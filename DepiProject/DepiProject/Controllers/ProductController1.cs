@@ -2,7 +2,7 @@
 
 namespace DepiProject.Controllers
 {
-    public class HomeController1 : Controller
+    public class ProductController1 : Controller
     {
         public IActionResult Index()
         {
