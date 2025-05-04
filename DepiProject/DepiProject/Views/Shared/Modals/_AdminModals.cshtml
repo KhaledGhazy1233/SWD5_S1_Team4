@@ -1,0 +1,72 @@
+<!-- نافذة إضافة منتج جديد -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">إضافة منتج جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">اسم المنتج</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productCategory" class="form-label">الفئة</label>
+                        <select class="form-select" id="productCategory" required>
+                            <option value="">اختر الفئة</option>
+                            <option value="1">ملابس رجالية</option>
+                            <option value="2">ملابس نسائية</option>
+                            <option value="3">أحذية</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">السعر</label>
+                        <input type="number" class="form-control" id="productPrice" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">صورة المنتج</label>
+                        <input type="file" class="form-control" id="productImage" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">وصف المنتج</label>
+                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="submit" form="addProductForm" class="btn btn-success">حفظ المنتج</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة إضافة فئة جديدة -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">إضافة فئة جديدة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">اسم الفئة</label>
+                        <input type="text" class="form-control" id="categoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">وصف الفئة</label>
+                        <textarea class="form-control" id="categoryDescription" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="submit" form="addCategoryForm" class="btn btn-success">حفظ الفئة</button>
+            </div>
+        </div>
+    </div>
+</div>
