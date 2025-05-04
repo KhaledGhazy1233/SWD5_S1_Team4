@@ -1,5 +1,4 @@
-﻿
-@model ShoppingCartVM
+﻿@model ShoppingCartVM
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/ShoppingCart.css" />
@@ -11,9 +10,9 @@
         transition: background-color 0.3s ease;
     }
 
-        .cart-item:hover {
-            background-color: #f8f9fa;
-        }
+    .cart-item:hover {
+        background-color: #f8f9fa;
+    }
 
     .product-img {
         max-width: 100px;
@@ -28,19 +27,19 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
 
-        .cart-summary .total-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+    .cart-summary .total-price {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
 
     .btn-checkout {
         background-color: #0d6efd;
         color: white;
     }
 
-        .btn-checkout:hover {
-            background-color: #0b5ed7;
-        }
+    .btn-checkout:hover {
+        background-color: #0b5ed7;
+    }
 
     .empty-cart {
         min-height: 300px;
@@ -67,7 +66,8 @@
                                     <i class="fas fa-minus"></i>
                                 </button>
 
-                                <input type="text" value="@item.Count" class="form-control form-control-sm text-center me-2" style="width: 50px;" readonly />
+                                <input type="text" value="@item.Count" class="form-control form-control-sm text-center me-2"
+                                    style="width: 50px;" readonly />
 
                                 <button type="button" class="btn btn-sm btn-outline-secondary">
                                     <i class="fas fa-plus"></i>
@@ -105,9 +105,11 @@
                     </li>
                 </ul>
 
-                <a href="#" class="btn btn-checkout w-100 py-2">
-                    <i class="fas fa-credit-card me-2"></i> Proceed to Checkout
-                </a>
+                <form asp-controller="Cart" asp-action="Checkout" method="post">
+                    <button type="submit" class="btn btn-checkout w-100 py-2">
+                        <i class="fas fa-credit-card me-2"></i> Proceed to Checkout
+                    </button>
+                </form>
             </div>
         </div>
     </div>
