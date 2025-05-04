@@ -1,0 +1,12 @@
+E:\DepiEcommerce\DepiProject\BusinessLayer\bin\Debug\net8.0\BusinessLayer.deps.json
+E:\DepiEcommerce\DepiProject\BusinessLayer\bin\Debug\net8.0\BusinessLayer.dll
+E:\DepiEcommerce\DepiProject\BusinessLayer\bin\Debug\net8.0\BusinessLayer.pdb
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.GeneratedMSBuildEditorConfig.editorconfig
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.AssemblyInfoInputs.cache
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.AssemblyInfo.cs
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.csproj.CoreCompileInputs.cache
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.sourcelink.json
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.dll
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\refint\BusinessLayer.dll
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\BusinessLayer.pdb
+E:\DepiEcommerce\DepiProject\BusinessLayer\obj\Debug\net8.0\ref\BusinessLayer.dll
