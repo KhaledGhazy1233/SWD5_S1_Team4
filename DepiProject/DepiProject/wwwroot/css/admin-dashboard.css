@@ -1,0 +1,101 @@
+/* Admin Dashboard Styles */
+.admin-header {
+    background-color: #343a40;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+}
+
+.admin-sidebar {
+    min-height: calc(100vh - 56px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+}
+
+.admin-nav .nav-link {
+    color: #495057;
+    border-radius: 0;
+    padding: 10px 20px;
+}
+
+.admin-nav .nav-link:hover {
+    background-color: #e9ecef;
+}
+
+.admin-nav .nav-link.active {
+    background-color: #59ab6e;
+    color: white;
+}
+
+.admin-nav .nav-link i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.stat-card {
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card i {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+
+.stat-card.primary {
+    background-color: #59ab6e;
+    color: white;
+}
+
+.stat-card.secondary {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.stat-card.info {
+    background-color: #3498db;
+    color: white;
+}
+
+.stat-card.warning {
+    background-color: #f1c40f;
+    color: white;
+}
+
+.table-responsive {
+    margin-bottom: 30px;
+}
+
+.admin-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.actions .btn {
+    padding: 4px 8px;
+    font-size: 0.875rem;
+}
+
+.chart-container {
+    height: 300px;
+    margin-bottom: 30px;
+}
+
+.product-image-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.badge-status {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+}
+
+.form-search {
+    margin-bottom: 20px;
+}

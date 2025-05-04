@@ -1,0 +1,1021 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="~/css/admin-dashboard.css" />
+
+<div class="admin-header">
+    <div class="container">
+        <h2><i class="fas fa-tachometer-alt me-2"></i> Admin Dashboard</h2>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 admin-sidebar p-0">
+            <div class="nav flex-column admin-nav">
+                <a href="#dashboard" class="nav-link active" data-bs-toggle="tab">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#products" class="nav-link" data-bs-toggle="tab">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="#categories" class="nav-link" data-bs-toggle="tab">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+                <a href="#orders" class="nav-link" data-bs-toggle="tab">
+                    <i class="fas fa-shopping-cart"></i> Orders
+                </a>
+                <a href="#customers" class="nav-link" data-bs-toggle="tab">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+                <a href="#settings" class="nav-link" data-bs-toggle="tab">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 p-4">
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-pane fade show active" id="dashboard">
+                    <h3 class="mb-4">Dashboard Overview</h3>
+
+                    <!-- Statistics Cards -->
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="stat-card primary">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Total Products</h6>
+                                        <h2 class="mb-0">127</h2>
+                                    </div>
+                                    <i class="fas fa-box"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="stat-card secondary">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Total Orders</h6>
+                                        <h2 class="mb-0">356</h2>
+                                    </div>
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="stat-card info">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Customers</h6>
+                                        <h2 class="mb-0">254</h2>
+                                    </div>
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="stat-card warning">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Revenue</h6>
+                                        <h2 class="mb-0">$5,420</h2>
+                                    </div>
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="row my-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Sales Overview</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="salesChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Top Categories</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="categoryChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Recent Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Products</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-1234</td>
+                                            <td>Ahmed Mohamed</td>
+                                            <td>3</td>
+                                            <td>$120.00</td>
+                                            <td>May 3, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-1233</td>
+                                            <td>Noha Ahmed</td>
+                                            <td>1</td>
+                                            <td>$85.00</td>
+                                            <td>May 3, 2025</td>
+                                            <td><span class="badge bg-warning text-dark badge-status">Processing</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-1232</td>
+                                            <td>Mohamed Ali</td>
+                                            <td>5</td>
+                                            <td>$240.00</td>
+                                            <td>May 2, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-1231</td>
+                                            <td>Sara Hassan</td>
+                                            <td>2</td>
+                                            <td>$95.00</td>
+                                            <td>May 2, 2025</td>
+                                            <td><span class="badge bg-info badge-status">Shipped</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-1230</td>
+                                            <td>Khaled Ahmed</td>
+                                            <td>4</td>
+                                            <td>$185.00</td>
+                                            <td>May 1, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Tab -->
+                <div class="tab-pane fade" id="products">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Products Management</h3>
+                        <button id="addProductBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New Product</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search products...">
+                                    <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td>1</td>
+                                            <td>Casual Blue Shirt</td>
+                                            <td>Men's Clothing</td>
+                                            <td>$49.99</td>
+                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td>2</td>
+                                            <td>Summer Dress</td>
+                                            <td>Women's Clothing</td>
+                                            <td>$59.99</td>
+                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td>3</td>
+                                            <td>Leather Shoes</td>
+                                            <td>Footwear</td>
+                                            <td>$79.99</td>
+                                            <td><span class="badge bg-secondary badge-status">Out of Stock</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td>4</td>
+                                            <td>Winter Jacket</td>
+                                            <td>Outerwear</td>
+                                            <td>$129.99</td>
+                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td>5</td>
+                                            <td>Casual Sneakers</td>
+                                            <td>Footwear</td>
+                                            <td>$69.99</td>
+                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Tab -->
+                <div class="tab-pane fade" id="categories">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Categories Management</h3>
+                        <button id="addCategoryBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New Category</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Products Count</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Men's Clothing</td>
+                                            <td>24</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Women's Clothing</td>
+                                            <td>36</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Footwear</td>
+                                            <td>18</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Accessories</td>
+                                            <td>29</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Outerwear</td>
+                                            <td>15</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other tabs - Orders, Customers, Settings -->
+               <!-- Orders Tab -->
+                <div class="tab-pane fade" id="orders">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Orders Management</h3>
+                        <div class="d-flex gap-2">
+                            <select class="form-select" id="orderStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <input type="text" class="form-control" placeholder="Search orders..." id="orderSearch">
+                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Products</th>
+                                            <th>Total</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-1234</td>
+                                            <td>أحمد محمد</td>
+                                            <td>3 products</td>
+                                            <td>$120.00</td>
+                                            <td>2024-01-20</td>
+                                            <td><span class="badge bg-warning">Processing</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="1234" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="1234" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="1234" title="Cancel">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- المزيد من الطلبات -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ترقيم الصفحات -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- نافذة تفاصيل الطلب -->
+                    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Order Details #<span id="orderNumber"></span></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <h6>Customer Information</h6>
+                                            <p><strong>Name:</strong> <span id="customerName"></span></p>
+                                            <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+                                            <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Shipping Information</h6>
+                                            <p><strong>Address:</strong> <span id="shippingAddress"></span></p>
+                                            <p><strong>City:</strong> <span id="shippingCity"></span></p>
+                                            <p><strong>ZIP Code:</strong> <span id="shippingZip"></span></p>
+                                        </div>
+                                    </div>
+
+                                    <h6>Products</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orderItems">
+                                                <!-- سيتم ملء هذا الجزء ديناميًا -->
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                                                    <td id="subtotal"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" class="text-end"><strong>Shipping:</strong></td>
+                                                    <td id="shippingCost"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                                    <td id="total"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <h6>Status Tracking</h6>
+                                        <div class="order-timeline" id="orderTimeline">
+                                            <!-- سيتم ملء هذا الجزء ديناميًا -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="updateOrderStatus">Update Status</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customers Tab -->
+                <div class="tab-pane fade" id="customers">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Customers Management</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" placeholder="Search customer..." id="customerSearch">
+                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Orders Count</th>
+                                            <th>Total Purchases</th>
+                                            <th>Registration Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- نموذج بيانات -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td>أحمد محمد</td>
+                                            <td>ahmed@example.com</td>
+                                            <td>0123456789</td>
+                                            <td>5</td>
+                                            <td>$750.00</td>
+                                            <td>2024-01-15</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="1" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="1" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="1" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>سارة أحمد</td>
+                                            <td>sara@example.com</td>
+                                            <td>0198765432</td>
+                                            <td>3</td>
+                                            <td>$450.00</td>
+                                            <td>2024-01-10</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="2" title="عرض التفاصيل">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="2" title="تعديل">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="2" title="حذف">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ترقيم الصفحات -->
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Customer Details Modal -->
+                    <div class="modal fade" id="customerDetailsModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Customer Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Personal Information</h6>
+                                            <p><strong>Name:</strong> <span id="customerName"></span></p>
+                                            <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+                                            <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Purchase Statistics</h6>
+                                            <p><strong>Orders Count:</strong> <span id="customerOrderCount"></span></p>
+                                            <p><strong>Total Purchases:</strong> <span id="customerTotalSpent"></span></p>
+                                            <p><strong>Last Order:</strong> <span id="customerLastOrder"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h6>Recent Orders</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Order ID</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="customerRecentOrders">
+                                                    <!-- Will be populated dynamically -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="settings">
+                    <h3 class="mb-4">Settings</h3>
+
+                    <div class="card mb-4">
+                        <div class="card-header" id="generalSettingsHeader">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#generalSettingsCollapse" aria-expanded="true" aria-controls="generalSettingsCollapse">
+                                    General Settings
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="generalSettingsCollapse" class="collapse show" aria-labelledby="generalSettingsHeader">
+                            <div class="card-body">
+                                <form id="settingsForm">
+                                    <div class="mb-3">
+                                        <label for="storeName" class="form-label">Store Name</label>
+                                        <input type="text" class="form-control" id="storeName" value="Zay Shop">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="storeEmail" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="storeEmail" value="info@company.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="storePhone" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="storePhone" value="010-020-0340">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="storeCurrency" class="form-label">Currency</label>
+                                        <select class="form-select" id="storeCurrency">
+                                            <option value="USD" selected>USD ($)</option>
+                                            <option value="EUR">EUR (€)</option>
+                                            <option value="GBP">GBP (£)</option>
+                                            <option value="EGP">EGP (ج.م)</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header" id="emailSettingsHeader">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#emailSettingsCollapse" aria-expanded="false" aria-controls="emailSettingsCollapse">
+                                    Email Settings
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="emailSettingsCollapse" class="collapse" aria-labelledby="emailSettingsHeader">
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="smtpServer" class="form-label">SMTP Server</label>
+                                        <input type="text" class="form-control" id="smtpServer">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtpPort" class="form-label">SMTP Port</label>
+                                        <input type="number" class="form-control" id="smtpPort" value="587">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtpUsername" class="form-label">SMTP Username</label>
+                                        <input type="text" class="form-control" id="smtpUsername">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="smtpPassword" class="form-label">SMTP Password</label>
+                                        <input type="password" class="form-control" id="smtpPassword">
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="smtpSsl">
+                                        <label class="form-check-label" for="smtpSsl">Use SSL</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="button" class="btn btn-outline-primary">Send Test Email</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="paymentSettingsHeader">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentSettingsCollapse" aria-expanded="false" aria-controls="paymentSettingsCollapse">
+                                    Payment Settings
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="paymentSettingsCollapse" class="collapse" aria-labelledby="paymentSettingsHeader">
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="enableCashOnDelivery" checked>
+                                        <label class="form-check-label" for="enableCashOnDelivery">Enable Cash on Delivery</label>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="enablePaypal">
+                                        <label class="form-check-label" for="enablePaypal">Enable PayPal</label>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="enableStripe">
+                                        <label class="form-check-label" for="enableStripe">Enable Stripe</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Modals -->
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productCategory" class="form-label">Category</label>
+                            <select class="form-select" id="productCategory" required>
+                                <!-- Populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productPrice" class="form-label">Price ($)</label>
+                            <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="productAvailability" checked>
+                        <label class="form-check-label" for="productAvailability">Available for sale</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Product Image</label>
+                        <input type="file" class="form-control" id="productImage">
+                        <small class="text-muted">Maximum file size: 2MB. Recommended size: 600x600 pixels.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <input type="hidden" id="productId">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductCategory" class="form-label">Category</label>
+                            <select class="form-select" id="editProductCategory" required>
+                                <!-- Populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productPrice" class="form-label">Price ($)</label>
+                            <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="productAvailability">
+                        <label class="form-check-label" for="productAvailability">Available for sale</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Image</label>
+                        <div>
+                            <img src="https://via.placeholder.com/100" id="currentProductImage" alt="Product" class="img-thumbnail" style="max-width: 100px;">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Change Image</label>
+                        <input type="file" class="form-control" id="productImage">
+                        <small class="text-muted">Leave empty to keep current image.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Product Modal -->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteProductId">
+                <p>Are you sure you want to delete the product: <strong id="deleteProductName"></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteProduct" class="btn btn-danger">Delete Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Category Modals -->
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <input type="hidden" id="categoryId">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCategoryId">
+                <p>Are you sure you want to delete the category: <strong id="deleteCategoryName"></strong>?</p>
+                <p id="categoryDeleteWarning" class="text-danger">Warning: This category contains products. Deleting it will make those products uncategorized.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteCategory" class="btn btn-danger">Delete Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container for Notifications -->
+<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/admin-dashboard.js"></script>
+    <script>
+        // Sample chart data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Sales 2025',
+                        data: [15, 19, 10, 12, 20, 18],
+                        backgroundColor: 'rgba(89, 171, 110, 0.2)',
+                        borderColor: 'rgba(89, 171, 110, 1)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            const categoryChart = new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Men\'s Clothing', 'Women\'s Clothing', 'Footwear', 'Accessories', 'Outerwear'],
+                    datasets: [{
+                        data: [24, 36, 18, 29, 15],
+                        backgroundColor: [
+                            '#59ab6e',
+                            '#2ecc71',
+                            '#3498db',
+                            '#f1c40f',
+                            '#e74c3c'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+}

@@ -35,7 +35,7 @@ namespace DepiProject.Controllers
             return View();
         }
 
-        public IActionResult shopSingle()
+        public IActionResult shopsingle(int id)
         {
             return View();
         }
@@ -46,6 +46,11 @@ namespace DepiProject.Controllers
         }
 
         public IActionResult about()
+        {
+            return View();
+        }
+
+        public IActionResult admin()
         {
             return View();
         }
