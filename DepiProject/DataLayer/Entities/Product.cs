@@ -10,17 +10,13 @@ public class Product
     public string Brand { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime DeletedAt { get; set; }
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; } = false;
 
 
     public int CountryId { get; set; }
     public int CategoryId { get; set; }
-    public int CreatedById { get; set; }
-    public int DeletedById { get; set; }
 
 
     public Country Country { get; set; }
     public Category Category { get; set; }
-    public User CreatedBy { get; set; }
-    public User DeletedBy { get; set; }
 }
