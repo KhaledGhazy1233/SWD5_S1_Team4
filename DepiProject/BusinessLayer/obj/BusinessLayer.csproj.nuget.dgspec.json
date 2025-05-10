@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "W:\\DEPI\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj": {}
+    "C:\\Users\\ENG Youssef\\source\\repos\\Ghr-Sw4\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj": {}
   },
   "projects": {
-    "W:\\DEPI\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj": {
+    "C:\\Users\\ENG Youssef\\source\\repos\\Ghr-Sw4\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "W:\\DEPI\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj",
+        "projectUniqueName": "C:\\Users\\ENG Youssef\\source\\repos\\Ghr-Sw4\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj",
         "projectName": "BusinessLayer",
-        "projectPath": "W:\\DEPI\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj",
-        "packagesPath": "C:\\Users\\COMPUMARTS\\.nuget\\packages\\",
-        "outputPath": "W:\\DEPI\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\obj\\",
+        "projectPath": "C:\\Users\\ENG Youssef\\source\\repos\\Ghr-Sw4\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\BusinessLayer.csproj",
+        "packagesPath": "C:\\Users\\ENG Youssef\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ENG Youssef\\source\\repos\\Ghr-Sw4\\SWD5_S1_Team4\\DepiProject\\BusinessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\COMPUMARTS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ENG Youssef\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +28,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -65,7 +69,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
