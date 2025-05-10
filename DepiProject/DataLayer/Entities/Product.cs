@@ -2,17 +2,6 @@
 
 public class Product
 {
-    public Product()
-    {
-        CreatedBy = new User();
-        DeletedBy = new User();
-        Category = new Category();
-        Country = new Country();
-
-        Name = string.Empty;
-        Description = string.Empty;
-        Brand = string.Empty;
-    }
     public int ProductId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

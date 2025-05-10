@@ -52,7 +52,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addCategoryForm">
+                <form id="addCategoryForm"  asp-action="Create" asp-controller="Category">
                     <div class="mb-3">
                         <label for="categoryName" class="form-label">اسم الفئة</label>
                         <input type="text" class="form-control" id="categoryName" required>
