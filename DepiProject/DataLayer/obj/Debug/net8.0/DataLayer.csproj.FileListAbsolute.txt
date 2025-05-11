@@ -1,5 +1,0 @@
-E:\DepiEcommerce\DepiProject\DataLayer\obj\Debug\net8.0\DataLayer.GeneratedMSBuildEditorConfig.editorconfig
-E:\DepiEcommerce\DepiProject\DataLayer\obj\Debug\net8.0\DataLayer.AssemblyInfoInputs.cache
-E:\DepiEcommerce\DepiProject\DataLayer\obj\Debug\net8.0\DataLayer.AssemblyInfo.cs
-E:\DepiEcommerce\DepiProject\DataLayer\obj\Debug\net8.0\DataLayer.csproj.CoreCompileInputs.cache
-E:\DepiEcommerce\DepiProject\DataLayer\obj\Debug\net8.0\DataLayer.sourcelink.json
