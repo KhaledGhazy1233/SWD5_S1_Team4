@@ -1,6 +1,6 @@
 ﻿namespace DepiProject.Models
 {
-    public class CartItem
+    public class ShoppingCart
     {
         public int Id { get; set; }
         public string? Name { get; set; }

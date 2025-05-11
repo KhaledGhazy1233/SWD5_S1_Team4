@@ -10,9 +10,9 @@ namespace DepiProject.Controllers
         {
             var shoppingcartvm = new ShoppingCartVM
             {
-                ShoppingCart = new List<CartItem>
+                ShoppingCart = new List<ShoppingCart>
     {
-        new CartItem
+        new ShoppingCart
         {
             Id = 1,
             Name = "Product 1",
@@ -21,7 +21,7 @@ namespace DepiProject.Controllers
             Count = 2,
             Image = "image1.jpg"
         },
-        new CartItem
+        new ShoppingCart
         {
             Id = 2,
             Name = "Product 2",
@@ -62,9 +62,9 @@ namespace DepiProject.Controllers
                 OrderId = orderId,
                 OrderDate = DateTime.Now,
                 ShippingAddress = "123 Main St, City, Country",
-                Items = new List<CartItem>
+                Items = new List<ShoppingCart>
                 {
-                    new CartItem
+                    new ShoppingCart
                     {
                         Id = 1,
                         Name = "Product 1",
@@ -73,7 +73,7 @@ namespace DepiProject.Controllers
                         Count = 2,
                         Image = "image1.jpg"
                     },
-                    new CartItem
+                    new ShoppingCart
                     {
                         Id = 2,
                         Name = "Product 2",
