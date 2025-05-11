@@ -40,10 +40,45 @@ namespace DepiProject.Controllers
         [HttpPost]
         public IActionResult Checkout()
         {
+            // Prepare the shopping cart data for the checkout page
+            var shoppingcartvm = new ShoppingCartVM
+            {
+                ShoppingCart = new List<ShoppingCart>
+                {
+                    new ShoppingCart
+                    {
+                        Id = 1,
+                        Name = "High-Performance Laptop",
+                        Description = "16GB RAM, 512GB SSD, Intel Core i7",
+                        Price = 999.99,
+                        Count = 1,
+                        Image = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain"
+                    },
+                    new ShoppingCart
+                    {
+                        Id = 2,
+                        Name = "Premium Smartphone",
+                        Description = "128GB Storage, 8GB RAM, 108MP Camera",
+                        Price = 799.99,
+                        Count = 1,
+                        Image = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png"
+                    }
+                },
+                TotalPrice = 999.99 + 799.99 // = 1799.98
+            };
+
+            // Render the checkout page
+            return View(shoppingcartvm);
+        }
+
+        [HttpPost]
+        public IActionResult PlaceOrder()
+        {
             // In a real application, this would:
-            // 1. Process the payment
-            // 2. Create the order in the database
-            // 3. Clear the shopping cart
+            // 1. Validate input data
+            // 2. Process the payment
+            // 3. Create the order in the database
+            // 4. Clear the shopping cart
 
             // For now, we'll just redirect to the confirmation page with the order ID
             // Simulating a new order with ID 1001
@@ -67,23 +102,23 @@ namespace DepiProject.Controllers
                     new ShoppingCart
                     {
                         Id = 1,
-                        Name = "Product 1",
-                        Description = "Description of Product 1",
-                        Price = 10.0,
-                        Count = 2,
-                        Image = "image1.jpg"
+                        Name = "High-Performance Laptop",
+                        Description = "16GB RAM, 512GB SSD, Intel Core i7",
+                        Price = 999.99,
+                        Count = 1,
+                        Image = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain"
                     },
                     new ShoppingCart
                     {
                         Id = 2,
-                        Name = "Product 2",
-                        Description = "Description of Product 2",
-                        Price = 20.0,
+                        Name = "Premium Smartphone",
+                        Description = "128GB Storage, 8GB RAM, 108MP Camera",
+                        Price = 799.99,
                         Count = 1,
-                        Image = "image2.jpg"
+                        Image = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png"
                     }
                 },
-                TotalPrice = 40.0
+                TotalPrice = 999.99 + 799.99 // = 1799.98
             };
 
             return View(orderDetails);

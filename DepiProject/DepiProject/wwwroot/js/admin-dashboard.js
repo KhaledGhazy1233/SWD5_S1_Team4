@@ -2,35 +2,38 @@
 
 // Sample data for frontend functionality
 let products = [
-    { id: 1, name: "Casual Blue Shirt", description: "Comfortable cotton shirt for casual wear", category: "Men's Clothing", categoryId: 1, price: 49.99, isAvailable: true, imageUrl: "https://via.placeholder.com/60" },
-    { id: 2, name: "Summer Dress", description: "Light floral dress perfect for summer", category: "Women's Clothing", categoryId: 2, price: 59.99, isAvailable: true, imageUrl: "https://via.placeholder.com/60" },
-    { id: 3, name: "Leather Shoes", description: "Premium leather formal shoes", category: "Footwear", categoryId: 3, price: 79.99, isAvailable: false, imageUrl: "https://via.placeholder.com/60" },
-    { id: 4, name: "Winter Jacket", description: "Warm winter jacket with hood", category: "Outerwear", categoryId: 5, price: 129.99, isAvailable: true, imageUrl: "https://via.placeholder.com/60" },
-    { id: 5, name: "Casual Sneakers", description: "Comfortable sneakers for everyday wear", category: "Footwear", categoryId: 3, price: 69.99, isAvailable: true, imageUrl: "https://via.placeholder.com/60" }
+    { id: 1, name: "iPhone 15 Pro", description: "Apple's latest flagship smartphone with A17 Pro chip", category: "Smartphones", categoryId: 1, brand: "Apple", brandId: 1, price: 999.99, stock: 42, isAvailable: true, modelNumber: "A2650", warranty: 12, specs: "A17 Pro chip, 6.1\" OLED display, 48MP camera", imageUrl: "https://via.placeholder.com/60", isFeatured: true },
+    { id: 2, name: "MacBook Pro 16\"", description: "Powerful laptop for professionals with M3 Pro chip", category: "Laptops & Computers", categoryId: 2, brand: "Apple", brandId: 1, price: 2499.99, stock: 15, isAvailable: true, modelNumber: "A2780", warranty: 12, specs: "M3 Pro chip, 16\" Liquid Retina XDR display, 32GB RAM, 1TB SSD", imageUrl: "https://via.placeholder.com/60", isFeatured: true },
+    { id: 3, name: "Sony WH-1000XM5", description: "Premium noise cancelling headphones", category: "Audio & Headphones", categoryId: 3, brand: "Sony", brandId: 3, price: 349.99, stock: 0, isAvailable: false, modelNumber: "WH1000XM5", warranty: 24, specs: "Industry-leading noise cancellation, 30-hour battery life, LDAC support", imageUrl: "https://via.placeholder.com/60", isFeatured: false },
+    { id: 4, name: "Samsung 65\" OLED 4K TV", description: "Premium OLED TV with stunning picture quality", category: "TV & Home Theater", categoryId: 4, brand: "Samsung", brandId: 2, price: 1799.99, stock: 8, isAvailable: true, modelNumber: "QN65S95C", warranty: 24, specs: "OLED display, 4K resolution, Quantum HDR, Smart TV features", imageUrl: "https://via.placeholder.com/60", isFeatured: true },
+    { id: 5, name: "Google Pixel 8 Pro", description: "Google's flagship smartphone with advanced AI features", category: "Smartphones", categoryId: 1, brand: "Google", brandId: 4, price: 899.99, stock: 23, isAvailable: true, modelNumber: "GA03822-US", warranty: 12, specs: "Google Tensor G3, 6.7\" display, 50MP camera system, 512GB storage", imageUrl: "https://via.placeholder.com/60", isFeatured: false }
 ];
 
 let categories = [
-    { id: 1, name: "Men's Clothing", productsCount: 24 },
-    { id: 2, name: "Women's Clothing", productsCount: 36 },
-    { id: 3, name: "Footwear", productsCount: 18 },
-    { id: 4, name: "Accessories", productsCount: 29 },
-    { id: 5, name: "Outerwear", productsCount: 15 }
+    { id: 1, name: "Smartphones", productsCount: 42, featured: true, icon: "fa-mobile-alt" },
+    { id: 2, name: "Laptops & Computers", productsCount: 38, featured: true, icon: "fa-laptop" },
+    { id: 3, name: "Audio & Headphones", productsCount: 25, featured: false, icon: "fa-headphones" },
+    { id: 4, name: "TV & Home Theater", productsCount: 18, featured: true, icon: "fa-tv" },
+    { id: 5, name: "Cameras", productsCount: 15, featured: false, icon: "fa-camera" },
+    { id: 6, name: "Gaming", productsCount: 27, featured: true, icon: "fa-gamepad" },
+    { id: 7, name: "Smart Home", productsCount: 14, featured: false, icon: "fa-home" },
+    { id: 8, name: "Wearable Tech", productsCount: 8, featured: false, icon: "fa-clock" }
 ];
 
 let orders = [
-    { id: "#ORD-1234", customer: "Ahmed Mohamed", products: 3, total: 120.00, date: "May 3, 2025", status: "Completed" },
-    { id: "#ORD-1233", customer: "Noha Ahmed", products: 1, total: 85.00, date: "May 3, 2025", status: "Processing" },
-    { id: "#ORD-1232", customer: "Mohamed Ali", products: 5, total: 240.00, date: "May 2, 2025", status: "Completed" },
-    { id: "#ORD-1231", customer: "Sara Hassan", products: 2, total: 95.00, date: "May 2, 2025", status: "Shipped" },
-    { id: "#ORD-1230", customer: "Khaled Ahmed", products: 4, total: 185.00, date: "May 1, 2025", status: "Completed" }
+    { id: "#ORD-5423", customer: "John Smith", customerEmail: "john@example.com", customerPhone: "555-123-4567", products: 3, total: 1249.97, date: "May 10, 2025", status: "Delivered" },
+    { id: "#ORD-5422", customer: "Emily Johnson", customerEmail: "emily@example.com", customerPhone: "555-987-6543", products: 1, total: 899.99, date: "May 9, 2025", status: "Processing" },
+    { id: "#ORD-5421", customer: "Michael Chen", customerEmail: "michael@example.com", customerPhone: "555-456-7890", products: 4, total: 3849.96, date: "May 8, 2025", status: "Shipped" },
+    { id: "#ORD-5420", customer: "Sarah Williams", customerEmail: "sarah@example.com", customerPhone: "555-321-6547", products: 2, total: 1199.98, date: "May 7, 2025", status: "Delivered" },
+    { id: "#ORD-5419", customer: "David Thompson", customerEmail: "david@example.com", customerPhone: "555-789-1234", products: 1, total: 2499.99, date: "May 6, 2025", status: "Delivered" }
 ];
 
 let customers = [
-    { id: 1, name: "Ahmed Mohamed", email: "ahmed@example.com", orders: 8, totalSpent: 450.00, joined: "Jan 15, 2025" },
-    { id: 2, name: "Noha Ahmed", email: "noha@example.com", orders: 5, totalSpent: 320.00, joined: "Feb 3, 2025" },
-    { id: 3, name: "Mohamed Ali", email: "mohamed@example.com", orders: 12, totalSpent: 780.00, joined: "Dec 10, 2024" },
-    { id: 4, name: "Sara Hassan", email: "sara@example.com", orders: 3, totalSpent: 150.00, joined: "Mar 22, 2025" },
-    { id: 5, name: "Khaled Ahmed", email: "khaled@example.com", orders: 7, totalSpent: 520.00, joined: "Jan 5, 2025" }
+    { id: 1, name: "John Smith", email: "john@example.com", phone: "555-123-4567", orders: 8, totalSpent: 5467.92, joined: "Feb 15, 2024" },
+    { id: 2, name: "Emily Johnson", email: "emily@example.com", phone: "555-987-6543", orders: 5, totalSpent: 3245.75, joined: "Mar 2, 2024" },
+    { id: 3, name: "Michael Chen", email: "michael@example.com", phone: "555-456-7890", orders: 12, totalSpent: 8912.45, joined: "Nov 18, 2023" },
+    { id: 4, name: "Sarah Williams", email: "sarah@example.com", phone: "555-321-6547", orders: 3, totalSpent: 1875.50, joined: "Apr 12, 2024" },
+    { id: 5, name: "David Thompson", email: "david@example.com", phone: "555-789-1234", orders: 7, totalSpent: 6325.89, joined: "Jan 22, 2024" }
 ];
 
 // DOM ready
@@ -38,11 +41,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize event listeners
     initEventListeners();
     
+    // Initialize event listeners for the newly added buttons in the recent orders section
+    document.querySelectorAll('#dashboard .view-order-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            showOrderDetails(orderId);
+        });
+    });
+    
+    document.querySelectorAll('#dashboard .edit-order-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            showUpdateOrderStatusModal(orderId);
+        });
+    });
+
     // Initialize modals using Bootstrap
     var modals = document.querySelectorAll('.modal');
     Array.from(modals).forEach(modal => {
         new bootstrap.Modal(modal);
     });
+    
+    // Initialize charts if they exist
+    if(document.getElementById('salesChart')) {
+        initSalesChart();
+    }
+    
+    if(document.getElementById('categoryChart')) {
+        initCategoryChart();
+    }
 });
 
 function initEventListeners() {
@@ -50,14 +77,21 @@ function initEventListeners() {
     document.getElementById('addProductBtn')?.addEventListener('click', showAddProductModal);
     document.querySelectorAll('.edit-product-btn')?.forEach(btn => {
         btn.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
+            const productId = parseInt(this.getAttribute('data-id'));
             showEditProductModal(productId);
         });
     });
     document.querySelectorAll('.delete-product-btn')?.forEach(btn => {
         btn.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
+            const productId = parseInt(this.getAttribute('data-id'));
             showDeleteProductConfirmation(productId);
+        });
+    });
+    document.querySelectorAll('.view-product-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = parseInt(this.getAttribute('data-id'));
+            // Implement view product details functionality
+            console.log(`View product with ID: ${productId}`);
         });
     });
     
@@ -65,14 +99,57 @@ function initEventListeners() {
     document.getElementById('addCategoryBtn')?.addEventListener('click', showAddCategoryModal);
     document.querySelectorAll('.edit-category-btn')?.forEach(btn => {
         btn.addEventListener('click', function() {
-            const categoryId = this.getAttribute('data-id');
+            const categoryId = parseInt(this.getAttribute('data-id'));
             showEditCategoryModal(categoryId);
         });
     });
     document.querySelectorAll('.delete-category-btn')?.forEach(btn => {
         btn.addEventListener('click', function() {
-            const categoryId = this.getAttribute('data-id');
+            const categoryId = parseInt(this.getAttribute('data-id'));
             showDeleteCategoryConfirmation(categoryId);
+        });
+    });
+    
+    // Order related actions
+    document.querySelectorAll('.view-order-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            showOrderDetails(orderId);
+        });
+    });
+    document.querySelectorAll('.edit-order-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            // Implement edit order functionality
+            console.log(`Edit order with ID: ${orderId}`);
+        });
+    });
+    document.querySelectorAll('.cancel-order-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-id');
+            // Implement cancel order functionality
+            console.log(`Cancel order with ID: ${orderId}`);
+        });
+    });
+    
+    // Customer related actions
+    document.querySelectorAll('.view-customer-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const customerId = parseInt(this.getAttribute('data-id'));
+            showCustomerDetails(customerId);
+        });
+    });
+    document.querySelectorAll('.edit-customer-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const customerId = parseInt(this.getAttribute('data-id'));
+            showEditCustomerModal(customerId);
+        });
+    });
+    document.querySelectorAll('.delete-customer-btn')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const customerId = parseInt(this.getAttribute('data-id'));
+            // Implement delete customer functionality
+            console.log(`Delete customer with ID: ${customerId}`);
         });
     });
     
@@ -81,9 +158,36 @@ function initEventListeners() {
     document.getElementById('editProductForm')?.addEventListener('submit', handleEditProduct);
     document.getElementById('addCategoryForm')?.addEventListener('submit', handleAddCategory);
     document.getElementById('editCategoryForm')?.addEventListener('submit', handleEditCategory);
+    document.getElementById('editCustomerBtn')?.addEventListener('click', function() {
+        const customerId = parseInt(document.getElementById('customerDetailsId').value);
+        showEditCustomerModal(customerId);
+    });
+      // Modal action buttons
+    document.getElementById('confirmDeleteProduct')?.addEventListener('click', handleDeleteProduct);
+    document.getElementById('confirmDeleteCategory')?.addEventListener('click', handleDeleteCategory);
+    document.getElementById('updateOrderStatus')?.addEventListener('click', function() {
+        const orderId = document.getElementById('orderNumber').textContent;
+        showUpdateOrderStatusModal(orderId);
+    });
+    document.getElementById('saveStatusUpdateBtn')?.addEventListener('click', handleOrderStatusUpdate);
+    document.getElementById('printInvoiceBtn')?.addEventListener('click', function() {
+        const orderId = document.getElementById('orderNumber').textContent;
+        handlePrintInvoice(orderId);
+    });
+    document.getElementById('addCustomerNoteBtn')?.addEventListener('click', handleAddCustomerNote);
     
     // Settings form
     document.getElementById('settingsForm')?.addEventListener('submit', handleSettingsSave);
+    
+    // Same as shipping checkbox in edit customer form
+    document.getElementById('sameAsShipping')?.addEventListener('change', function() {
+        const billingFields = document.getElementById('billingAddressFields');
+        if (this.checked) {
+            billingFields.style.display = 'none';
+        } else {
+            billingFields.style.display = 'block';
+        }
+    });
 }
 
 // Product Functions
@@ -531,6 +635,185 @@ function deleteCategory(categoryId) {
     showToast('Category deleted successfully!');
 }
 
+// Order Functions
+function showOrderDetails(orderId) {
+    // Find the order by ID
+    const order = orders.find(o => o.id.replace('#ORD-', '') === orderId);
+    if (!order) {
+        console.error('Order not found:', orderId);
+        return;
+    }
+    
+    // Sample data for order details
+    const orderDetails = {
+        id: order.id,
+        customer: {
+            name: order.customer,
+            email: order.customerEmail,
+            phone: order.customerPhone,
+            address: '123 Tech Street',
+            city: 'San Francisco',
+            zip: '94105'
+        },
+        products: [
+            { name: 'iPhone 15 Pro', quantity: 1, price: 999.99, total: 999.99 },
+            { name: 'AirPods Pro', quantity: 1, price: 249.99, total: 249.99 }
+        ],
+        shipping: 0,
+        subtotal: order.total - 0, // Assuming free shipping
+        total: order.total,
+        timeline: [
+            { date: '2025-05-08 08:15', status: 'Order Placed', description: 'Order has been placed successfully' },
+            { date: '2025-05-08 14:30', status: 'Payment Confirmed', description: 'Payment has been confirmed' },
+            { date: '2025-05-09 09:45', status: 'Processing', description: 'Order is being processed' }
+        ]
+    };
+    
+    // Add timeline entries based on status
+    if (order.status === 'Shipped') {
+        orderDetails.timeline.push({ 
+            date: '2025-05-10 11:20', 
+            status: 'Shipped', 
+            description: 'Order has been shipped via Express Delivery' 
+        });
+    }
+    
+    if (order.status === 'Delivered') {
+        orderDetails.timeline.push({ 
+            date: '2025-05-10 11:20', 
+            status: 'Shipped', 
+            description: 'Order has been shipped via Express Delivery' 
+        });
+        orderDetails.timeline.push({ 
+            date: '2025-05-12 14:15', 
+            status: 'Delivered', 
+            description: 'Order has been delivered successfully' 
+        });
+    }
+    
+    // Populate modal with data
+    document.getElementById('orderNumber').textContent = order.id.replace('#ORD-', '');
+    document.getElementById('customerName').textContent = order.customer;
+    document.getElementById('customerEmail').textContent = order.customerEmail;
+    document.getElementById('customerPhone').textContent = order.customerPhone;
+    document.getElementById('shippingAddress').textContent = orderDetails.customer.address;
+    document.getElementById('shippingCity').textContent = orderDetails.customer.city;
+    document.getElementById('shippingZip').textContent = orderDetails.customer.zip;
+    
+    // Populate products
+    const orderItemsContainer = document.getElementById('orderItems');
+    orderItemsContainer.innerHTML = '';
+    orderDetails.products.forEach(product => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${product.quantity}</td>
+            <td>$${product.price.toFixed(2)}</td>
+            <td>$${product.total.toFixed(2)}</td>
+        `;
+        orderItemsContainer.appendChild(row);
+    });
+    
+    // Set totals
+    document.getElementById('subtotal').textContent = `$${orderDetails.subtotal.toFixed(2)}`;
+    document.getElementById('shippingCost').textContent = `$${orderDetails.shipping.toFixed(2)}`;
+    document.getElementById('total').textContent = `$${orderDetails.total.toFixed(2)}`;
+    
+    // Populate timeline
+    const timelineContainer = document.getElementById('orderTimeline');
+    timelineContainer.innerHTML = '';
+    orderDetails.timeline.forEach((event, index) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item ' + (index === orderDetails.timeline.length - 1 ? 'active' : '');
+        item.innerHTML = `
+            <div class="timeline-badge"></div>
+            <div class="timeline-content">
+                <p class="mb-0"><small>${event.date}</small></p>
+                <h6 class="fw-bold mb-0">${event.status}</h6>
+                <p class="text-muted">${event.description}</p>
+            </div>
+        `;
+        timelineContainer.appendChild(item);
+    });
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+    modal.show();
+}
+
+function showUpdateOrderStatusModal(orderId) {
+    const order = orders.find(o => o.id.replace('#ORD-', '') === orderId);
+    if (!order) return;
+    
+    // Populate order status dropdown with current status selected
+    const statusSelect = document.getElementById('orderStatusUpdate');
+    statusSelect.value = order.status.toLowerCase();
+    
+    // Store order ID for reference
+    document.getElementById('updateOrderId').value = orderId;
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('updateOrderStatusModal'));
+    modal.show();
+}
+
+function handleOrderStatusUpdate(event) {
+    event.preventDefault();
+    
+    const orderId = document.getElementById('updateOrderId').value;
+    const newStatus = document.getElementById('orderStatusUpdate').value;
+    
+    // Find order index
+    const orderIndex = orders.findIndex(o => o.id.replace('#ORD-', '') === orderId);
+    if (orderIndex === -1) return;
+    
+    // Update status
+    const statusCapitalized = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    orders[orderIndex].status = statusCapitalized;
+    
+    // Update UI
+    const statusBadgeClassMap = {
+        'pending': 'bg-secondary',
+        'processing': 'bg-warning text-dark',
+        'shipped': 'bg-info',
+        'delivered': 'bg-success',
+        'cancelled': 'bg-danger'
+    };
+    
+    // Update in orders tab
+    const orderRow = document.querySelector(`#orders table tbody tr:nth-child(${orderIndex + 1}) td:nth-child(6) span`);
+    if (orderRow) {
+        // Remove all status classes and add new one
+        orderRow.className = 'badge ' + (statusBadgeClassMap[newStatus] || 'bg-secondary');
+        orderRow.textContent = statusCapitalized;
+    }
+    
+    // Update in dashboard (if visible)
+    const dashboardOrderRow = document.querySelector(`#dashboard .recent-orders tbody tr:nth-child(${orderIndex + 1}) td:nth-child(6) span`);
+    if (dashboardOrderRow) {
+        dashboardOrderRow.className = 'badge ' + (statusBadgeClassMap[newStatus] || 'bg-secondary') + ' badge-status';
+        dashboardOrderRow.textContent = statusCapitalized;
+    }
+    
+    // Close all modals
+    const orderDetailsModal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
+    const updateStatusModal = bootstrap.Modal.getInstance(document.getElementById('updateOrderStatusModal'));
+    
+    if (updateStatusModal) updateStatusModal.hide();
+    if (orderDetailsModal) orderDetailsModal.hide();
+    
+    // Show success toast
+    showToast(`Order #${orderId} status updated to ${statusCapitalized}`, 'success');
+}
+
+function handlePrintInvoice(orderId) {
+    // In a real app, this would generate and download an invoice PDF
+    console.log(`Printing invoice for order: ${orderId}`);
+    
+    // For demo purposes, just show a toast
+    showToast('Invoice printing initiated', 'info');
+}
+
 // Settings Functions
 function handleSettingsSave(event) {
     event.preventDefault();
@@ -582,4 +865,138 @@ function showToast(message) {
     toastElement.addEventListener('hidden.bs.toast', function() {
         toastElement.remove();
     });
+}
+
+// Customer Notes Function
+function handleAddCustomerNote() {
+    const customerId = document.getElementById('customerDetailsId').value;
+    const noteText = document.getElementById('customerNoteText').value;
+    
+    if (!noteText.trim()) {
+        showToast('Please enter a note', 'warning');
+        return;
+    }
+    
+    // In a real app, this would save the note to the server
+    // For demo, we'll just add it to the UI
+    
+    const notesList = document.getElementById('customerNotesList');
+    const noteItem = document.createElement('div');
+    noteItem.className = 'customer-note-item border-bottom pb-2 mb-2';
+    
+    const today = new Date();
+    const dateStr = today.toLocaleString();
+    
+    noteItem.innerHTML = `
+        <div class="d-flex justify-content-between">
+            <small class="text-muted">${dateStr}</small>
+            <small class="text-muted">Admin</small>
+        </div>
+        <p class="mb-0">${noteText}</p>
+    `;
+    
+    notesList.insertBefore(noteItem, notesList.firstChild);
+    
+    // Clear input
+    document.getElementById('customerNoteText').value = '';
+    
+    // Show success message
+    showToast('Note added successfully');
+}
+
+// Customer Functions
+function showCustomerDetails(customerId) {
+    const customer = customers.find(c => c.id === customerId);
+    if (!customer) return;
+    
+    // Store customer ID for reference
+    document.getElementById('customerDetailsId').value = customer.id;
+    
+    // Populate basic info
+    document.getElementById('customerName').textContent = customer.name;
+    document.getElementById('customerEmail').textContent = customer.email;
+    document.getElementById('customerPhone').textContent = customer.phone;
+    
+    // Populate stats
+    document.getElementById('customerOrderCount').textContent = customer.orders;
+    document.getElementById('customerTotalSpent').textContent = `$${customer.totalSpent.toFixed(2)}`;
+    document.getElementById('customerLastOrder').textContent = customer.joined; // Using joined date as last order for demo
+    
+    // Populate recent orders (mock data for demo)
+    const recentOrdersContainer = document.getElementById('customerRecentOrders');
+    recentOrdersContainer.innerHTML = '';
+    
+    // Find orders for this customer
+    const customerOrders = orders.filter(o => o.customer === customer.name);
+    
+    if (customerOrders.length > 0) {
+        customerOrders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.date}</td>
+                <td>$${order.total.toFixed(2)}</td>
+                <td><span class="badge ${getBadgeClassForStatus(order.status)}">${order.status}</span></td>
+            `;
+            recentOrdersContainer.appendChild(row);
+        });
+    } else {
+        // Demo fallback orders
+        const demoOrders = [
+            { id: `#ORD-${5400 + customer.id}`, date: '2025-05-01', amount: 799.99, status: 'Delivered' },
+            { id: `#ORD-${5300 + customer.id}`, date: '2025-04-15', amount: 1249.98, status: 'Delivered' },
+            { id: `#ORD-${5200 + customer.id}`, date: '2025-03-22', amount: 349.99, status: 'Delivered' }
+        ];
+        
+        demoOrders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.date}</td>
+                <td>$${order.amount.toFixed(2)}</td>
+                <td><span class="badge ${getBadgeClassForStatus(order.status)}">${order.status}</span></td>
+            `;
+            recentOrdersContainer.appendChild(row);
+        });
+    }
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('customerDetailsModal'));
+    modal.show();
+}
+
+function getBadgeClassForStatus(status) {
+    const statusMap = {
+        'Delivered': 'bg-success',
+        'Shipped': 'bg-info',
+        'Processing': 'bg-warning text-dark',
+        'Pending': 'bg-secondary',
+        'Cancelled': 'bg-danger'
+    };
+    
+    return statusMap[status] || 'bg-secondary';
+}
+
+function showEditCustomerModal(customerId) {
+    const customer = customers.find(c => c.id === customerId);
+    if (!customer) return;
+    
+    // In a real app, this would populate a form with customer data
+    // For demo, we'll just log it
+    console.log(`Edit customer with ID: ${customerId}`, customer);
+    
+    // Show success message
+    showToast('Edit customer functionality would open a form to edit customer details');
+}
+
+function handleEditCustomer(event) {
+    event.preventDefault();
+    
+    // In a real app, this would process the form data and update the customer
+    // For demo, we'll just show a success message
+    showToast('Customer details updated successfully!');
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('editCustomerModal'));
+    if (modal) modal.hide();
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Context
 {
-    internal class ApplicationDbContext
+    public class ApplicationDbContext
     {
     }
 }

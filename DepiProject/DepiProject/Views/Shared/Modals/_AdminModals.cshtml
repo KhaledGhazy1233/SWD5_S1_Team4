@@ -1,72 +1,673 @@
-<!-- نافذة إضافة منتج جديد -->
+<!-- Add Product Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">إضافة منتج جديد</h5>
+                <h5 class="modal-title" id="addProductModalLabel">Add New Electronic Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addProductForm">
                     <div class="mb-3">
-                        <label for="productName" class="form-label">اسم المنتج</label>
+                        <label for="productName" class="form-label">Product Name</label>
                         <input type="text" class="form-control" id="productName" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="productCategory" class="form-label">الفئة</label>
-                        <select class="form-select" id="productCategory" required>
-                            <option value="">اختر الفئة</option>
-                            <option value="1">ملابس رجالية</option>
-                            <option value="2">ملابس نسائية</option>
-                            <option value="3">أحذية</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productCategory" class="form-label">Category</label>
+                            <select class="form-select" id="productCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="1">Smartphones</option>
+                                <option value="2">Laptops & Computers</option>
+                                <option value="3">Audio & Headphones</option>
+                                <option value="4">TV & Home Theater</option>
+                                <option value="5">Cameras</option>
+                                <option value="6">Gaming</option>
+                                <option value="7">Smart Home</option>
+                                <option value="8">Wearable Tech</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productBrand" class="form-label">Brand</label>
+                            <select class="form-select" id="productBrand" required>
+                                <option value="">Select Brand</option>
+                                <option value="1">Apple</option>
+                                <option value="2">Samsung</option>
+                                <option value="3">Sony</option>
+                                <option value="4">Google</option>
+                                <option value="5">Microsoft</option>
+                                <option value="6">LG</option>
+                                <option value="7">Dell</option>
+                                <option value="8">HP</option>
+                                <option value="9">Lenovo</option>
+                                <option value="10">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productPrice" class="form-label">Price ($)</label>
+                            <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productStock" class="form-label">Stock Quantity</label>
+                            <input type="number" class="form-control" id="productStock" min="0" required>
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="productPrice" class="form-label">السعر</label>
-                        <input type="number" class="form-control" id="productPrice" required>
+                        <label for="productSpecs" class="form-label">Technical Specifications</label>
+                        <textarea class="form-control" id="productSpecs" rows="3"
+                            placeholder="CPU, RAM, Storage, Display, etc."></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="productImage" class="form-label">صورة المنتج</label>
-                        <input type="file" class="form-control" id="productImage" accept="image/*" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="productDescription" class="form-label">وصف المنتج</label>
+                        <label for="productDescription" class="form-label">Product Description</label>
                         <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="productWarranty" class="form-label">Warranty (Months)</label>
+                            <input type="number" class="form-control" id="productWarranty" min="0" value="12">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="productModel" class="form-label">Model Number</label>
+                            <input type="text" class="form-control" id="productModel">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Product Images</label>
+                        <input type="file" class="form-control" id="productImage" accept="image/*" multiple required>
+                        <small class="text-muted">You can select multiple images. First image will be the main product
+                            image.</small>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="productFeatured">
+                        <label class="form-check-label" for="productFeatured">Feature on Homepage</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <button type="submit" form="addProductForm" class="btn btn-success">حفظ المنتج</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="addProductForm" class="btn btn-success">Add Product</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- نافذة إضافة فئة جديدة -->
+<!-- Add Category Modal -->
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCategoryModalLabel">إضافة فئة جديدة</h5>
+                <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addCategoryForm"  asp-action="Create" asp-controller="Category">
+                <form id="addCategoryForm" asp-action="Create" asp-controller="Category">
                     <div class="mb-3">
-                        <label for="categoryName" class="form-label">اسم الفئة</label>
+                        <label for="categoryName" class="form-label">Category Name</label>
                         <input type="text" class="form-control" id="categoryName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryDescription" class="form-label">وصف الفئة</label>
+                        <label for="categoryDescription" class="form-label">Category Description</label>
                         <textarea class="form-control" id="categoryDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryIcon" class="form-label">Category Icon</label>
+                        <select class="form-select" id="categoryIcon">
+                            <option value="fa-mobile-alt">Smartphone</option>
+                            <option value="fa-laptop">Laptop</option>
+                            <option value="fa-headphones">Headphones</option>
+                            <option value="fa-tv">TV</option>
+                            <option value="fa-camera">Camera</option>
+                            <option value="fa-gamepad">Gaming</option>
+                            <option value="fa-home">Smart Home</option>
+                            <option value="fa-clock">Wearable Tech</option>
+                        </select>
+                        <small class="text-muted">Icon to represent this category</small>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="categoryFeatured">
+                        <label class="form-check-label" for="categoryFeatured">Feature on Homepage</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <button type="submit" form="addCategoryForm" class="btn btn-success">حفظ الفئة</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="addCategoryForm" class="btn btn-success">Add Category</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <input type="hidden" id="editCategoryId">
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="editCategoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategoryDescription" class="form-label">Category Description</label>
+                        <textarea class="form-control" id="editCategoryDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategoryIcon" class="form-label">Category Icon</label>
+                        <select class="form-select" id="editCategoryIcon">
+                            <option value="fa-mobile-alt">Smartphone</option>
+                            <option value="fa-laptop">Laptop</option>
+                            <option value="fa-headphones">Headphones</option>
+                            <option value="fa-tv">TV</option>
+                            <option value="fa-camera">Camera</option>
+                            <option value="fa-gamepad">Gaming</option>
+                            <option value="fa-home">Smart Home</option>
+                            <option value="fa-clock">Wearable Tech</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="editCategoryFeatured">
+                        <label class="form-check-label" for="editCategoryFeatured">Feature on Homepage</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="editCategoryForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCategoryModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCategoryId">
+                <p>Are you sure you want to delete the category: <strong id="deleteCategoryName"></strong>?</p>
+                <p class="text-danger">This action will also affect all products in this category and cannot be undone.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteCategory" class="btn btn-danger">Delete Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Edit Electronic Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <input type="hidden" id="editProductId">
+                    <div class="mb-3">
+                        <label for="editProductName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="editProductName" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductCategory" class="form-label">Category</label>
+                            <select class="form-select" id="editProductCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="1">Smartphones</option>
+                                <option value="2">Laptops & Computers</option>
+                                <option value="3">Audio & Headphones</option>
+                                <option value="4">TV & Home Theater</option>
+                                <option value="5">Cameras</option>
+                                <option value="6">Gaming</option>
+                                <option value="7">Smart Home</option>
+                                <option value="8">Wearable Tech</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductBrand" class="form-label">Brand</label>
+                            <select class="form-select" id="editProductBrand" required>
+                                <option value="">Select Brand</option>
+                                <option value="1">Apple</option>
+                                <option value="2">Samsung</option>
+                                <option value="3">Sony</option>
+                                <option value="4">Google</option>
+                                <option value="5">Microsoft</option>
+                                <option value="6">LG</option>
+                                <option value="7">Dell</option>
+                                <option value="8">HP</option>
+                                <option value="9">Lenovo</option>
+                                <option value="10">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductPrice" class="form-label">Price ($)</label>
+                            <input type="number" class="form-control" id="editProductPrice" step="0.01" min="0"
+                                required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductStock" class="form-label">Stock Quantity</label>
+                            <input type="number" class="form-control" id="editProductStock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProductSpecs" class="form-label">Technical Specifications</label>
+                        <textarea class="form-control" id="editProductSpecs" rows="3"
+                            placeholder="CPU, RAM, Storage, Display, etc."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProductDescription" class="form-label">Product Description</label>
+                        <textarea class="form-control" id="editProductDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductWarranty" class="form-label">Warranty (Months)</label>
+                            <input type="number" class="form-control" id="editProductWarranty" min="0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editProductModel" class="form-label">Model Number</label>
+                            <input type="text" class="form-control" id="editProductModel">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Images</label>
+                        <div class="row" id="currentProductImages">
+                            <!-- Product images will be displayed here -->
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProductImage" class="form-label">Add/Replace Images</label>
+                        <input type="file" class="form-control" id="editProductImage" accept="image/*" multiple>
+                        <small class="text-muted">Leave empty to keep current images.</small>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="editProductFeatured">
+                        <label class="form-check-label" for="editProductFeatured">Feature on Homepage</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="editProductForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Product Modal -->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteProductId">
+                <p>Are you sure you want to delete the product: <strong id="deleteProductName"></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteProduct" class="btn btn-danger">Delete Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Order Details #<span id="modalOrderId"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Customer Information</h6>
+                        <p><strong>Name:</strong> <span id="modalCustomerName"></span></p>
+                        <p><strong>Email:</strong> <span id="modalCustomerEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="modalCustomerPhone"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Order Information</h6>
+                        <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                        <p><strong>Status:</strong> <span id="modalOrderStatus"></span></p>
+                        <p><strong>Payment Method:</strong> <span id="modalPaymentMethod"></span></p>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Shipping Address</h6>
+                        <p id="modalShippingAddress"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Billing Address</h6>
+                        <p id="modalBillingAddress"></p>
+                    </div>
+                </div>
+                <h6>Products</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Model</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalOrderItems">
+                            <!-- Will be filled dynamically -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                                <td id="modalSubtotal"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Shipping:</strong></td>
+                                <td id="modalShippingCost"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Tax:</strong></td>
+                                <td id="modalTax"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                                <td id="modalTotal"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="mt-4">
+                    <h6>Order Timeline</h6>
+                    <div class="order-timeline" id="modalOrderTimeline">
+                        <!-- Will be filled dynamically -->
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>Order Notes</h6>
+                    <div id="modalOrderNotes">
+                        <!-- Will be filled dynamically -->
+                    </div>
+                    <div class="mt-2">
+                        <label for="newOrderNote" class="form-label">Add Note</label>
+                        <textarea class="form-control" id="newOrderNote" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" id="printInvoiceBtn">Print Invoice</button>
+                <button type="button" class="btn btn-primary" id="updateOrderBtn">Update Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Order Status Modal -->
+<div class="modal fade" id="updateOrderStatusModal" tabindex="-1" aria-labelledby="updateOrderStatusModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateOrderStatusModalLabel">Update Order Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="statusUpdateOrderId">
+                <div class="mb-3">
+                    <label for="orderStatusSelect" class="form-label">New Status</label>
+                    <select class="form-select" id="orderStatusSelect">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="statusUpdateNote" class="form-label">Note (Optional)</label>
+                    <textarea class="form-control" id="statusUpdateNote" rows="3"
+                        placeholder="Add a note about this status change..."></textarea>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="notifyCustomer" checked>
+                    <label class="form-check-label" for="notifyCustomer">Notify customer about this update</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveStatusUpdateBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Details Modal -->
+<div class="modal fade" id="customerDetailsModal" tabindex="-1" aria-labelledby="customerDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerDetailsModalLabel">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Personal Information</h6>
+                        <p><strong>Name:</strong> <span id="modalDetailCustomerName"></span></p>
+                        <p><strong>Email:</strong> <span id="modalDetailCustomerEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="modalDetailCustomerPhone"></span></p>
+                        <p><strong>Member Since:</strong> <span id="modalDetailCustomerJoined"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Purchase Statistics</h6>
+                        <p><strong>Total Orders:</strong> <span id="modalDetailCustomerOrders"></span></p>
+                        <p><strong>Total Spent:</strong> <span id="modalDetailCustomerSpent"></span></p>
+                        <p><strong>Last Order:</strong> <span id="modalDetailCustomerLastOrder"></span></p>
+                        <p><strong>Average Order Value:</strong> <span id="modalDetailCustomerAvgOrder"></span></p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>Address Information</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-2">Default Shipping Address</h6>
+                            <p id="modalDetailCustomerShipping"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="mb-2">Default Billing Address</h6>
+                            <p id="modalDetailCustomerBilling"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>Recent Orders</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Products</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalDetailCustomerRecentOrders">
+                                <!-- Will be filled dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>Customer Notes</h6>
+                    <div id="modalDetailCustomerNotes">
+                        <!-- Will be filled dynamically -->
+                    </div>
+                    <div class="mt-2">
+                        <label for="newCustomerNote" class="form-label">Add Note</label>
+                        <textarea class="form-control" id="newCustomerNote" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addCustomerNoteBtn">Add Note</button>
+                <button type="button" class="btn btn-primary" id="editCustomerBtn">Edit Customer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Customer Modal -->
+<div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCustomerForm">
+                    <input type="hidden" id="editCustomerId">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editCustomerFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="editCustomerFirstName" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editCustomerLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="editCustomerLastName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editCustomerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editCustomerEmail" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editCustomerPhone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="editCustomerPhone">
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="editCustomerStatus" checked>
+                        <label class="form-check-label" for="editCustomerStatus">Active Account</label>
+                    </div>
+                    <h6 class="mt-4">Shipping Address</h6>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="editCustomerShippingAddress" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="editCustomerShippingAddress">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editCustomerShippingCity" class="form-label">City</label>
+                            <input type="text" class="form-control" id="editCustomerShippingCity">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="editCustomerShippingState" class="form-label">State/Province</label>
+                            <input type="text" class="form-control" id="editCustomerShippingState">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editCustomerShippingZip" class="form-label">ZIP/Postal Code</label>
+                            <input type="text" class="form-control" id="editCustomerShippingZip">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editCustomerShippingCountry" class="form-label">Country</label>
+                            <select class="form-select" id="editCustomerShippingCountry">
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <!-- Add more countries as needed -->
+                            </select>
+                        </div>
+                    </div>
+                    <h6 class="mt-4">Billing Address</h6>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="sameAsShipping">
+                        <label class="form-check-label" for="sameAsShipping">Same as shipping address</label>
+                    </div>
+                    <div id="billingAddressFields">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="editCustomerBillingAddress" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="editCustomerBillingAddress">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editCustomerBillingCity" class="form-label">City</label>
+                                <input type="text" class="form-control" id="editCustomerBillingCity">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="editCustomerBillingState" class="form-label">State/Province</label>
+                                <input type="text" class="form-control" id="editCustomerBillingState">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editCustomerBillingZip" class="form-label">ZIP/Postal Code</label>
+                                <input type="text" class="form-control" id="editCustomerBillingZip">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editCustomerBillingCountry" class="form-label">Country</label>
+                                <select class="form-select" id="editCustomerBillingCountry">
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="AU">Australia</option>
+                                    <!-- Add more countries as needed -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="editCustomerForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+   
+   
+                
+                               
+                           
+   
+   
+   
+                       
+   
+   

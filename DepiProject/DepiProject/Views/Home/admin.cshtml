@@ -1,17 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "TechXpress Admin Dashboard";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="~/css/admin-dashboard.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/admin-dashboard.js" defer></script>
+<script src="~/js/admin-charts.js" defer></script>
 
 @await Html.PartialAsync("~/Views/Shared/Modals/_AdminModals.cshtml")
 
 <div class="admin-header">
     <div class="container">
-        <h2><i class="fas fa-tachometer-alt me-2"></i> Admin Dashboard</h2>
+        <h2><i class="fas fa-tachometer-alt me-2"></i> TechXpress Admin Dashboard</h2>
     </div>
 </div>
 
@@ -48,16 +49,15 @@
                 <div class="tab-pane fade show active" id="dashboard">
                     <h3 class="mb-4">Dashboard Overview</h3>
 
-                    <!-- Statistics Cards -->
-                    <div class="row">
+                    <!-- Statistics Cards -->                    <div class="row">
                         <div class="col-md-6 col-lg-3">
                             <div class="stat-card primary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-0">Total Products</h6>
-                                        <h2 class="mb-0">127</h2>
+                                        <h2 class="mb-0">187</h2>
                                     </div>
-                                    <i class="fas fa-box"></i>
+                                    <i class="fas fa-mobile-alt"></i>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-0">Total Orders</h6>
-                                        <h2 class="mb-0">356</h2>
+                                        <h2 class="mb-0">354</h2>
                                     </div>
                                     <i class="fas fa-shopping-cart"></i>
                                 </div>
@@ -77,7 +77,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-0">Customers</h6>
-                                        <h2 class="mb-0">254</h2>
+                                        <h2 class="mb-0">412</h2>
                                     </div>
                                     <i class="fas fa-users"></i>
                                 </div>
@@ -88,7 +88,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-0">Revenue</h6>
-                                        <h2 class="mb-0">$5,420</h2>
+                                        <h2 class="mb-0">$245,780</h2>
                                     </div>
                                     <i class="fas fa-dollar-sign"></i>
                                 </div>
@@ -131,8 +131,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped admin-table">
-                                    <thead>
+                                <table class="table table-striped admin-table">                                    <thead>
                                         <tr>
                                             <th>Order ID</th>
                                             <th>Customer</th>
@@ -140,48 +139,65 @@
                                             <th>Total</th>
                                             <th>Date</th>
                                             <th>Status</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>#ORD-1234</td>
-                                            <td>Ahmed Mohamed</td>
+                                        <tr>                                            <td>#ORD-5423</td>
+                                            <td>John Smith</td>
                                             <td>3</td>
-                                            <td>$120.00</td>
-                                            <td>May 3, 2025</td>
-                                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                                            <td>$1,249.97</td>
+                                            <td>May 10, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Delivered</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5423"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5423"><i class="fas fa-edit"></i></button>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>#ORD-1233</td>
-                                            <td>Noha Ahmed</td>
+                                        <tr>                                            <td>#ORD-5422</td>
+                                            <td>Emily Johnson</td>
                                             <td>1</td>
-                                            <td>$85.00</td>
-                                            <td>May 3, 2025</td>
-                                            <td><span class="badge bg-warning text-dark badge-status">Processing</span></td>
+                                            <td>$899.99</td>
+                                            <td>May 9, 2025</td>
+                                            <td><span class="badge bg-warning text-dark badge-status">Processing</span>
+                                            </td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5422"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5422"><i class="fas fa-edit"></i></button>
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>#ORD-1232</td>
-                                            <td>Mohamed Ali</td>
-                                            <td>5</td>
-                                            <td>$240.00</td>
-                                            <td>May 2, 2025</td>
-                                            <td><span class="badge bg-success badge-status">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>#ORD-1231</td>
-                                            <td>Sara Hassan</td>
-                                            <td>2</td>
-                                            <td>$95.00</td>
-                                            <td>May 2, 2025</td>
-                                            <td><span class="badge bg-info badge-status">Shipped</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>#ORD-1230</td>
-                                            <td>Khaled Ahmed</td>
+                                        <tr>                                            <td>#ORD-5421</td>
+                                            <td>Michael Chen</td>
                                             <td>4</td>
-                                            <td>$185.00</td>
-                                            <td>May 1, 2025</td>
-                                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                                            <td>$3,849.96</td>
+                                            <td>May 8, 2025</td>
+                                            <td><span class="badge bg-info badge-status">Shipped</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5421"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5421"><i class="fas fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>                                            <td>#ORD-5420</td>
+                                            <td>Sarah Williams</td>
+                                            <td>2</td>
+                                            <td>$1,199.98</td>
+                                            <td>May 7, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Delivered</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5420"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5420"><i class="fas fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>                                            <td>#ORD-5419</td>
+                                            <td>David Thompson</td>
+                                            <td>1</td>
+                                            <td>$2,499.99</td>
+                                            <td>May 6, 2025</td>
+                                            <td><span class="badge bg-success badge-status">Delivered</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5419"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5419"><i class="fas fa-edit"></i></button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -194,7 +210,8 @@
                 <div class="tab-pane fade" id="products">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3>Products Management</h3>
-                        <button id="addProductBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New Product</button>
+                        <button id="addProductBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New
+                            Product</button>
                     </div>
 
                     <div class="card">
@@ -202,82 +219,119 @@
                             <div class="form-search">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Search products...">
-                                    <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+                                    <button class="btn btn-outline-secondary" type="button"><i
+                                            class="fas fa-search"></i></button>
                                 </div>
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-striped admin-table">
-                                    <thead>
+                                <table class="table table-striped admin-table">                                    <thead>
                                         <tr>
                                             <th>Image</th>
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Category</th>
+                                            <th>Brand</th>
                                             <th>Price</th>
+                                            <th>Stock</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td><img src="https://via.placeholder.com/60"
+                                                    class="product-image-thumbnail" alt="Product"></td>
                                             <td>1</td>
-                                            <td>Casual Blue Shirt</td>
-                                            <td>Men's Clothing</td>
-                                            <td>$49.99</td>
-                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td>iPhone 15 Pro</td>
+                                            <td>Smartphones</td>
+                                            <td>Apple</td>
+                                            <td>$999.99</td>
+                                            <td>42</td>
+                                            <td><span class="badge bg-success badge-status">In Stock</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-info view-product-btn" data-id="1"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-product-btn" data-id="1"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-product-btn" data-id="1"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td><img src="https://via.placeholder.com/60"
+                                                    class="product-image-thumbnail" alt="Product"></td>
                                             <td>2</td>
-                                            <td>Summer Dress</td>
-                                            <td>Women's Clothing</td>
-                                            <td>$59.99</td>
-                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td>MacBook Pro 16"</td>
+                                            <td>Laptops & Computers</td>
+                                            <td>Apple</td>
+                                            <td>$2499.99</td>
+                                            <td>15</td>
+                                            <td><span class="badge bg-success badge-status">In Stock</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-info view-product-btn" data-id="2"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-product-btn" data-id="2"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-product-btn" data-id="2"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td><img src="https://via.placeholder.com/60"
+                                                    class="product-image-thumbnail" alt="Product"></td>
                                             <td>3</td>
-                                            <td>Leather Shoes</td>
-                                            <td>Footwear</td>
-                                            <td>$79.99</td>
+                                            <td>Sony WH-1000XM5</td>
+                                            <td>Audio & Headphones</td>
+                                            <td>Sony</td>
+                                            <td>$349.99</td>
+                                            <td>0</td>
                                             <td><span class="badge bg-secondary badge-status">Out of Stock</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-info view-product-btn" data-id="3"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-product-btn" data-id="3"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-product-btn" data-id="3"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td><img src="https://via.placeholder.com/60"
+                                                    class="product-image-thumbnail" alt="Product"></td>
                                             <td>4</td>
-                                            <td>Winter Jacket</td>
-                                            <td>Outerwear</td>
-                                            <td>$129.99</td>
-                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td>Samsung 65" OLED 4K TV</td>
+                                            <td>TV & Home Theater</td>
+                                            <td>Samsung</td>
+                                            <td>$1799.99</td>
+                                            <td>8</td>
+                                            <td><span class="badge bg-warning text-dark badge-status">Low Stock</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-info view-product-btn" data-id="4"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-product-btn" data-id="4"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-product-btn" data-id="4"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><img src="https://via.placeholder.com/60" class="product-image-thumbnail" alt="Product"></td>
+                                            <td><img src="https://via.placeholder.com/60"
+                                                    class="product-image-thumbnail" alt="Product"></td>
                                             <td>5</td>
-                                            <td>Casual Sneakers</td>
-                                            <td>Footwear</td>
-                                            <td>$69.99</td>
-                                            <td><span class="badge bg-success badge-status">Available</span></td>
+                                            <td>Google Pixel 8 Pro</td>
+                                            <td>Smartphones</td>
+                                            <td>Google</td>
+                                            <td>$899.99</td>
+                                            <td>23</td>
+                                            <td><span class="badge bg-success badge-status">In Stock</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-info view-product-btn" data-id="5"><i
+                                                        class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-product-btn" data-id="5"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-product-btn" data-id="5"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -305,65 +359,117 @@
                 <div class="tab-pane fade" id="categories">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3>Categories Management</h3>
-                        <button id="addCategoryBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New Category</button>
+                        <button id="addCategoryBtn" class="btn btn-success"><i class="fas fa-plus"></i> Add New
+                            Category</button>
                     </div>
 
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped admin-table">
-                                    <thead>
+                                <table class="table table-striped admin-table">                                    <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Products Count</th>
+                                            <th>Featured</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Men's Clothing</td>
-                                            <td>24</td>
+                                            <td>Smartphones</td>
+                                            <td>42</td>
+                                            <td><span class="badge bg-success">Yes</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>Women's Clothing</td>
-                                            <td>36</td>
+                                            <td>Laptops & Computers</td>
+                                            <td>38</td>
+                                            <td><span class="badge bg-success">Yes</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="2"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="2"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
-                                            <td>Footwear</td>
-                                            <td>18</td>
+                                            <td>Audio & Headphones</td>
+                                            <td>25</td>
+                                            <td><span class="badge bg-secondary">No</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="3"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="3"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
-                                            <td>Accessories</td>
-                                            <td>29</td>
+                                            <td>TV & Home Theater</td>
+                                            <td>18</td>
+                                            <td><span class="badge bg-success">Yes</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="4"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="4"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>5</td>
-                                            <td>Outerwear</td>
+                                            <td>Cameras</td>
                                             <td>15</td>
+                                            <td><span class="badge bg-secondary">No</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="1"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="1"><i class="fas fa-trash"></i></button>
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="5"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="5"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Gaming</td>
+                                            <td>27</td>
+                                            <td><span class="badge bg-success">Yes</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="6"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="6"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Smart Home</td>
+                                            <td>14</td>
+                                            <td><span class="badge bg-secondary">No</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="7"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="7"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Wearable Tech</td>
+                                            <td>8</td>
+                                            <td><span class="badge bg-secondary">No</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-primary edit-category-btn" data-id="8"><i
+                                                        class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger delete-category-btn" data-id="8"><i
+                                                        class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -374,7 +480,7 @@
                 </div>
 
                 <!-- Other tabs - Orders, Customers, Settings -->
-               <!-- Orders Tab -->
+                <!-- Orders Tab -->
                 <div class="tab-pane fade" id="orders">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3>Orders Management</h3>
@@ -407,27 +513,116 @@
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>#ORD-1234</td>
-                                            <td>أحمد محمد</td>
+                                    <tbody>                                        <tr>
+                                            <td>#ORD-5423</td>
+                                            <td>John Smith</td>
                                             <td>3 products</td>
-                                            <td>$120.00</td>
-                                            <td>2024-01-20</td>
-                                            <td><span class="badge bg-warning">Processing</span></td>
+                                            <td>$1,249.97</td>
+                                            <td>2025-05-10</td>
+                                            <td><span class="badge bg-success">Delivered</span></td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-info view-order-btn" data-id="1234" title="View Details">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5423"
+                                                    title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="1234" title="Edit">
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5423"
+                                                    title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="1234" title="Cancel">
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="5423"
+                                                    title="Cancel">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <!-- المزيد من الطلبات -->
+                                        <tr>
+                                            <td>#ORD-5422</td>
+                                            <td>Emily Johnson</td>
+                                            <td>1 product</td>
+                                            <td>$899.99</td>
+                                            <td>2025-05-09</td>
+                                            <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5422"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5422"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="5422"
+                                                    title="Cancel">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5421</td>
+                                            <td>Michael Chen</td>
+                                            <td>4 products</td>
+                                            <td>$3,849.96</td>
+                                            <td>2025-05-08</td>
+                                            <td><span class="badge bg-info">Shipped</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5421"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5421"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="5421"
+                                                    title="Cancel">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5420</td>
+                                            <td>Sarah Williams</td>
+                                            <td>2 products</td>
+                                            <td>$1,199.98</td>
+                                            <td>2025-05-07</td>
+                                            <td><span class="badge bg-success">Delivered</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5420"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5420"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="5420"
+                                                    title="Cancel">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5419</td>
+                                            <td>David Thompson</td>
+                                            <td>1 product</td>
+                                            <td>$2,499.99</td>
+                                            <td>2025-05-06</td>
+                                            <td><span class="badge bg-success">Delivered</span></td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-order-btn" data-id="5419"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-order-btn" data-id="5419"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger cancel-order-btn" data-id="5419"
+                                                    title="Cancel">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -447,9 +642,7 @@
                                 </ul>
                             </nav>
                         </div>
-                    </div>
-
-                    <!-- نافذة تفاصيل الطلب -->
+                    </div>                    <!-- Order Details Modal -->
                     <div class="modal fade" id="orderDetailsModal" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -484,8 +677,7 @@
                                                     <th>Total</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="orderItems">
-                                                <!-- سيتم ملء هذا الجزء ديناميًا -->
+                                            <tbody id="orderItems">                                            <!-- Will be populated dynamically -->
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -511,10 +703,52 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" id="updateOrderStatus">Update Status</button>
+                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="updateOrderStatus">Update
+                                        Status</button>
+                                    <button type="button" class="btn btn-info" id="printInvoiceBtn">Print Invoice</button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Status Update Modal -->
+                <div class="modal fade" id="updateOrderStatusModal" tabindex="-1" aria-labelledby="updateOrderStatusModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateOrderStatusModalLabel">Update Order Status</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updateOrderStatusForm">
+                                    <input type="hidden" id="updateOrderId">
+                                    <div class="mb-3">
+                                        <label for="orderStatusUpdate" class="form-label">Status</label>
+                                        <select class="form-select" id="orderStatusUpdate" required>
+                                            <option value="pending">Pending</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="delivered">Delivered</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="statusNote" class="form-label">Status Note (Optional)</label>
+                                        <textarea class="form-control" id="statusNote" rows="2"></textarea>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="notifyCustomer" checked>
+                                        <label class="form-check-label" for="notifyCustomer">Notify Customer</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="saveStatusUpdateBtn">Update Status</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -525,7 +759,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3>Customers Management</h3>
                         <div class="d-flex gap-2">
-                            <input type="text" class="form-control" placeholder="Search customer..." id="customerSearch">
+                            <input type="text" class="form-control" placeholder="Search customer..."
+                                id="customerSearch">
                             <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
@@ -547,43 +782,117 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- نموذج بيانات -->
-                                        <tr>
+                                        <!-- نموذج بيانات -->                                        <tr>
                                             <td>1</td>
-                                            <td>أحمد محمد</td>
-                                            <td>ahmed@example.com</td>
-                                            <td>0123456789</td>
-                                            <td>5</td>
-                                            <td>$750.00</td>
-                                            <td>2024-01-15</td>
+                                            <td>John Smith</td>
+                                            <td>john@example.com</td>
+                                            <td>555-123-4567</td>
+                                            <td>8</td>
+                                            <td>$5,467.92</td>
+                                            <td>2024-02-15</td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="1" title="View Details">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="1"
+                                                    title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="1" title="Edit">
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="1"
+                                                    title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="1" title="Delete">
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="1"
+                                                    title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>سارة أحمد</td>
-                                            <td>sara@example.com</td>
-                                            <td>0198765432</td>
-                                            <td>3</td>
-                                            <td>$450.00</td>
-                                            <td>2024-01-10</td>
+                                            <td>Emily Johnson</td>
+                                            <td>emily@example.com</td>
+                                            <td>555-987-6543</td>
+                                            <td>5</td>
+                                            <td>$3,245.75</td>
+                                            <td>2024-03-02</td>
                                             <td class="actions">
-                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="2" title="عرض التفاصيل">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="2"
+                                                    title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="2" title="تعديل">
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="2"
+                                                    title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="2" title="حذف">
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="2"
+                                                    title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Michael Chen</td>
+                                            <td>michael@example.com</td>
+                                            <td>555-456-7890</td>
+                                            <td>12</td>
+                                            <td>$8,912.45</td>
+                                            <td>2023-11-18</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="3"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="3"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="3"
+                                                    title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Sarah Williams</td>
+                                            <td>sarah@example.com</td>
+                                            <td>555-321-6547</td>
+                                            <td>3</td>
+                                            <td>$1,875.50</td>
+                                            <td>2024-04-12</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="4"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="4"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="4"
+                                                    title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>David Thompson</td>
+                                            <td>david@example.com</td>
+                                            <td>555-789-1234</td>
+                                            <td>7</td>
+                                            <td>$6,325.89</td>
+                                            <td>2024-01-22</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-info view-customer-btn" data-id="5"
+                                                    title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary edit-customer-btn" data-id="5"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger delete-customer-btn" data-id="5"
+                                                    title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -609,8 +918,7 @@
                         </div>
                     </div>
 
-                    <!-- Customer Details Modal -->
-                    <div class="modal fade" id="customerDetailsModal" tabindex="-1">
+                    <!-- Customer Details Modal -->                    <div class="modal fade" id="customerDetailsModal" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -618,6 +926,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
+                                    <input type="hidden" id="customerDetailsId">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h6>Personal Information</h6>
@@ -628,7 +937,8 @@
                                         <div class="col-md-6">
                                             <h6>Purchase Statistics</h6>
                                             <p><strong>Orders Count:</strong> <span id="customerOrderCount"></span></p>
-                                            <p><strong>Total Purchases:</strong> <span id="customerTotalSpent"></span></p>
+                                            <p><strong>Total Purchases:</strong> <span id="customerTotalSpent"></span>
+                                            </p>
                                             <p><strong>Last Order:</strong> <span id="customerLastOrder"></span></p>
                                         </div>
                                     </div>
@@ -650,6 +960,20 @@
                                             </table>
                                         </div>
                                     </div>
+                                    
+                                    <div class="mt-4">
+                                        <h6>Customer Notes</h6>
+                                        <div id="customerNotesList" class="mb-3">
+                                            <!-- Notes will be populated here -->
+                                        </div>
+                                        <div class="input-group">
+                                            <textarea class="form-control" id="customerNoteText" rows="2" placeholder="Add a note about this customer..."></textarea>
+                                            <button class="btn btn-primary" type="button" id="addCustomerNoteBtn">Add Note</button>
+                                        </div>
+                                    </div>
+                                </div>                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" id="editCustomerBtn">Edit Customer</button>
                                 </div>
                             </div>
                         </div>
@@ -662,25 +986,27 @@
                     <div class="card mb-4">
                         <div class="card-header" id="generalSettingsHeader">
                             <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#generalSettingsCollapse" aria-expanded="true" aria-controls="generalSettingsCollapse">
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#generalSettingsCollapse" aria-expanded="true"
+                                    aria-controls="generalSettingsCollapse">
                                     General Settings
                                 </button>
                             </h5>
                         </div>
                         <div id="generalSettingsCollapse" class="collapse show" aria-labelledby="generalSettingsHeader">
                             <div class="card-body">
-                                <form id="settingsForm">
-                                    <div class="mb-3">
+                                <form id="settingsForm">                                    <div class="mb-3">
                                         <label for="storeName" class="form-label">Store Name</label>
-                                        <input type="text" class="form-control" id="storeName" value="Zay Shop">
+                                        <input type="text" class="form-control" id="storeName" value="TechXpress Electronics">
                                     </div>
                                     <div class="mb-3">
                                         <label for="storeEmail" class="form-label">Email Address</label>
-                                        <input type="email" class="form-control" id="storeEmail" value="info@company.com">
+                                        <input type="email" class="form-control" id="storeEmail"
+                                            value="support@techxpress.com">
                                     </div>
                                     <div class="mb-3">
                                         <label for="storePhone" class="form-label">Phone Number</label>
-                                        <input type="text" class="form-control" id="storePhone" value="010-020-0340">
+                                        <input type="text" class="form-control" id="storePhone" value="1-800-TECH-NOW">
                                     </div>
                                     <div class="mb-3">
                                         <label for="storeCurrency" class="form-label">Currency</label>
@@ -688,7 +1014,7 @@
                                             <option value="USD" selected>USD ($)</option>
                                             <option value="EUR">EUR (€)</option>
                                             <option value="GBP">GBP (£)</option>
-                                            <option value="EGP">EGP (ج.م)</option>
+                                            <option value="JPY">JPY (¥)</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -700,7 +1026,9 @@
                     <div class="card mb-4">
                         <div class="card-header" id="emailSettingsHeader">
                             <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#emailSettingsCollapse" aria-expanded="false" aria-controls="emailSettingsCollapse">
+                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#emailSettingsCollapse" aria-expanded="false"
+                                    aria-controls="emailSettingsCollapse">
                                     Email Settings
                                 </button>
                             </h5>
@@ -738,7 +1066,9 @@
                     <div class="card">
                         <div class="card-header" id="paymentSettingsHeader">
                             <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentSettingsCollapse" aria-expanded="false" aria-controls="paymentSettingsCollapse">
+                                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#paymentSettingsCollapse" aria-expanded="false"
+                                    aria-controls="paymentSettingsCollapse">
                                     Payment Settings
                                 </button>
                             </h5>
@@ -747,8 +1077,10 @@
                             <div class="card-body">
                                 <form>
                                     <div class="mb-3 form-check">
-                                        <input type="checkbox" class="form-check-input" id="enableCashOnDelivery" checked>
-                                        <label class="form-check-label" for="enableCashOnDelivery">Enable Cash on Delivery</label>
+                                        <input type="checkbox" class="form-check-input" id="enableCashOnDelivery"
+                                            checked>
+                                        <label class="form-check-label" for="enableCashOnDelivery">Enable Cash on
+                                            Delivery</label>
                                     </div>
                                     <div class="mb-3 form-check">
                                         <input type="checkbox" class="form-check-input" id="enablePaypal">
@@ -857,7 +1189,8 @@
                     <div class="mb-3">
                         <label class="form-label">Current Image</label>
                         <div>
-                            <img src="https://via.placeholder.com/100" id="currentProductImage" alt="Product" class="img-thumbnail" style="max-width: 100px;">
+                            <img src="https://via.placeholder.com/100" id="currentProductImage" alt="Product"
+                                class="img-thumbnail" style="max-width: 100px;">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -876,7 +1209,8 @@
 </div>
 
 <!-- Delete Product Modal -->
-<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -922,7 +1256,8 @@
 </div>
 
 <!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -947,7 +1282,8 @@
 </div>
 
 <!-- Delete Category Modal -->
-<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -957,7 +1293,8 @@
             <div class="modal-body">
                 <input type="hidden" id="deleteCategoryId">
                 <p>Are you sure you want to delete the category: <strong id="deleteCategoryName"></strong>?</p>
-                <p id="categoryDeleteWarning" class="text-danger">Warning: This category contains products. Deleting it will make those products uncategorized.</p>
+                <p id="categoryDeleteWarning" class="text-danger">Warning: This category contains products. Deleting it
+                    will make those products uncategorized.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -975,7 +1312,7 @@
     <script src="~/js/admin-dashboard.js"></script>
     <script>
         // Sample chart data
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Sales Chart
             const salesCtx = document.getElementById('salesChart').getContext('2d');
             const salesChart = new Chart(salesCtx, {
@@ -995,16 +1332,14 @@
                     responsive: true,
                     maintainAspectRatio: false
                 }
-            });
-
-            // Category Chart
+            });            // Category Chart
             const categoryCtx = document.getElementById('categoryChart').getContext('2d');
             const categoryChart = new Chart(categoryCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Men\'s Clothing', 'Women\'s Clothing', 'Footwear', 'Accessories', 'Outerwear'],
+                    labels: ['Smartphones', 'Laptops & Computers', 'Audio & Headphones', 'TV & Home Theater', 'Gaming'],
                     datasets: [{
-                        data: [24, 36, 18, 29, 15],
+                        data: [42, 38, 25, 18, 27],
                         backgroundColor: [
                             '#59ab6e',
                             '#2ecc71',
