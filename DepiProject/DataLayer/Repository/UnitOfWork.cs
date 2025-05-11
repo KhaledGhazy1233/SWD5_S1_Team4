@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private ApplicationDbContext? _db;
-        public IShoppingCartRepository ShoppingCart { get; set; }
+        private ApplicationDbContext _db;
+        //public IShoppingCartRepository ShoppingCart { get; private set; }
+        public IUserRepository User { get; private set; }
+        
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
-            ShoppingCart = new ShoppingCartRepository(_db);
-
+            //ShoppingCart = new ShoppingCartRepository(_db);
+            User = new UserRepository(_db);
         }
+        
         public void Save()
         {
             _db.SaveChanges();

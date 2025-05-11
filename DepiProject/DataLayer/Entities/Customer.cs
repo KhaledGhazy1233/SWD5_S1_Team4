@@ -1,7 +1,19 @@
-﻿namespace DEPI_Project.Infrastructure.Entities;
+﻿using System.Collections.Generic;
 
-public class Customer
+namespace DataLayer.Entities
 {
-    public int PersonId { get; set; }
-    public Person? Person { get; set; }
+    public class Customer
+    {
+        public Customer()
+        {
+            Orders = new List<Order>();
+        }
+        
+        public int CustomerId { get; set; }
+        public string ApplicationUserId { get; set; }
+        
+        // Navigation properties
+        public ApplicationUser ApplicationUser { get; set; }
+        public ICollection<Order> Orders { get; set; }
+    }
 }

@@ -8,7 +8,8 @@ namespace DataLayer.Repository.IRepository
 {
     public interface IUnitOfWork
     {
-        IShoppingCartRepository ShoppingCart { get; }
+        //IShoppingCartRepository ShoppingCart { get; }
+        IUserRepository User { get; }
         void Save();
     }
 }

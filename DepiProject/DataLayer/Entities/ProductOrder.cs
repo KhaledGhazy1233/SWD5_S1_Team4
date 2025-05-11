@@ -1,24 +1,27 @@
-﻿namespace DEPI_Project.Infrastructure.Entities;
+﻿using System;
 
-public class ProductOrder
+namespace DataLayer.Entities
 {
-    public ProductOrder()
+    public class ProductOrder
     {
-        Product = new Product();
-        Order = new Order();
+        public ProductOrder()
+        {
+            Name = string.Empty;
+            Brand = string.Empty;
+        }
+        
+        public int ProductOrderId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Amount { get; set; }
+        public string Brand { get; set; }
 
-        Name = string.Empty;
-        Brand = string.Empty;
+        // Foreign keys
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+
+        // Navigation properties
+        public Order Order { get; set; }
+        public Product Product { get; set; }
     }
-    public int ProductOrderId { get; set; }
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-    public int Amount { get; set; }
-    public string Brand { get; set; }
-
-    public int OrderId { get; set; }
-    public int ProductId { get; set; }
-
-    public Order Order { get; set; }
-    public Product Product { get; set; }
 }

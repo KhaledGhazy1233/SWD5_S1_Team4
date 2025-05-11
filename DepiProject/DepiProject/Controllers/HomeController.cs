@@ -135,9 +135,8 @@ namespace DepiProject.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public IActionResult index()
+        }        
+        public IActionResult Index()
         {
             // Pass featured products to the home page
             ViewBag.FeaturedProducts = _products.Where(p => p.IsFeatured).ToList();

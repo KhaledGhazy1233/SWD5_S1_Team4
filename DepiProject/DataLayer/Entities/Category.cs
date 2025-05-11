@@ -1,12 +1,24 @@
-﻿namespace DEPI_Project.Infrastructure.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-public class Category
+namespace DataLayer.Entities
 {
-    public int CategoryId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public class Category
+    {
+        public Category()
+        {
+            Products = new List<Product>();
+        }
+        
+        public int CategoryId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime? DeletedAt { get; set; }
-    public bool IsDeleted { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        
+        // Navigation properties
+        public ICollection<Product> Products { get; set; }
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using DataLayer.Context;
+using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
-    {
-        private ApplicationDbContext _db;
-        public ShoppingCartRepository(ApplicationDbContext db) : base(db)
-        {
-            _db = db;
-        }
+    //public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
+    //{
+    //    private ApplicationDbContext _db;
+    //    public ShoppingCartRepository(ApplicationDbContext db) : base(db)
+    //    {
+    //        _db = db;
+    //    }
 
 
-        public void Update(ShoppingCart obj)
-        {
-            _db.Update(obj);
-        }
-    }
+    //    public void Update(ShoppingCart obj)
+    //    {
+    //        _db.Update(obj);
+    //    }
+    //}
 }

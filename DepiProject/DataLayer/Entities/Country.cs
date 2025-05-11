@@ -1,11 +1,18 @@
-﻿namespace DEPI_Project.Infrastructure.Entities;
+﻿using System.Collections.Generic;
 
-public class Country
+namespace DataLayer.Entities
 {
-    public Country()
+    public class Country
     {
-        CountryName = string.Empty;
+        public Country()
+        {
+            CountryName = string.Empty;
+            Products = new List<Product>();
+        }
+        public int CountryId { get; set; }
+        public string CountryName { get; set; }
+        
+        // Navigation properties
+        public ICollection<Product> Products { get; set; }
     }
-    public int CountryId { get; set; }
-    public string CountryName { get; set; }
 }
