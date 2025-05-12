@@ -1,5 +1,6 @@
 using BusinessLayer.Extensions;
 using BusinessLayer.Services;
+using DataLayer.Extensions;
 using DataLayer.Repository;
 using DataLayer.Repository.IRepository;
 
@@ -14,9 +15,12 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
+        builder.Services.AddHttpClient();
         // Add Identity services
         builder.Services.AddIdentityServices(builder.Configuration)
-                        .AddFilesDependencies(builder.Configuration);
+                        .AddFilesDependencies(builder.Configuration)
+                        .AddInterfacesDependencies()
+                        .AddRepoDependencies();
         // Add repositories and unit of work
         //builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

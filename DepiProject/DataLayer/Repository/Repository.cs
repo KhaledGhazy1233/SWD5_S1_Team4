@@ -1,12 +1,7 @@
 ﻿using DataLayer.Context;
 using DataLayer.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
@@ -67,5 +62,10 @@ namespace DataLayer.Repository
             return query.ToList();
         }
 
+        public async Task Update(T entity)
+        {
+            dbSet.Update(entity);
+            await _db.SaveChangesAsync();
+        }
     }
 }
