@@ -1,17 +1,17 @@
-using DataLayer.Context;
+﻿using DataLayer.Context;
 using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
 
 namespace DataLayer.Repository;
 
-public class CategoryRepository : Repository<Category>, ICategoryRepository
+public class ProductImageRepository : Repository<ProductImage>, IProductImageRepository
 {
     #region      Fields
     private ApplicationDbContext _db;
     #endregion
 
     #region      Constructor
-    public CategoryRepository(ApplicationDbContext db) : base(db)
+    public ProductImageRepository(ApplicationDbContext db) : base(db)
     {
         _db = db;
     }
