@@ -13,7 +13,11 @@ namespace DataLayer.Entities
         
         public DateTime Created { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = false;
-        
+        public string ?FirstName { get; set; }
+        public string ?LastName { get; set; }
+        public string ?City { get; set; }
+        public string ?Country { get; set; }
+        public string ?PhoneNumber { get; set; }
         // Navigation properties
         public virtual User? User { get; set; }
         public virtual ICollection<Order> Orders { get; set; }

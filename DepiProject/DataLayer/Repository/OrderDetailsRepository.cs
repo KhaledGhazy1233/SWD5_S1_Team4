@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
+    public class OrderDetailsRepository : Repository<OrderDetails>, IOrderDetailsRepository
     {
         private ApplicationDbContext _db;
-        public ShoppingCartRepository(ApplicationDbContext db) : base(db)
+        public OrderDetailsRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
 
-        public void Update(ShoppingCart obj)
+        public void Update(OrderDetails obj)
         {
             _db.Update(obj);
         }

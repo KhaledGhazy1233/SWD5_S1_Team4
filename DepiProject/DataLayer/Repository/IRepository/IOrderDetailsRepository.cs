@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository.IRepository
 {
-    public interface IShoppingCartRepository : IRepository<ShoppingCart>
+    public interface IOrderDetailsRepository : IRepository<OrderDetails>
     {
-        void Update(ShoppingCart obj);
+        void Update(OrderDetails obj);
     }
 }
+
