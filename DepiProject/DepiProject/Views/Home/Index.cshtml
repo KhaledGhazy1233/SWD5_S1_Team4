@@ -1,56 +1,9 @@
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+}
 
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>TechXpress - Electronics Store</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <base href="/" />
-
-    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/templatemo.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
-
-    <!-- Load fonts style after rendering the layout styles -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-</head>
-
-<body>
-    <!-- Start Top Nav -->
-
-    <!-- Close Top Nav -->
-    <!-- Header -->
-
-    <!-- Close Header -->
-    <!-- Modal -->
-    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" method="get" class="modal-content modal-body border-0 p-0">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-
-    <!-- Start Banner Hero -->
+<!-- Start Banner Hero -->
     <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
         <ol class="carousel-indicators">
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
@@ -150,14 +103,54 @@
         <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel"
             role="button" data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
-        </a>
-        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
+        </a>        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
             role="button" data-bs-slide="next">
             <i class="fas fa-chevron-right"></i>
         </a>
     </div>
     <!-- End Banner Hero -->
-    <!-- Start Categories of The Month -->
+    
+    @if (ViewBag.UserName != null)
+    {
+        <!-- Start Personalized Welcome for logged-in users -->
+        <div class="container py-4">
+            <div class="role-card shadow-sm p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3>Welcome back, <span class="@(ViewBag.UserRole == "Admin" ? "admin-text-primary" : "customer-text-primary")">@ViewBag.UserName</span>!</h3>
+                        <div class="mb-3">
+                            <span class="badge @ViewBag.RoleBadgeClass">@ViewBag.UserRole</span>
+                        </div>
+                        @if (ViewBag.UserRole == "Admin")
+                        {
+                            <p>Manage your store's products, orders, and customer accounts from your Admin Dashboard.</p>
+                            <a href="/Admin/Dashboard" class="btn admin-btn-primary mt-2">
+                                <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+                            </a>
+                        }
+                        else if (ViewBag.UserRole == "Customer") 
+                        {
+                            <p>You have <strong>@ViewBag.PendingOrdersCount</strong> pending orders. Your last order was on <strong>@ViewBag.LatestOrderDate</strong>.</p>
+                            <div class="mt-3">
+                                <a href="/Customer/Dashboard" class="btn customer-btn-primary me-2">
+                                    <i class="fas fa-user me-2"></i>My Dashboard
+                                </a>
+                                <a href="/Customer/Orders" class="btn btn-outline-success">
+                                    <i class="fas fa-box me-2"></i>My Orders
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                        <div class="display-4 @(ViewBag.UserRole == "Admin" ? "text-primary" : "text-success")">
+                            <i class="@(ViewBag.UserRole == "Admin" ? "fas fa-user-shield" : "fas fa-user")"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Personalized Welcome -->
+    }<!-- Start Categories of The Month -->
     <section class="container py-5">
         <div class="row text-center pt-3">
             <div class="col-lg-6 m-auto">
@@ -169,30 +162,69 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="/Home/shop?category=laptops"><img src="./assets/img/category_img_01.jpg"
-                        class="rounded-circle img-fluid border"></a>
-                <h5 class="text-center mt-3 mb-3">Laptops</h5>
-                <p class="text-center"><a href="/Home/shop?category=laptops" class="btn btn-success">Browse Laptops</a>
-                </p>
+            <div class="col-12 col-md-4 mb-5">
+                <div class="category-card shadow-sm h-100">
+                    <div class="position-relative">
+                        <a href="/Home/shop?category=laptops">
+                            <img src="https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain"
+                                class="category-img w-100">
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-success">15 Products</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h4 class="mb-3">Laptops</h4>
+                        <p class="text-muted mb-3">Powerful machines for work and play, from ultrabooks to gaming powerhouses</p>
+                        <a href="/Home/shop?category=laptops" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="fas fa-laptop me-2"></i>Browse Laptops
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="/Home/shop?category=mobiles"><img src="./assets/img/category_img_02.jpg"
-                        class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Mobiles</h2>
-                <p class="text-center"><a href="/Home/shop?category=mobiles" class="btn btn-success">Browse Mobiles</a>
-                </p>
+            <div class="col-12 col-md-4 mb-5">
+                <div class="category-card shadow-sm h-100">
+                    <div class="position-relative">
+                        <a href="/Home/shop?category=mobiles">
+                            <img src="https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png"
+                                class="category-img w-100">
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-success">8 Products</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h4 class="mb-3">Mobiles</h4>
+                        <p class="text-muted mb-3">Stay connected with the latest smartphones featuring cutting-edge technology</p>
+                        <a href="/Home/shop?category=mobiles" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="fas fa-mobile-alt me-2"></i>Browse Mobiles
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="/Home/shop?category=cameras"><img src="./assets/img/category_img_03.jpg"
-                        class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Cameras</h2>
-                <p class="text-center"><a href="/Home/shop?category=cameras" class="btn btn-success">Browse Cameras</a>
-                </p>
+            <div class="col-12 col-md-4 mb-5">
+                <div class="category-card shadow-sm h-100">
+                    <div class="position-relative">
+                        <a href="/Home/shop?category=cameras">
+                            <img src="https://tse3.mm.bing.net/th/id/OIP.Kuw2tT6BMjFfN3UpgO1j2QHaE8?cb=iwc2&rs=1&pid=ImgDetMain"
+                                class="category-img w-100">
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-success">5 Products</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h4 class="mb-3">Cameras</h4>
+                        <p class="text-muted mb-3">Capture life's moments with professional quality cameras and accessories</p>
+                        <a href="/Home/shop?category=cameras" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="fas fa-camera me-2"></i>Browse Cameras
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    <!-- End Categories of The Month --> <!-- Start Featured Product -->
+    <!-- End Categories of The Month --><!-- Start Featured Product -->
     <section class="bg-light">
         <div class="container py-5">
             <div class="row text-center py-3">
@@ -208,49 +240,69 @@
                 @if (ViewBag.FeaturedProducts != null && ViewBag.FeaturedProducts.Count > 0)
                 {
                     foreach (var product in ViewBag.FeaturedProducts)
-                    {
-                        <div class="col-12 col-md-4 mb-4">
-                            <div class="card h-100">
-                                <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id">
+                    {                        <div class="col-12 col-md-4 mb-4">
+                            <div class="product-card h-100">
+                                @if (product.DiscountPercentage > 0)
+                                {
+                                    <div class="position-absolute top-0 left-0 p-3">
+                                        <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                            <i class="fas fa-tag me-1"></i>@product.DiscountPercentage% OFF
+                                        </span>
+                                    </div>
+                                }
+                                <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id" class="position-relative">
                                     <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
                                 </a>
-                                <div class="card-body">
-                                    <ul class="list-unstyled d-flex justify-content-between">
-                                        <li>
+                                <div class="card-body d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="product-brand">
+                                            <i class="fas fa-tag me-1"></i>@product.Brand
+                                        </span>
+                                        <div class="ratings">
                                             <i class="text-warning fa fa-star"></i>
                                             <i class="text-warning fa fa-star"></i>
                                             <i class="text-warning fa fa-star"></i>
                                             <i class="text-warning fa fa-star"></i>
                                             <i class="text-muted fa fa-star"></i>
-                                        </li>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title mb-3">
+                                        <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
+                                            class="text-decoration-none text-dark">@product.Name</a>
+                                    </h5>
+                                    <p class="card-text flex-grow-1 text-muted">
+                                        @(product.Description.Length > 100 ? $"{product.Description.Substring(0, 100)}..." : product.Description)
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
                                         @if (product.DiscountPercentage > 0)
                                         {
                                             decimal discountedPrice = product.Price * (1 - (product.DiscountPercentage / 100));
-                                            <li>
-                                                <span
-                                                    class="text-muted text-decoration-line-through">$@product.Price.ToString("0.00")</span>
-                                                <span class="text-danger"> $@discountedPrice.ToString("0.00")</span>
-                                            </li>
+                                            <div>
+                                                <span class="product-price product-price-discount">$@discountedPrice.ToString("0.00")</span>
+                                                <span class="text-muted text-decoration-line-through ms-2">$@product.Price.ToString("0.00")</span>
+                                            </div>
                                         }
                                         else
                                         {
-                                            <li class="text-muted text-right">$@product.Price.ToString("0.00")</li>
+                                            <span class="product-price">$@product.Price.ToString("0.00")</span>
                                         }
-                                    </ul>
-                                    <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
-                                        class="h2 text-decoration-none text-dark">@product.Name</a>
-                                    <p class="card-text">
-                                        @product.Description
-                                    </p>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="text-muted">Brand: @product.Brand</p>
+                                        
                                         @if (product.StockQuantity <= 5)
                                         {
-                                            <p class="text-danger">Only @product.StockQuantity left!</p>
+                                            <span class="badge bg-warning text-dark rounded-pill">Only @product.StockQuantity left</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success rounded-pill">In Stock</span>
                                         }
                                     </div>
-                                    <div class="d-grid gap-2">
-                                        <a href="/Cart/AddToCart?productId=@product.Id" class="btn btn-success">Add to Cart</a>
+                                    <div class="d-flex mt-3">
+                                        <a href="/Cart/AddToCart?productId=@product.Id" class="btn btn-success flex-grow-1">
+                                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                        </a>
+                                        <a href="#" class="btn btn-outline-secondary ms-2">
+                                            <i class="far fa-heart"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -277,6 +329,3 @@
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
     <!-- End Script -->
-</body>
-
-</html>

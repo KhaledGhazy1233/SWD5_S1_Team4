@@ -1,0 +1,121 @@
+@using Microsoft.AspNetCore.Identity
+@using DataLayer.Entities
+@using BusinessLayer.Constants
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    var isAdmin = user != null && await UserManager.IsInRoleAsync(user, Roles.Admin);
+    var isCustomer = user != null && await UserManager.IsInRoleAsync(user, Roles.Customer);
+    
+    <li class="nav-item dropdown">
+        @if (isAdmin)
+        {
+            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="badge bg-primary me-2">
+                    <i class="fas fa-user-shield me-1"></i>Admin
+                </span>
+                <span>@(user?.UserName ?? "User")</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="adminDropdown">
+                <li class="px-3 py-2 bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-shield fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">@(user?.UserName ?? "User")</div>
+                            <div class="small">Administrator</div>
+                        </div>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+                <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="Dashboard">
+                    <i class="fas fa-tachometer-alt me-2"></i> Admin Dashboard</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Product" asp-action="Index">
+                    <i class="fas fa-box me-2"></i> Manage Products</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Category" asp-action="Index">
+                    <i class="fas fa-tags me-2"></i> Manage Categories</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="Orders">
+                    <i class="fas fa-shopping-cart me-2"></i> Manage Orders</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Admin" asp-action="Customers">
+                    <i class="fas fa-users me-2"></i> Manage Customers</a>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+        }
+        else if (isCustomer)
+        {
+            <a class="nav-link dropdown-toggle" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="badge bg-success me-2">
+                    <i class="fas fa-user me-1"></i>Customer
+                </span>
+                <span>@(user?.UserName ?? "User")</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="customerDropdown">
+                <li class="px-3 py-2 bg-success text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">@(user?.UserName ?? "User")</div>
+                            <div class="small">Customer</div>
+                        </div>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+                <li><a class="dropdown-item py-2" asp-controller="Customer" asp-action="Dashboard">
+                    <i class="fas fa-tachometer-alt me-2"></i> My Dashboard</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Customer" asp-action="Orders">
+                    <i class="fas fa-shopping-bag me-2"></i> My Orders</a>
+                </li>
+                <li><a class="dropdown-item py-2" asp-controller="Profile" asp-action="Index">
+                    <i class="fas fa-user-edit me-2"></i> Edit Profile</a>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+        }
+        else
+        {
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user me-1"></i>
+                <span>@(user?.UserName ?? "User")</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                <li class="px-3 py-2 bg-info text-white">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">@(user?.UserName ?? "User")</div>
+                            <div class="small">User</div>
+                        </div>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+            <li>
+                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in-alt me-1"></i> Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Account" asp-action="Register"><i class="fa fa-user-plus me-1"></i> Register</a>
+    </li>
+}
+</ul>

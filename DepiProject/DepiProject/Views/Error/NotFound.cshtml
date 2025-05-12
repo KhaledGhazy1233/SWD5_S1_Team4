@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-template">
+                <h1 class="display-1 text-danger">@ViewData["StatusCode"]</h1>
+                <h2 class="mb-4">Oops! Something went wrong</h2>
+                <div class="error-details mb-4">
+                    @ViewData["ErrorMessage"]
+                </div>
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home me-2"></i>Take Me Home
+                    </a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Go Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .error-template {
+        padding: 40px 15px;
+    }
+    .error-template h1 {
+        font-size: 80px;
+        font-weight: bold;
+    }
+    .error-details {
+        font-size: 1.2rem;
+        color: #666;
+    }
+    .error-actions {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+</style> 

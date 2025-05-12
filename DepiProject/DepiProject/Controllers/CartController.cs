@@ -1,6 +1,5 @@
 ﻿using DataLayer.Repository.IRepository;
-//using DepiProject.Models;
-using DepiProject.ViewModel;
+using DepiProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DataLayer.Entities;
@@ -85,7 +84,7 @@ namespace DepiProject.Controllers
                 OrderHeader = new()
             };
 
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.ApplicationUser.Get(u => u.Id == userId);
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
 
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
@@ -119,13 +118,10 @@ namespace DepiProject.Controllers
                 OrderHeader = new()
             };
 
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.ApplicationUser.Get(u => u.Id == userId);
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
             ShoppingCartVM.OrderHeader.FirstName = ShoppingCartVM.OrderHeader.ApplicationUser.FirstName;
-            ShoppingCartVM.OrderHeader.LastName = ShoppingCartVM.OrderHeader.ApplicationUser.LastName;
-            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.LastName = ShoppingCartVM.OrderHeader.ApplicationUser.LastName;            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
             ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
-            ShoppingCartVM.OrderHeader.Country = ShoppingCartVM.OrderHeader.ApplicationUser.Country;
-            //ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
 
 
 
@@ -172,7 +168,7 @@ namespace DepiProject.Controllers
             _unitofOfWork.Save();
 
             // Stripe Checkout Session
-            var domain = "http://localhost:5086/"; // غيره حسب عنوان موقعك
+            var domain = "http://localhost:5086/";
             var options = new Stripe.Checkout.SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -213,7 +209,6 @@ namespace DepiProject.Controllers
         }
         public IActionResult OrderConfirmation(int id)
         {
-            // استرجاع الـ OrderHeader
             OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
 
             if (orderHeader == null)
@@ -226,25 +221,21 @@ namespace DepiProject.Controllers
 
                 var service = new Stripe.Checkout.SessionService();
                 Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
-                // استرجاع تفاصيل الجلسة من Stripe
 
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
-                    // إذا كانت حالة الدفع "مدفوعة"
-                    _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);  // تحديث بيانات الدفع
-                    _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);  // تحديث حالة الطلب
-                    _unitofOfWork.Save();  // حفظ التغييرات
+                    _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
+                    _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitofOfWork.Save();
                 }
 
-                // إزالة جميع العناصر من سلة التسوق للمستخدم المرتبط بالطلب
                 List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
                     .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
-                _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);  // إزالة العناصر
-                _unitofOfWork.Save();  // حفظ التغييرات
+                _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+                _unitofOfWork.Save();
             }
 
-            // إرجاع عرض تأكيد الطلب
-            return View(id);  // أو يمكنك إرجاع شيء آخر مثل إعادة توجيه إلى صفحة معينة
+            return View(id);
         }
 
     }

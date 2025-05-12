@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository.IRepository
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository
     {
-        void Update(User user);
+        ApplicationUser GetUser(string id);
+        Task<ApplicationUser> GetByIdAsync(string id);
+        Task<bool> UpdateAsync(ApplicationUser user);
+        IEnumerable<ApplicationUser> GetAll();
     }
 }

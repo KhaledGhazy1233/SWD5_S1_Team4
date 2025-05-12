@@ -9,10 +9,10 @@ namespace DataLayer.Repository.IRepository
     public interface IUnitOfWork
     {
         IShoppingCartRepository ShoppingCart { get; }
-        IApplicationUserRepository ApplicationUser { get; }
+        IUserRepository User { get; }
         IOrderHeaderRepository OrderHeader { get; }
         IOrderDetailsRepository OrderDetails { get; }
-        IUserRepository User { get; }
+        IProductRepository Product { get; }
         void Save();
     }
 }
