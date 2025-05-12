@@ -1,127 +1,251 @@
-﻿using DepiProject.Models;
+﻿using DataLayer.Repository.IRepository;
+//using DepiProject.Models;
 using DepiProject.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
+using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 namespace DepiProject.Controllers
 {
     public class CartController : Controller
     {
+        private IUnitOfWork _unitofOfWork;
+        public ShoppingCartVM ShoppingCartVM { get; set; }
+        public CartController(IUnitOfWork unitOfWork)
+        {
+            _unitofOfWork = unitOfWork;
+        }
+        [Authorize]
+        public IActionResult AddToCart(int productId, int quantity)
+        {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var cartItem = _unitofOfWork.ShoppingCart.Get(c => c.ApplicationUserId == userId && c.ProductId == productId);
+
+
+            if (cartItem != null)
+            {
+                cartItem.Count += quantity;
+
+                _unitofOfWork.ShoppingCart.Update(cartItem);
+            }
+            else
+            {
+                _unitofOfWork.ShoppingCart.Add(new ShoppingCart
+                {
+                    ApplicationUserId = userId,
+                    ProductId = productId,
+                    Count = quantity,
+                });
+            }
+
+            _unitofOfWork.Save();
+            return RedirectToAction("Index", "Home", new { id = productId });
+        }
+        public IActionResult Plus(int cartId)
+        {
+            var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            cartfromdb.Count += 1;
+            _unitofOfWork.ShoppingCart.Update(cartfromdb);
+            _unitofOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Minus(int cartId)
+        {
+            var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb.Count <= 1)
+            {
+                _unitofOfWork.ShoppingCart.Remove(cartfromdb);
+            }
+            else
+            {
+                cartfromdb.Count -= 1;
+                _unitofOfWork.ShoppingCart.Update(cartfromdb);
+            }
+            _unitofOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Remove(int cartId)
+        {
+            var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            _unitofOfWork.ShoppingCart.Remove(cartfromdb);
+            _unitofOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+
         public IActionResult Index()
         {
-            var shoppingcartvm = new ShoppingCartVM
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ShoppingCartVM = new()
             {
-                ShoppingCart = new List<ShoppingCart>
-    {
-        new ShoppingCart
-        {
-            Id = 1,
-            Name = "Product 1",
-            Description = "Description of Product 1",
-            Price = 10.0,
-            Count = 2,
-            Image = "image1.jpg"
-        },
-        new ShoppingCart
-        {
-            Id = 2,
-            Name = "Product 2",
-            Description = "Description of Product 2",
-            Price = 20.0,
-            Count = 1,
-            Image = "image2.jpg"
-        }
-    },
-                TotalPrice = 10.0 * 2 + 20.0 * 1 // = 40.0
+                ShoppingCartList = _unitofOfWork.ShoppingCart.GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product"),
+                OrderHeader = new()
             };
 
-            return View(shoppingcartvm);
-        }
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.ApplicationUser.Get(u => u.Id == userId);
 
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderHeader.OrderTotal += (double)(cart.Product.Price * cart.Count);
+            }
+            return View(ShoppingCartVM);
+        }
+        //AddInIConCartINNavBar(Header)
+        [AllowAnonymous]
+        public int GetCartCount()
+        {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return 0;
+            }
+            else
+                return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
+        }
+        public IActionResult SummaryOrder()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            ShoppingCartVM = new()
+            {
+                ShoppingCartList = _unitofOfWork.ShoppingCart.GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product"),
+                OrderHeader = new()
+            };
+
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.ApplicationUser.Get(u => u.Id == userId);
+            ShoppingCartVM.OrderHeader.FirstName = ShoppingCartVM.OrderHeader.ApplicationUser.FirstName;
+            ShoppingCartVM.OrderHeader.LastName = ShoppingCartVM.OrderHeader.ApplicationUser.LastName;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+            ShoppingCartVM.OrderHeader.Country = ShoppingCartVM.OrderHeader.ApplicationUser.Country;
+            //ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
+
+
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderHeader.OrderTotal += (double)(cart.Product.Price * cart.Count);
+            }
+
+            return View(ShoppingCartVM);
+        }
         [HttpPost]
-        public IActionResult Checkout()
+        public IActionResult SummaryPost()
         {
-            // Prepare the shopping cart data for the checkout page
-            var shoppingcartvm = new ShoppingCartVM
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            ShoppingCartVM.ShoppingCartList = _unitofOfWork.ShoppingCart.GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product");
+
+            ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
+            ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
-                ShoppingCart = new List<ShoppingCart>
+                ShoppingCartVM.OrderHeader.OrderTotal += (double)(cart.Product.Price * cart.Count);
+            }
+
+            ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
+
+            _unitofOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+            _unitofOfWork.Save();
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                OrderDetails orderDetails = new()
                 {
-                    new ShoppingCart
-                    {
-                        Id = 1,
-                        Name = "High-Performance Laptop",
-                        Description = "16GB RAM, 512GB SSD, Intel Core i7",
-                        Price = 999.99,
-                        Count = 1,
-                        Image = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain"
-                    },
-                    new ShoppingCart
-                    {
-                        Id = 2,
-                        Name = "Premium Smartphone",
-                        Description = "128GB Storage, 8GB RAM, 108MP Camera",
-                        Price = 799.99,
-                        Count = 1,
-                        Image = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png"
-                    }
-                },
-                TotalPrice = 999.99 + 799.99 // = 1799.98
+                    ProductId = cart.ProductId,
+                    OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
+                    Price = (double)cart.Product.Price,
+                    Count = cart.Count
+                };
+                _unitofOfWork.OrderDetails.Add(orderDetails);
+            }
+            _unitofOfWork.Save();
+
+            // Stripe Checkout Session
+            var domain = "http://localhost:5086/"; // غيره حسب عنوان موقعك
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<Stripe.Checkout.SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                CancelUrl = domain + "Customer/Cart/Index",
             };
 
-            // Render the checkout page
-            return View(shoppingcartvm);
-        }
-
-        [HttpPost]
-        public IActionResult PlaceOrder()
-        {
-            // In a real application, this would:
-            // 1. Validate input data
-            // 2. Process the payment
-            // 3. Create the order in the database
-            // 4. Clear the shopping cart
-
-            // For now, we'll just redirect to the confirmation page with the order ID
-            // Simulating a new order with ID 1001
-            return RedirectToAction("OrderConfirmation", new { orderId = 1001 });
-        }
-
-        public IActionResult OrderConfirmation(int orderId)
-        {
-            // In a real application, we would:
-            // 1. Fetch the order details from the database using the orderId
-            // 2. Pass the order details to the view
-
-            // For this demo, we'll create a mock order
-            var orderDetails = new
+            foreach (var item in ShoppingCartVM.ShoppingCartList)
             {
-                OrderId = orderId,
-                OrderDate = DateTime.Now,
-                ShippingAddress = "123 Main St, City, Country",
-                Items = new List<ShoppingCart>
+                var sessionItem = new Stripe.Checkout.SessionLineItemOptions
                 {
-                    new ShoppingCart
+                    PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
                     {
-                        Id = 1,
-                        Name = "High-Performance Laptop",
-                        Description = "16GB RAM, 512GB SSD, Intel Core i7",
-                        Price = 999.99,
-                        Count = 1,
-                        Image = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain"
+                        UnitAmount = (long)(item.Product.Price * 100), // Stripe uses cents
+                        Currency = "usd",
+                        ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Name
+                        }
                     },
-                    new ShoppingCart
-                    {
-                        Id = 2,
-                        Name = "Premium Smartphone",
-                        Description = "128GB Storage, 8GB RAM, 108MP Camera",
-                        Price = 799.99,
-                        Count = 1,
-                        Image = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png"
-                    }
-                },
-                TotalPrice = 999.99 + 799.99 // = 1799.98
-            };
+                    Quantity = item.Count
+                };
+                options.LineItems.Add(sessionItem);
+            }
 
-            return View(orderDetails);
+            var service = new Stripe.Checkout.SessionService();
+            var session = service.Create(options);
+
+            _unitofOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+            _unitofOfWork.Save();
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303); // Redirect to Stripe Checkout
+
+
         }
+        public IActionResult OrderConfirmation(int id)
+        {
+            // استرجاع الـ OrderHeader
+            OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
+
+            if (orderHeader == null)
+            {
+                return NotFound();
+            }
+
+            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+            {
+
+                var service = new Stripe.Checkout.SessionService();
+                Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
+                // استرجاع تفاصيل الجلسة من Stripe
+
+                if (session.PaymentStatus.ToLower() == "paid")
+                {
+                    // إذا كانت حالة الدفع "مدفوعة"
+                    _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);  // تحديث بيانات الدفع
+                    _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);  // تحديث حالة الطلب
+                    _unitofOfWork.Save();  // حفظ التغييرات
+                }
+
+                // إزالة جميع العناصر من سلة التسوق للمستخدم المرتبط بالطلب
+                List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
+                    .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+                _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);  // إزالة العناصر
+                _unitofOfWork.Save();  // حفظ التغييرات
+            }
+
+            // إرجاع عرض تأكيد الطلب
+            return View(id);  // أو يمكنك إرجاع شيء آخر مثل إعادة توجيه إلى صفحة معينة
+        }
+
     }
 }

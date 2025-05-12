@@ -1,10 +1,12 @@
-﻿using DepiProject.Models;
+﻿using DataLayer.Entities;
+using DepiProject.Models;
 
 namespace DepiProject.ViewModel
 {
     public class ShoppingCartVM
     {
-        public IEnumerable<ShoppingCart> ? ShoppingCart { get; set; }
-        public double TotalPrice { get; set; }
+        public IEnumerable<DataLayer.Entities.ShoppingCart> ShoppingCartList { get; set; }
+        public double OrderTotal { get; set; }
+        public OrderHeader ?OrderHeader { get; set; }
     }
 }

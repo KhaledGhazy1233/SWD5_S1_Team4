@@ -24,6 +24,10 @@ namespace DataLayer.Context
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<User> AppUsers { get; set; }
+        public DbSet<ApplicationUser> ApplicatioUsers { get; set; }
+        public DbSet<OrderHeader> OrderHeaders { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -25,11 +25,20 @@ namespace DataLayer.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string includeProperties = null)
         {
             IQueryable<T> entites = dbSet;
             entites = entites.Where(filter);
             return entites.FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entites = entites.Include(includeProp);
+                }
+            }
+
         }
 
         public IEnumerable<T> GetAll()
