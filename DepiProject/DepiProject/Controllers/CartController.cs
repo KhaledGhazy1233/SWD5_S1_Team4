@@ -1,5 +1,5 @@
 ﻿using DepiProject.Models;
-using DepiProject.ViewModel;
+using DepiProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DepiProject.Controllers

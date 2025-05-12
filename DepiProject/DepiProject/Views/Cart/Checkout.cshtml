@@ -1,4 +1,4 @@
-@model DepiProject.ViewModel.ShoppingCartVM
+@model DepiProject.ViewModels.ShoppingCartVM
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -74,142 +74,156 @@
         <div class="col-md-8">
             <h2 class="mb-4"><i class="fas fa-credit-card me-2"></i> Checkout</h2>
             
-            <form asp-controller="Cart" asp-action="PlaceOrder" method="post" class="checkout-form">
-                <!-- Customer Information -->
-                <div class="form-section">
-                    <h4 class="section-title">Customer Information</h4>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName" name="FirstName" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" name="LastName" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="Email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" name="Phone" required>
-                    </div>
-                </div>
-                
-                <!-- Shipping Information -->
-                <div class="form-section">
-                    <h4 class="section-title">Shipping Information</h4>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Street Address</label>
-                        <input type="text" class="form-control" id="address" name="Address" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city" name="City" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="state" class="form-label">State/Province</label>
-                            <input type="text" class="form-control" id="state" name="State" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="zipCode" class="form-label">Zip/Postal Code</label>
-                            <input type="text" class="form-control" id="zipCode" name="ZipCode" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="country" class="form-label">Country</label>
-                        <select class="form-select" id="country" name="Country" required>
-                            <option value="" selected disabled>Select a country</option>
-                            <option value="USA">United States</option>
-                            <option value="CAN">Canada</option>
-                            <option value="AUS">Australia</option>
-                            <option value="GBR">United Kingdom</option>
-                            <option value="GER">Germany</option>
-                            <option value="FRA">France</option>
-                            <option value="JPN">Japan</option>
-                            <option value="CHN">China</option>
-                            <option value="IND">India</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Payment Information -->
-                <div class="form-section">
-                    <h4 class="section-title">Payment Method</h4>
-                    
-                    <div class="payment-option selected">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
-                            <label class="form-check-label d-flex align-items-center" for="creditCard">
-                                <i class="fas fa-credit-card me-2"></i> Credit/Debit Card
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="payment-option">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
-                            <label class="form-check-label d-flex align-items-center" for="paypal">
-                                <i class="fab fa-paypal me-2"></i> PayPal
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="payment-details mt-3">
+            @if (Model?.ShoppingCart != null && Model.ShoppingCart.Any())
+            {
+                <form asp-controller="Cart" asp-action="PlaceOrder" method="post" class="checkout-form">
+                    <!-- Customer Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">Customer Information</h4>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="cardName" class="form-label">Name on Card</label>
-                                <input type="text" class="form-control" id="cardName" name="CardName">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="FirstName" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="cardNumber" class="form-label">Card Number</label>
-                                <input type="text" class="form-control" id="cardNumber" name="CardNumber" placeholder="XXXX XXXX XXXX XXXX">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="LastName" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="Email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="Phone" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Shipping Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">Shipping Information</h4>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Street Address</label>
+                            <input type="text" class="form-control" id="address" name="Address" required>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="expiryMonth" class="form-label">Expiry Month</label>
-                                <select class="form-select" id="expiryMonth" name="ExpiryMonth">
-                                    <option value="01">01 - January</option>
-                                    <option value="02">02 - February</option>
-                                    <option value="03">03 - March</option>
-                                    <option value="04">04 - April</option>
-                                    <option value="05">05 - May</option>
-                                    <option value="06">06 - June</option>
-                                    <option value="07">07 - July</option>
-                                    <option value="08">08 - August</option>
-                                    <option value="09">09 - September</option>
-                                    <option value="10">10 - October</option>
-                                    <option value="11">11 - November</option>
-                                    <option value="12">12 - December</option>
-                                </select>
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="City" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="expiryYear" class="form-label">Expiry Year</label>
-                                <select class="form-select" id="expiryYear" name="ExpiryYear">
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2027">2027</option>
-                                    <option value="2028">2028</option>
-                                </select>
+                                <label for="state" class="form-label">State/Province</label>
+                                <input type="text" class="form-control" id="state" name="State" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="cvv" class="form-label">CVV</label>
-                                <input type="text" class="form-control" id="cvv" name="CVV" placeholder="XXX">
+                                <label for="zipCode" class="form-label">Zip/Postal Code</label>
+                                <input type="text" class="form-control" id="zipCode" name="ZipCode" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            <select class="form-select" id="country" name="Country" required>
+                                <option value="" selected disabled>Select a country</option>
+                                <option value="USA">United States</option>
+                                <option value="CAN">Canada</option>
+                                <option value="AUS">Australia</option>
+                                <option value="GBR">United Kingdom</option>
+                                <option value="GER">Germany</option>
+                                <option value="FRA">France</option>
+                                <option value="JPN">Japan</option>
+                                <option value="CHN">China</option>
+                                <option value="IND">India</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">Payment Method</h4>
+                        
+                        <div class="payment-option selected">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
+                                <label class="form-check-label d-flex align-items-center" for="creditCard">
+                                    <i class="fas fa-credit-card me-2"></i> Credit/Debit Card
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-option">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
+                                <label class="form-check-label d-flex align-items-center" for="paypal">
+                                    <i class="fab fa-paypal me-2"></i> PayPal
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-details mt-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cardName" class="form-label">Name on Card</label>
+                                    <input type="text" class="form-control" id="cardName" name="CardName">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="cardNumber" class="form-label">Card Number</label>
+                                    <input type="text" class="form-control" id="cardNumber" name="CardNumber" placeholder="XXXX XXXX XXXX XXXX">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="expiryMonth" class="form-label">Expiry Month</label>
+                                    <select class="form-select" id="expiryMonth" name="ExpiryMonth">
+                                        <option value="01">01 - January</option>
+                                        <option value="02">02 - February</option>
+                                        <option value="03">03 - March</option>
+                                        <option value="04">04 - April</option>
+                                        <option value="05">05 - May</option>
+                                        <option value="06">06 - June</option>
+                                        <option value="07">07 - July</option>
+                                        <option value="08">08 - August</option>
+                                        <option value="09">09 - September</option>
+                                        <option value="10">10 - October</option>
+                                        <option value="11">11 - November</option>
+                                        <option value="12">12 - December</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="expiryYear" class="form-label">Expiry Year</label>
+                                    <select class="form-select" id="expiryYear" name="ExpiryYear">
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" name="CVV" placeholder="XXX">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <button type="submit" class="btn place-order-btn w-100 py-3 mt-4">
+                        <i class="fas fa-lock me-2"></i> Place Your Order
+                    </button>
+                </form>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <h3>Your cart is empty</h3>
+                    <p class="text-muted">Add some items to your cart before proceeding to checkout</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
+                        <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                    </a>
                 </div>
-                
-                <button type="submit" class="btn place-order-btn w-100 py-3 mt-4">
-                    <i class="fas fa-lock me-2"></i> Place Your Order
-                </button>
-            </form>
+            }
         </div>
         
         <div class="col-md-4 mt-4 mt-md-0">

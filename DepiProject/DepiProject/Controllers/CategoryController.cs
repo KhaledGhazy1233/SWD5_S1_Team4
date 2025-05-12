@@ -1,4 +1,4 @@
-﻿using DepiProject.ViewModel.Category;
+﻿using DepiProject.ViewModels.Category;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DepiProject.Controllers

@@ -1,6 +1,6 @@
-﻿using DepiProject.Models;
+using DepiProject.Models;
 
-namespace DepiProject.ViewModel
+namespace DepiProject.ViewModels
 {
     public class ShoppingCartVM
     {

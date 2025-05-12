@@ -10,6 +10,7 @@ namespace DataLayer.Repository.IRepository
     {
         //IShoppingCartRepository ShoppingCart { get; }
         IUserRepository User { get; }
+        IProductRepository Product { get; }
         void Save();
     }
 }

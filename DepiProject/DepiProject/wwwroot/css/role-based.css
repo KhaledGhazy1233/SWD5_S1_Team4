@@ -1,0 +1,228 @@
+/* Role-based CSS for TechXpress application */
+
+/* Role-based notifications */
+.role-notification-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.role-notification {
+    border-radius: 8px;
+    border-left-width: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.role-notification:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+}
+
+.role-notification .alert-link {
+    color: inherit;
+    font-weight: 500;
+}
+
+.role-notification.alert-primary {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: #3498db;
+    color: #2475a5;
+}
+
+.role-notification.alert-success {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: #2ecc71;
+    color: #25a25a;
+}
+
+.role-notification.alert-warning {
+    background-color: rgba(243, 156, 18, 0.1);
+    border-color: #f39c12;
+    color: #c87f0a;
+}
+
+.role-notification.alert-danger {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: #e74c3c;
+    color: #c0392b;
+}
+
+.role-notification.alert-info {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: #3498db;
+    color: #2980b9;
+}
+
+/* Common role-based components */
+.role-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: none;
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.role-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    position: relative;
+}
+
+.role-header:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Admin-specific styling */
+.admin-header:after {
+    background-color: #3498db;
+}
+
+.admin-text-primary {
+    color: #3498db !important;
+}
+
+.admin-bg-primary {
+    background-color: #3498db !important;
+}
+
+.admin-btn-primary {
+    background-color: #3498db !important;
+    border-color: #3498db !important;
+}
+
+.admin-btn-primary:hover {
+    background-color: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+
+.admin-icon-lg {
+    font-size: 3rem;
+    opacity: 0.2;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.admin-stat-card {
+    border-left: 4px solid;
+}
+
+.admin-stat-card.primary {
+    border-left-color: #3498db;
+}
+
+.admin-stat-card.success {
+    border-left-color: #2ecc71;
+}
+
+.admin-stat-card.warning {
+    border-left-color: #f39c12;
+}
+
+.admin-stat-card.danger {
+    border-left-color: #e74c3c;
+}
+
+.bg-info-light {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.bg-success-light {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.bg-warning-light {
+    background-color: rgba(243, 156, 18, 0.1);
+}
+
+.bg-danger-light {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Customer-specific styling */
+.customer-header:after {
+    background-color: #2ecc71;
+}
+
+.customer-text-primary {
+    color: #2ecc71 !important;
+}
+
+.customer-bg-primary {
+    background-color: #2ecc71 !important;
+}
+
+.customer-btn-primary {
+    background-color: #2ecc71 !important;
+    border-color: #2ecc71 !important;
+}
+
+.customer-btn-primary:hover {
+    background-color: #27ae60 !important;
+    border-color: #27ae60 !important;
+}
+
+.customer-sidebar .list-group-item.active {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+
+.customer-stat-card {
+    border-left: 4px solid;
+}
+
+.customer-stat-card.primary {
+    border-left-color: #2ecc71;
+}
+
+.customer-stat-card.success {
+    border-left-color: #3498db;
+}
+
+.customer-stat-card.warning {
+    border-left-color: #f39c12;
+}
+
+/* Dashboard stats cards */
+.dashboard-icon {
+    font-size: 2rem;
+    padding: 15px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Role-based nav tabs */
+.role-tabs .nav-link {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0;
+    font-weight: 500;
+    color: #666;
+}
+
+.admin-tabs .nav-link.active {
+    color: #3498db;
+    border-bottom: 3px solid #3498db;
+}
+
+.customer-tabs .nav-link.active {
+    color: #2ecc71;
+    border-bottom: 3px solid #2ecc71;
+}

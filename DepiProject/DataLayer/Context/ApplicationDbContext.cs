@@ -4,109 +4,91 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities;
 
-namespace DataLayer.Context
+namespace DataLayer.Context;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
-            : base(options)
-        {
-        }
+    }    
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<ProductOrder> ProductOrders { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<ProductOrder> ProductOrders { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Coupon> Coupons { get; set; }
-        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        public DbSet<User> AppUsers { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);        // Application user configuration
+        modelBuilder.Entity<ApplicationUser>(entity => 
         {
-            base.OnModelCreating(modelBuilder);
-              // Configure one-to-one relationship between ApplicationUser and User
-            modelBuilder.Entity<User>(entity =>
-            {
-                // Configure primary key
-                entity.HasKey(u => u.Id);
-                
-                // Configure one-to-one relationship with ApplicationUser
-                entity.HasOne(u => u.ApplicationUser)
-                    .WithOne(a => a.User)
-                    .HasForeignKey<User>(u => u.Id)
-                    .OnDelete(DeleteBehavior.Cascade);
-                
-                // Configure non-nullable properties
-                entity.Property(u => u.FirstName).IsRequired();
-                entity.Property(u => u.LastName).IsRequired();
-                entity.Property(u => u.Address).IsRequired();
-                entity.Property(u => u.City).IsRequired();
-                entity.Property(u => u.State).IsRequired();
-                entity.Property(u => u.PostalCode).IsRequired();
-                entity.Property(u => u.Phone).IsRequired();
-            });
+            entity.Property(u => u.FirstName).IsRequired();
+            entity.Property(u => u.LastName).IsRequired();
+            entity.Property(u => u.Address).IsRequired();
+            entity.Property(u => u.City).IsRequired();
+            entity.Property(u => u.State).IsRequired();
+            entity.Property(u => u.PostalCode).IsRequired();
+        });
+        
+        // Coupon entity
+        modelBuilder.Entity<Coupon>()
+            .Property(c => c.Discount)
+            .HasColumnType("decimal(18,2)");
+        
+        modelBuilder.Entity<Coupon>()
+            .Property(c => c.MinimumAmount)
+            .HasColumnType("decimal(18,2)");
+        
+        // Order entity
+        modelBuilder.Entity<Order>()
+            .Property(o => o.TotalPrice)
+            .HasColumnType("decimal(18,2)");
+        
+        modelBuilder.Entity<Order>()
+            .Property(o => o.Discount)
+            .HasColumnType("decimal(18,2)");
+        
+        modelBuilder.Entity<Order>()
+            .Property(o => o.Fax)
+            .HasColumnType("decimal(18,2)");
+        
+        modelBuilder.Entity<Order>()
+            .Property(o => o.FinalPrice)
+            .HasColumnType("decimal(18,2)");
+        
+        // Product entity
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("decimal(18,2)");
+        
+        // ProductOrder entity
+        modelBuilder.Entity<ProductOrder>()
+            .Property(po => po.Price)
+            .HasColumnType("decimal(18,2)");
+        
+        // ShoppingCart entity
+        modelBuilder.Entity<ShoppingCart>()
+            .Property(sc => sc.Price)
+            .HasColumnType("decimal(18,2)");
+        
+        // Relationships
+        modelBuilder.Entity<ProductOrder>()
+            .HasKey(po => new { po.ProductId, po.OrderId });
             
-            // Configure decimal precision for all decimal properties
-            // Coupon entity
-            modelBuilder.Entity<Coupon>()
-                .Property(c => c.Discount)
-                .HasColumnType("decimal(18,2)");
+        modelBuilder.Entity<ProductOrder>()
+            .HasOne(po => po.Product)
+            .WithMany(p => p.ProductOrders)
+            .HasForeignKey(po => po.ProductId);
             
-            modelBuilder.Entity<Coupon>()
-                .Property(c => c.MinimumAmount)
-                .HasColumnType("decimal(18,2)");
-            
-            // Order entity
-            modelBuilder.Entity<Order>()
-                .Property(o => o.TotalPrice)
-                .HasColumnType("decimal(18,2)");
-            
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Discount)
-                .HasColumnType("decimal(18,2)");
-            
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Fax)
-                .HasColumnType("decimal(18,2)");
-            
-            modelBuilder.Entity<Order>()
-                .Property(o => o.FinalPrice)
-                .HasColumnType("decimal(18,2)");
-            
-            // Product entity
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18,2)");
-            
-            // ProductOrder entity
-            modelBuilder.Entity<ProductOrder>()
-                .Property(po => po.Price)
-                .HasColumnType("decimal(18,2)");
-            
-            // ShoppingCart entity
-            modelBuilder.Entity<ShoppingCart>()
-                .Property(sc => sc.Price)
-                .HasColumnType("decimal(18,2)");
-            
-            // Configure relationships and constraints here
-            
-            // Example: Many-to-many relationship between Product and Order
-            modelBuilder.Entity<ProductOrder>()
-                .HasKey(po => new { po.ProductId, po.OrderId });
-                
-            modelBuilder.Entity<ProductOrder>()
-                .HasOne(po => po.Product)
-                .WithMany(p => p.ProductOrders)
-                .HasForeignKey(po => po.ProductId);
-                
-            modelBuilder.Entity<ProductOrder>()
-                .HasOne(po => po.Order)
-                .WithMany(o => o.ProductOrders)
-                .HasForeignKey(po => po.OrderId);
-        }
+        modelBuilder.Entity<ProductOrder>()
+            .HasOne(po => po.Order)
+            .WithMany(o => o.ProductOrders)
+            .HasForeignKey(po => po.OrderId);
     }
 }
