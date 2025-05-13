@@ -1,4 +1,4 @@
-@model dynamic
+@model DepiProject.ViewModels.OrderConfirmationViewModel
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
@@ -76,7 +76,8 @@
                                 <hr>
                                 <p><strong>Order ID:</strong> #@Model.OrderId</p>
                                 <p><strong>Order Date:</strong> @Model.OrderDate.ToString("MMMM dd, yyyy HH:mm")</p>
-                                <p><strong>Payment Method:</strong> Credit Card (ending in 1234)</p>
+                                <p><strong>Payment Method:</strong> @Model.PaymentMethod</p>
+                                <p><strong>Order Status:</strong> <span class="badge bg-success">@Model.OrderStatus</span></p>
                             </div>
                         </div>
                         
@@ -86,6 +87,7 @@
                                 <hr>
                                 <p><strong>Shipping Address:</strong></p>
                                 <p>@Model.ShippingAddress</p>
+                                <p><strong>Tracking Number:</strong> @Model.TrackingNumber</p>
                                 <p><strong>Estimated Delivery:</strong> @Model.OrderDate.AddDays(5).ToString("MMMM dd, yyyy")</p>
                             </div>
                         </div>
@@ -97,7 +99,8 @@
                         
                         @foreach (var item in Model.Items)
                         {
-                            <div class="d-flex justify-content-between align-items-center mb-3">                                <div class="d-flex align-items-center">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
                                     <img src="@item.Image" alt="@item.Name" class="item-image me-3">
                                     <div>
                                         <h6 class="mb-0">@item.Name</h6>

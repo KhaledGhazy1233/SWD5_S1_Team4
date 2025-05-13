@@ -14,7 +14,7 @@
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         padding: 30px;
     }
-
+    
     .order-summary {
         background-color: white;
         border-radius: 8px;
@@ -73,62 +73,48 @@
     <div class="row">
         <div class="col-md-8">
             <h2 class="mb-4"><i class="fas fa-credit-card me-2"></i> Checkout</h2>
-            @if (Model?.ShoppingCartList != null && Model.ShoppingCartList.Any())
+              @if (Model?.ShoppingCartList != null && Model.ShoppingCartList.Any())
             {
                 <form asp-controller="Cart" asp-action="PlaceOrder" method="post" class="checkout-form">
                     <!-- Customer Information -->
                     <div class="form-section">
                         <h4 class="section-title">Customer Information</h4>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                        <div class="row">                            <div class="col-md-6 mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstName" name="FirstName"
-                                    value="@(Model.OrderHeader?.FirstName ?? "")" required>
+                                <input type="text" class="form-control" id="firstName" name="FirstName" value="@Model.OrderHeader.FirstName" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" name="LastName"
-                                    value="@(Model.OrderHeader?.LastName ?? "")" required>
+                                <input type="text" class="form-control" id="lastName" name="LastName" value="@Model.OrderHeader.LastName" required>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="Email"
-                                value="@(Model.OrderHeader?.ApplicationUser?.Email ?? "")" required>
-                        </div>
-                        <div class="mb-3">
+                            <input type="email" class="form-control" id="email" name="Email" value="@Model.OrderHeader.ApplicationUser?.Email" required>
+                        </div>                        <div class="mb-3">
                             <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" name="PhoneNumber"
-                                value="@(Model.OrderHeader?.PhoneNumber ?? "")" required>
+                            <input type="tel" class="form-control" id="phone" name="PhoneNumber" value="@Model.OrderHeader.PhoneNumber" required>
                         </div>
                     </div>
-
+                    
                     <!-- Shipping Information -->
-                    <div class="form-section">
-                        <h4 class="section-title">Shipping Information</h4>
-                        <div class="mb-3">
+                    <div class="form-section">                        <h4 class="section-title">Shipping Information</h4>                        <div class="mb-3">
                             <label for="address" class="form-label">Street Address</label>
-                            <input type="text" class="form-control" id="address" name="StreetAddress"
-                                value="@(Model.OrderHeader?.StreetAddress ?? "")" required>
+                            <input type="text" class="form-control" id="address" name="StreetAddress" value="@Model.OrderHeader.StreetAddress" required>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="City"
-                                    value="@(Model.OrderHeader?.City ?? "")" required>
+                                <input type="text" class="form-control" id="city" name="City" value="@Model.OrderHeader.City" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="state" class="form-label">State/Province</label>
-                                <input type="text" class="form-control" id="state" name="State"
-                                    value="@(Model.OrderHeader?.State ?? "")" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
+                                <input type="text" class="form-control" id="state" name="State" value="@Model.OrderHeader.State" required>
+                            </div>                            <div class="col-md-4 mb-3">
                                 <label for="zipCode" class="form-label">Zip/Postal Code</label>
-                                <input type="text" class="form-control" id="zipCode" name="PostalCode"
-                                    value="@(Model.OrderHeader?.PostalCode ?? "")" required>
+                                <input type="text" class="form-control" id="zipCode" name="PostalCode" value="@Model.OrderHeader.PostalCode" required>
                             </div>
-                        </div>
-                        <div class="mb-3">
+                        </div>                        <div class="mb-3">
                             <label for="country" class="form-label">Country</label>
                             <select class="form-select" id="country" name="Country" required>
                                 <option value="">Select a country</option>
@@ -142,33 +128,39 @@
                                 <option value="CHN">China</option>
                                 <option value="IND">India</option>
                             </select>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var country = "@Model.OrderHeader?.Country";
+                                    if (country) {
+                                        document.getElementById('country').value = country;
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
-
+                    
                     <!-- Payment Information -->
                     <div class="form-section">
                         <h4 class="section-title">Payment Method</h4>
-
+                        
                         <div class="payment-option selected">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
-                                    value="creditCard" checked>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
                                 <label class="form-check-label d-flex align-items-center" for="creditCard">
                                     <i class="fas fa-credit-card me-2"></i> Credit/Debit Card
                                 </label>
                             </div>
                         </div>
-
+                        
                         <div class="payment-option">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal"
-                                    value="paypal">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
                                 <label class="form-check-label d-flex align-items-center" for="paypal">
                                     <i class="fab fa-paypal me-2"></i> PayPal
                                 </label>
                             </div>
                         </div>
-
+                        
                         <div class="payment-details mt-3">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -177,8 +169,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="cardNumber" class="form-label">Card Number</label>
-                                    <input type="text" class="form-control" id="cardNumber" name="CardNumber"
-                                        placeholder="XXXX XXXX XXXX XXXX">
+                                    <input type="text" class="form-control" id="cardNumber" name="CardNumber" placeholder="XXXX XXXX XXXX XXXX">
                                 </div>
                             </div>
                             <div class="row">
@@ -217,7 +208,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <button type="submit" class="btn place-order-btn w-100 py-3 mt-4">
                         <i class="fas fa-lock me-2"></i> Place Your Order
                     </button>
@@ -235,8 +226,7 @@
                 </div>
             }
         </div>
-
-        <div class="col-md-4 mt-4 mt-md-0">
+          <div class="col-md-4 mt-4 mt-md-0">
             <h4 class="mb-4">Order Summary</h4>
             @if (Model?.ShoppingCartList != null && Model.OrderHeader != null)
             {
@@ -245,20 +235,18 @@
                     {
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="@(item.Product?.ProductImages?.FirstOrDefault()?.Path ?? "/images/no-image.jpg")"
-                                    alt="@(item.Product?.Name ?? "")" class="product-img me-2">
+                                <img src="@(item.Product?.ProductImages?.FirstOrDefault()?.Path ?? "/images/no-image.jpg")" alt="@item.Product?.Name" class="product-img me-2">
                                 <div>
-                                    <h6 class="mb-0">@(item.Product?.Name ?? "")</h6>
+                                    <h6 class="mb-0">@item.Product?.Name</h6>
                                     <small class="text-muted">Qty: @item.Count</small>
                                 </div>
                             </div>
-                            <span class="fw-bold">$@(((item.Product?.Price ?? 0) * item.Count).ToString("F2"))</span>
+                            <span class="fw-bold">$@((item.Product?.Price * item.Count).ToString("F2"))</span>
                         </div>
                     }
-
+                    
                     <hr>
-
-                    <div class="d-flex justify-content-between mb-2">
+                      <div class="d-flex justify-content-between mb-2">
                         <span>Subtotal:</span>
                         <span>$@Model.OrderHeader.OrderTotal.ToString("F2")</span>
                     </div>
@@ -276,36 +264,26 @@
                     </div>
                 </div>
             }
-
+            
             <div class="bg-light p-3 rounded">
                 <h6 class="mb-3"><i class="fas fa-shield-alt text-success me-2"></i> Secure Checkout</h6>
-                <p class="small mb-0">Your payment information is processed securely. We do not store credit card
-                    details nor have access to your credit card information.</p>
+                <p class="small mb-0">Your payment information is processed securely. We do not store credit card details nor have access to your credit card information.</p>
                 <hr>
                 <h6 class="mb-3"><i class="fas fa-truck text-success me-2"></i> Shipping Info</h6>
                 <p class="small mb-0">Free shipping on all orders over $50. Standard delivery 3-5 business days.</p>
                 <hr>
                 <h6 class="mb-3"><i class="fas fa-exchange-alt text-success me-2"></i> Return Policy</h6>
-                <p class="small mb-0">30-day return policy for all TechXpress products. Electronics must be in original
-                    packaging.</p>
+                <p class="small mb-0">30-day return policy for all TechXpress products. Electronics must be in original packaging.</p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Set country select value
-        const countrySelect = document.getElementById('country');
-        const countryValue = '@(Model?.OrderHeader?.Country ?? "")';
-        if (countryValue) {
-            countrySelect.value = countryValue;
-        }
-
-        // Payment option handling
+    document.addEventListener('DOMContentLoaded', function() {
         const paymentOptions = document.querySelectorAll('.payment-option');
         const paymentDetails = document.querySelector('.payment-details');
-
+        
         // Toggle payment option selection
         paymentOptions.forEach(option => {
             option.addEventListener('click', () => {
@@ -313,14 +291,14 @@
                 paymentOptions.forEach(opt => {
                     opt.classList.remove('selected');
                 });
-
+                
                 // Add selected class to clicked option
                 option.classList.add('selected');
-
+                
                 // Check the radio button
                 const radio = option.querySelector('input[type="radio"]');
                 radio.checked = true;
-
+                
                 // Show/hide payment details based on selected option
                 if (radio.value === 'creditCard') {
                     paymentDetails.style.display = 'block';
