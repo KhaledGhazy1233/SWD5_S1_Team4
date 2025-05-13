@@ -5,6 +5,7 @@ using DataLayer.Repository.IRepository;
 namespace DataLayer.Repository
 {
     public class ProductRepository : Repository<Product>, IProductRepository
+
     {
         private readonly ApplicationDbContext _db;
 
@@ -18,4 +19,4 @@ namespace DataLayer.Repository
             _db.Products.Update(product);
         }
     }
-} 
+}
