@@ -31,12 +31,21 @@ namespace DepiProject.Controllers
                 _unitofOfWork.ShoppingCart.Update(cartItem);
             }
             else
-            {
+            {                // Get the product to ensure it exists and to get its price
+                var product = _unitofOfWork.Product.Get(p => p.ProductId == productId);
+                if (product == null)
+                {
+                    // Product doesn't exist, return an error
+                    TempData["Error"] = "Product not found.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 _unitofOfWork.ShoppingCart.Add(new ShoppingCart
                 {
                     ApplicationUserId = userId,
                     ProductId = productId,
                     Count = quantity,
+                    Price = product.Price
                 });
             }
 
