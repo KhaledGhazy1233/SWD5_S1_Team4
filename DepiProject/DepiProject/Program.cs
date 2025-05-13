@@ -27,6 +27,8 @@ public class Program
         // Add RoleInitializer as a hosted service
         builder.Services.AddHostedService<RoleInitializer>();
 
+        builder.Services.AddHttpClient();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

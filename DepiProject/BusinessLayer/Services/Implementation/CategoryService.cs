@@ -1,40 +1,90 @@
 ﻿using BusinessLayer.Services.Interface;
 using BusinessLayer.ViewModel.Category;
 using DataLayer.Entities;
+using DataLayer.Repository;
 using DataLayer.Repository.IRepository;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace BusinessLayer.Services.Implementation;
-
-public class CategoryService : ICategoryService
+namespace BusinessLayer.Services.Implementation
 {
-    #region   Fields
-    private readonly ICategoryRepository _categoryRepository;
-    #endregion
-
-    #region   Constructor
-    public CategoryService(ICategoryRepository categoryRepository)
+    public class CategoryService : ICategoryService
     {
-        _categoryRepository = categoryRepository;
-    }
-    #endregion
+        private readonly ICategoryRepository _categoryRepository;
 
-    #region    Handle Methods
-    public async Task<string> Create(CreateCategoryVm vm)
-    {
-        // check name not exist
-        if (await _categoryRepository.IsCategoryNameExist(vm.Name))
-            return "This name is already exist";
-
-        // map to category
-        var category = new Category()
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            Description = vm.Description,
-            Name = vm.Name,
-        };
-        // then save
-        _categoryRepository.Add(category);
+            _categoryRepository = categoryRepository;
+        }
 
-        return "Success";
+        public async Task<string> Create(CreateCategoryVm vm)
+        {
+            if (await _categoryRepository.IsCategoryNameExist(vm.Name))
+                return "This name already exists";
+
+            var category = new Category()
+            {
+                Name = vm.Name,
+                Description = vm.Description,
+                IsDeleted = false
+            };
+
+             _categoryRepository.Add(category);
+            await _categoryRepository.SaveChangesAsync();
+
+            return "Success";
+        }
+
+        public async Task<string> Update(UpdateCategoryVm vm)
+        {
+            var category = await _categoryRepository.GetCategoryByIdAsync(vm.Id);
+            if (category == null)
+                return "Category not found";
+
+            category.Name = vm.Name;
+            category.Description = vm.Description;
+
+            await _categoryRepository.SaveChangesAsync();
+
+            return "Success";
+        }
+
+        public async Task<string> Delete(int id)
+        {
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+            if (category == null)
+                return "Category not found";
+
+            await _categoryRepository.SoftDeleteAsync(id);
+
+            return "Success";
+        }
+
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await _categoryRepository.GetAllCategoriesAsync();
+        }
+
+        public async Task<Category> GetCategoryById(int id)
+        {
+            return await _categoryRepository.GetCategoryByIdAsync(id);
+        }
+        //last
+        public async Task<UpdateCategoryVm?> GetUpdateCategoryVmById(int id)
+        {
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+            if (category == null)
+                return null;
+
+            return new UpdateCategoryVm
+            {
+                Id = category.CategoryId,
+                Name = category.Name,
+                Description = category.Description
+            };
+        }
+
     }
-    #endregion
 }
+
+

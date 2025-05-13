@@ -1,5 +1,7 @@
 ﻿namespace DepiProject.Models
+
 {
+    using DataLayer.Entities;
     public class Category
     {
         public int Id { get; set; }
@@ -7,5 +9,8 @@
 
         // Add a property for subcategories if needed in the future
         public string? SubCategory { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
+
     }
 }
