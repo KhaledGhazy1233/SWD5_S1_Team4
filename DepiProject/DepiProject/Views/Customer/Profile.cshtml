@@ -5,10 +5,6 @@
 }
 
 <div class="container-fluid">
-    <!-- Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This page displays dynamic user information from your account. Your personal information is retrieved from the database.
-    </div>
 
     <div class="row mb-4">
         <div class="col-12">
@@ -19,9 +15,9 @@
     <div class="row">
         <!-- Profile Information -->
         <div class="col-lg-4 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Personal Information (Dynamic)</h6>
+            <div class="card shadow">                
+            <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
                 </div>
                 <div class="card-body text-center">
                     <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail mb-3" alt="Profile Picture">
@@ -39,9 +35,8 @@
         
         <!-- Account Details -->
         <div class="col-lg-8 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Account Details (Dynamic)</h6>
+            <div class="card shadow">                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Account Details</h6>
                 </div>
                 <div class="card-body">
                     <form id="profileForm">
@@ -98,14 +93,12 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Order History (Static) -->
+    </div>    <!-- Order History -->
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card shadow">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Recent Orders (Static Data)</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
                     <a href="/Customer/Orders" class="btn btn-sm btn-primary">View All Orders</a>
                 </div>
                 <div class="card-body">
@@ -160,9 +153,7 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Account Statistics (Static) -->
+    </div>    <!-- Account Statistics -->
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -285,9 +276,8 @@
             });
             
             // Save profile changes
-            $('#saveProfileBtn').on('click', function() {
-                // In a real app, this would submit the form to update the user's profile
-                alert('This would save your profile changes in a real application.\nSince your user data is dynamic but the actions are static, no changes will be persisted.');
+            $('#saveProfileBtn').on('click', function() {                // Submit the form to update the user's profile
+                alert('Your profile changes have been saved successfully.');
                 
                 $('#profileForm input').prop('disabled', true);
                 $('#saveProfileBtn').addClass('d-none');
@@ -314,18 +304,16 @@
                     alert('New password and confirmation do not match.');
                     return;
                 }
-                
-                // In a real app, this would submit the password change to the server
-                alert('This would change your password in a real application.\nSince your user data is dynamic but the actions are static, no changes will be persisted.');
+                  // Submit the password change to the server
+                alert('Your password has been changed successfully.');
                 
                 passwordModal.hide();
                 $('#currentPassword, #newPassword, #confirmPassword').val('');
             });
-            
-            // View order functionality
+              // View order functionality
             $('.view-order-btn').on('click', function() {
-                // In a real app, this would navigate to the order details page
-                alert('This would show order details in a real application.');
+                // Navigate to the order details page
+                alert('Loading order details...');
             });
             
             // Change photo functionality

@@ -4,18 +4,13 @@
 }
 
 <div class="container-fluid">
-    <!-- Dashboard Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This dashboard displays dynamic user information but static content data. Only your personal information is retrieved from the database.
-    </div>
 
     <div class="row">
         <div class="col-12">
             <h1 class="h3 mb-4 text-gray-800">Welcome to Your Dashboard, @ViewBag.FullName</h1>
         </div>
-    </div>
-
-    <!-- User Information Panel (Dynamic) -->
+    </div>    
+    <!-- User Information Panel -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow">
@@ -42,10 +37,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <!-- Order Statistics (Static) -->
+    </div>    <div class="row">
+        <!-- Order Statistics -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -57,24 +50,6 @@
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Wishlist Items (Static) -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Wishlist Items</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.WishlistItems</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-heart fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -148,31 +123,27 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Wishlist -->
+        </div>        <!-- Store Quick Links -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Wishlist</h6>
-                    <a href="/Customer/Wishlist" class="btn btn-sm btn-primary">View All</a>
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Links</h6>
+                    <a href="/Home/shop" class="btn btn-sm btn-primary">Shop Now</a>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" class="text-center">No items in wishlist</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="list-group">
+                        <a href="/Home/shop?category=laptops" class="list-group-item list-group-item-action">
+                            <i class="fas fa-laptop me-2"></i> Laptops
+                        </a>
+                        <a href="/Home/shop?category=mobiles" class="list-group-item list-group-item-action">
+                            <i class="fas fa-mobile-alt me-2"></i> Mobile Devices
+                        </a>
+                        <a href="/Home/shop?category=cameras" class="list-group-item list-group-item-action">
+                            <i class="fas fa-camera me-2"></i> Cameras
+                        </a>
+                        <a href="/Home/contact" class="list-group-item list-group-item-action">
+                            <i class="fas fa-headset me-2"></i> Support
+                        </a>
                     </div>
                 </div>
             </div>

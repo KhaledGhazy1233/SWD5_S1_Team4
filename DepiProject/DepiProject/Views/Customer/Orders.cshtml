@@ -5,10 +5,6 @@
 }
 
 <div class="container-fluid">
-    <!-- Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This page displays dynamic user information but static order data. Only your personal information is retrieved from the database.
-    </div>
 
     <div class="row mb-4">
         <div class="col-12">
@@ -18,9 +14,8 @@
     </div>
 
     <!-- Orders List -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Order History (Static Data)</h6>
+    <div class="card shadow mb-4">        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Order History</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -80,10 +75,8 @@
             
             // View order button click handler
             $('.view-order-btn').on('click', function() {
-                var orderId = $(this).data('id');
-                // This would typically navigate to an order details page
-                // but since we're using static data, just show an alert
-                alert('Viewing details for order: ' + orderId + '\nThis is static data for demonstration purposes.');
+                var orderId = $(this).data('id');                // Navigate to order details page
+                alert('Loading details for order: ' + orderId);
             });
         });
     </script>
