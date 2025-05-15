@@ -3,17 +3,25 @@ using DataLayer.Repository.IRepository;
 using DepiProject.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Stripe;
 using System.Security.Claims;
+
 namespace DepiProject.Controllers
 {
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitofOfWork;
+        private readonly IConfiguration _configuration;
         public ShoppingCartVM ShoppingCartVM { get; set; } = new();
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitofOfWork = unitOfWork;
+            _configuration = configuration;
+
+            // Ensure Stripe API key is set
+            StripeConfiguration.ApiKey = _configuration.GetSection("Stripe:SecretKey").Get<string>();
         }
         [Authorize]
         public IActionResult AddToCart(int productId, int quantity = 1)
@@ -293,14 +301,13 @@ namespace DepiProject.Controllers
                 };
                 options.LineItems.Add(sessionItem);
             }
-
             var service = new Stripe.Checkout.SessionService();
             var session = service.Create(options);
 
             _unitofOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitofOfWork.Save();
 
-            Response.Headers.Add("Location", session.Url);
+            Response.Headers["Location"] = session.Url;
             return new StatusCodeResult(303); // Redirect to Stripe Checkout
 
 
@@ -336,14 +343,12 @@ namespace DepiProject.Controllers
             var orderDetails = _unitofOfWork.OrderDetails.GetAll(
                 od => od.OrderHeaderId == id,
                 includeProperties: "Product,Product.ProductImages"
-            ).ToList();
-
-            var orderConfirmation = new OrderConfirmationViewModel
+            ).ToList(); var orderConfirmation = new OrderConfirmationViewModel
             {
                 OrderId = orderHeader.Id,
                 OrderDate = orderHeader.OrderDate,
                 ShippingAddress = $"{orderHeader.FirstName} {orderHeader.LastName}, {orderHeader.StreetAddress}, {orderHeader.City}, {orderHeader.State} {orderHeader.PostalCode}, {orderHeader.Country}",
-                PaymentMethod = "Credit Card", // Adjust as needed based on your payment methods
+                PaymentMethod = "Stripe", // Using Stripe for payment processing
                 CustomerName = $"{orderHeader.FirstName} {orderHeader.LastName}",
                 TrackingNumber = orderHeader.TrackingNumber ?? "Not available yet",
                 OrderStatus = orderHeader.OrderStatus,
@@ -402,6 +407,7 @@ namespace DepiProject.Controllers
                 OrderStatus = SD.StatusPending,
                 PaymentStatus = SD.PaymentStatusPending,
                 TrackingNumber = Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
+                Carrier = "Pending", // Setting a default value for Carrier to prevent NULL constraint violation
                 OrderTotal = 0
             };
 

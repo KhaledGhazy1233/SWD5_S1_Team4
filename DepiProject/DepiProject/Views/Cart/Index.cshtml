@@ -122,7 +122,7 @@
                         <span class="total-price text-primary">@cart.OrderTotal.ToString("C")</span>
                     </li>
                 </ul>
-                <form asp-controller="Cart" asp-action="Checkout" method="post">
+                <form asp-controller="Cart" asp-action="Checkout" method="get">
                     <button type="submit" class="btn btn-checkout w-100 py-2">
                         <i class="fas fa-credit-card me-2"></i> Proceed to Checkout
                     </button>

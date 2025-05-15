@@ -73,10 +73,9 @@
                         <div class="col-md-6 mb-4">
                             <div class="order-summary-box">
                                 <h4>Order Information</h4>
-                                <hr>
-                                <p><strong>Order ID:</strong> #@Model.OrderId</p>
+                                <hr>                                <p><strong>Order ID:</strong> #@Model.OrderId</p>
                                 <p><strong>Order Date:</strong> @Model.OrderDate.ToString("MMMM dd, yyyy HH:mm")</p>
-                                <p><strong>Payment Method:</strong> @Model.PaymentMethod</p>
+                                <p><strong>Payment Method:</strong> <span class="d-flex align-items-center"><i class="fab fa-stripe text-primary me-2"></i> Stripe</span></p>
                                 <p><strong>Order Status:</strong> <span class="badge bg-success">@Model.OrderStatus</span></p>
                             </div>
                         </div>
