@@ -1,0 +1,98 @@
+@model IEnumerable<DepiProject.Models.Product>
+
+@{
+    ViewData["Title"] = "Products Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid px-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-box me-2"></i>Products Management
+        </h1>
+        <a href="javascript:void(0);" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Product
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="productsTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                    {
+                                        <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 50px;" />
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-image text-muted"></i>
+                                    }
+                                </td>
+                                <td>@product.Name</td>
+                                <td>@product.Category?.Name</td>
+                                <td>@product.Price.ToString("C")</td>
+                                <td>@product.StockQuantity</td>
+                                <td>
+                                    @if (product.IsAvailable)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Check if DataTable is already initialized
+            if (!$.fn.DataTable.isDataTable('#productsTable')) {
+                $('#productsTable').DataTable({
+                    "order": [[1, "asc"]],
+                    "pageLength": 25,
+                    "language": {
+                        "search": "Search products:",
+                        "lengthMenu": "Show _MENU_ products per page",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ products"
+                    }
+                });
+            }
+        });
+    </script>
+}

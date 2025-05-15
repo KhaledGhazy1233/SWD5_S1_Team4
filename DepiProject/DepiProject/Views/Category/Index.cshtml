@@ -9,24 +9,35 @@
 <a class="btn btn-primary mb-3" asp-action="Create">Create New Category</a>
 
 <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
             <th>Description</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
         @foreach (var item in Model)
-        {
-            <tr>
+                        {
+                            <tr>
                 <td>@item.Name</td>
                 <td>@item.Description</td>
-                <td>
+                                <td>
                     <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
                     <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No categories found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

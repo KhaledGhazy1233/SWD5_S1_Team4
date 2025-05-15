@@ -1,0 +1,152 @@
+/* Home Page Styling */
+
+/* Hero Section */
+#template-mo-zay-hero-carousel .carousel-inner {
+    height: 450px;
+}
+
+#template-mo-zay-hero-carousel .carousel-item img {
+    max-height: 400px;
+    object-fit: contain;
+}
+
+#template-mo-zay-hero-carousel .carousel-control-prev,
+#template-mo-zay-hero-carousel .carousel-control-next {
+    width: 10%;
+}
+
+#template-mo-zay-hero-carousel .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Category Section */
+.category-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    background-color: #fff;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+
+.category-card:hover .btn-outline-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.category-img {
+    height: 200px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+/* Featured Products */
+.product-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.product-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.product-card .card-img-top {
+    height: 250px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    padding: 20px;
+    transition: all 0.3s;
+}
+
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.product-card .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    transition: all 0.3s;
+}
+
+.product-card .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+    transform: translateY(-2px);
+}
+
+.product-price {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.product-price-discount {
+    color: #dc3545;
+}
+
+.product-brand {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.product-img {
+    height: 250px;
+    object-fit: contain;
+    padding: 20px;
+}
+
+.product-price {
+    font-weight: 600;
+}
+
+.rating-stars i {
+    color: #FFD700;
+}
+
+/* Why Choose Us Section */
+.feature-card {
+    transition: all 0.3s;
+    border: none;
+}
+
+.feature-card:hover {
+    background-color: #f8f9fa;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #3f72af;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background-color: #3f72af;
+    padding: 60px 0;
+}
+
+.newsletter-section h2,
+.newsletter-section p {
+    color: white;
+}
+
+.newsletter-form .form-control {
+    height: 50px;
+    border-radius: 0;
+    border: none;
+}
+
+.newsletter-form button {
+    height: 50px;
+    border-radius: 0;
+}

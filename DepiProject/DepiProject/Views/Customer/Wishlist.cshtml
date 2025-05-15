@@ -1,0 +1,124 @@
+@model List<object>
+@{
+    ViewData["Title"] = "My Wishlist";
+    Layout = "_CustomerLayout";
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 text-gray-800">My Wishlist</h1>
+            <p>Welcome, <strong>@ViewBag.UserName</strong> (@ViewBag.Email)</p>
+        </div>
+    </div>
+
+    <!-- Wishlist Items -->
+    <div class="row">
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                var id = item.GetType().GetProperty("Id").GetValue(item, null);
+                var name = item.GetType().GetProperty("Name").GetValue(item, null).ToString();
+                var price = (decimal)item.GetType().GetProperty("Price").GetValue(item, null);
+                var imageUrl = item.GetType().GetProperty("ImageUrl").GetValue(item, null)?.ToString() ?? "/images/placeholder.jpg";
+                var inStock = (bool)item.GetType().GetProperty("InStock").GetValue(item, null);
+
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <div class="position-relative">
+                            <img src="@imageUrl" class="card-img-top p-3" alt="@name" style="height: 180px; object-fit: contain;">
+                            <button class="btn btn-sm btn-danger remove-wishlist-btn position-absolute top-0 end-0 mt-2 me-2" 
+                                    data-id="@id" data-name="@name">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">@name</h5>
+                            <p class="card-text text-primary fw-bold">$@price.ToString("0.00")</p>
+                            @if (inStock)
+                            {
+                                <span class="badge bg-success mb-2">In Stock</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger mb-2">Out of Stock</span>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                            <button class="btn btn-primary add-to-cart-btn @(inStock ? "" : "disabled")" 
+                                    data-id="@id" data-name="@name">
+                                <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline-secondary view-details-btn" data-id="@id">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <i class="fas fa-heart-broken me-2"></i> Your wishlist is empty.
+                </div>
+                <a href="/Home/Shop" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag me-2"></i> Start Shopping
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Remove from wishlist button handler
+            $('.remove-wishlist-btn').on('click', function() {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                  // Show confirmation of removal
+                alert('Item removed from wishlist: ' + name + ' (ID: ' + id + ')');
+                
+                // In a real app, this would remove the item from the database
+                // For demo purposes, we'll just remove the visual element
+                $(this).closest('.col-lg-3').fadeOut(400, function() {
+                    $(this).remove();
+                    // Check if wishlist is now empty
+                    if($('.col-lg-3').length === 0) {
+                        $('.row').append(`
+                            <div class="col-12">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-heart-broken me-2"></i> Your wishlist is empty.
+                                </div>
+                                <a href="/Home/Shop" class="btn btn-primary">
+                                    <i class="fas fa-shopping-bag me-2"></i> Start Shopping
+                                </a>
+                            </div>
+                        `);
+                    }
+                });
+            });
+            
+            // Add to cart button handler
+            $('.add-to-cart-btn').on('click', function() {
+                if($(this).hasClass('disabled')) return;
+                
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                  // Show confirmation
+                alert('Added to cart: ' + name + ' (ID: ' + id + ')');
+            });
+            
+            // View details button handler
+            $('.view-details-btn').on('click', function() {
+                var id = $(this).data('id');
+                  // Navigate to the product details page
+                alert('Loading product details for ID: ' + id);
+            });
+        });
+    </script>
+}

@@ -5,26 +5,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.Repository;
 
-public class ProductRepository : Repository<Product>, IProductRepository
-{
+    public class ProductRepository : Repository<Product>, IProductRepository
+    {
     #region       Fields
     private ApplicationDbContext _db;
 
     #endregion
 
     #region     Constructor
-    public ProductRepository(ApplicationDbContext db) : base(db)
-    {
-        _db = db;
-    }
+        public ProductRepository(ApplicationDbContext db) : base(db)
+        {
+            _db = db;
+        }
     #endregion
 
     #region      Methods
     public async Task<bool> IsProductNameExist(string productName)
-    {
+        {
         var exist = await _db.Products.AnyAsync(p => p.Name == productName);
         return exist;
-    }
+        }
 
     public async Task<bool> IsProductNameExistExcludeItself(string productName, int productId)
     {
@@ -32,4 +32,4 @@ public class ProductRepository : Repository<Product>, IProductRepository
         return exist;
     }
     #endregion
-}
+} 

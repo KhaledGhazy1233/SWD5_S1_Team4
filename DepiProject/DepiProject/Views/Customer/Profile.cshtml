@@ -1,0 +1,325 @@
+@model dynamic
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_CustomerLayout";
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-2 text-gray-800">My Profile</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow">                
+            <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
+                </div>
+                <div class="card-body text-center">
+                    <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail mb-3" alt="Profile Picture">
+                    <h5 class="mb-1">@Model.FirstName @Model.LastName</h5>
+                    <p class="text-muted mb-3">@Model.UserName</p>
+                    <p class="small text-muted mb-0">Member since @(((DateTime)Model.JoinDate).ToString("MMMM dd, yyyy"))</p>
+                    <div class="mt-4">
+                        <button class="btn btn-sm btn-outline-primary" id="changePhotoBtn">
+                            <i class="fas fa-camera me-1"></i> Change Photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Account Details -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow">                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Account Details</h6>
+                </div>
+                <div class="card-body">
+                    <form id="profileForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" value="@Model.FirstName" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" value="@Model.LastName" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" value="@Model.Email" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" value="@Model.PhoneNumber" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" value="@Model.Address" disabled>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" value="@Model.City" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" value="@Model.State" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="zip" class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="zip" value="@Model.PostalCode" disabled>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-primary" id="editProfileBtn">
+                                <i class="fas fa-edit me-1"></i> Edit Profile
+                            </button>
+                            <button type="button" class="btn btn-success d-none" id="saveProfileBtn">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="changePasswordBtn">
+                                <i class="fas fa-lock me-1"></i> Change Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Order History -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
+                    <a href="/Customer/Orders" class="btn btn-sm btn-primary">View All Orders</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-123456</td>
+                                    <td>@DateTime.Now.AddDays(-3).ToString("MMM dd, yyyy")</td>
+                                    <td><span class="badge bg-success">Delivered</span></td>
+                                    <td>$299.99</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary view-order-btn">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-123457</td>
+                                    <td>@DateTime.Now.AddDays(-7).ToString("MMM dd, yyyy")</td>
+                                    <td><span class="badge bg-primary">Shipped</span></td>
+                                    <td>$549.99</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary view-order-btn">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-123458</td>
+                                    <td>@DateTime.Now.AddDays(-14).ToString("MMM dd, yyyy")</td>
+                                    <td><span class="badge bg-success">Delivered</span></td>
+                                    <td>$199.99</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary view-order-btn">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Account Statistics -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Orders</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalOrders</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Completed Orders</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CompletedOrders</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Orders</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingOrders</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Spent</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">$@ViewBag.TotalSpent.ToString("0.00")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="currentPassword" class="form-label">Current Password</label>
+                    <input type="password" class="form-control" id="currentPassword">
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="newPassword">
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-control" id="confirmPassword">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="savePasswordBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var passwordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+            
+            // Initialize DataTable
+            $('table').DataTable({
+                paging: false,
+                searching: false,
+                info: false,
+                order: [[1, 'desc']]
+            });
+            
+            // Edit profile button functionality
+            $('#editProfileBtn').on('click', function() {
+                $('#profileForm input').prop('disabled', false);
+                $('#editProfileBtn').addClass('d-none');
+                $('#saveProfileBtn').removeClass('d-none');
+            });
+            
+            // Save profile changes
+            $('#saveProfileBtn').on('click', function() {                // Submit the form to update the user's profile
+                alert('Your profile changes have been saved successfully.');
+                
+                $('#profileForm input').prop('disabled', true);
+                $('#saveProfileBtn').addClass('d-none');
+                $('#editProfileBtn').removeClass('d-none');
+            });
+            
+            // Change password button
+            $('#changePasswordBtn').on('click', function() {
+                passwordModal.show();
+            });
+            
+            // Save password changes
+            $('#savePasswordBtn').on('click', function() {
+                var currentPassword = $('#currentPassword').val();
+                var newPassword = $('#newPassword').val();
+                var confirmPassword = $('#confirmPassword').val();
+                
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    alert('Please fill in all password fields.');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('New password and confirmation do not match.');
+                    return;
+                }
+                  // Submit the password change to the server
+                alert('Your password has been changed successfully.');
+                
+                passwordModal.hide();
+                $('#currentPassword, #newPassword, #confirmPassword').val('');
+            });
+              // View order functionality
+            $('.view-order-btn').on('click', function() {
+                // Navigate to the order details page
+                alert('Loading order details...');
+            });
+            
+            // Change photo functionality
+            $('#changePhotoBtn').on('click', function() {
+                alert('This would allow you to upload a new profile photo in a real application.');
+            });
+        });
+    </script>
+}

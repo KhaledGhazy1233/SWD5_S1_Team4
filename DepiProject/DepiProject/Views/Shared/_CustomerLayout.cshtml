@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Customer Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 1rem 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-brand h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-link.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 25px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+        }
+
+        .search-form {
+            position: relative;
+        }
+
+        .search-form input {
+            padding-left: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .search-form i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .user-dropdown img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .stats-card {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .stats-card .icon {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        .table {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: var(--light-bg);
+            border-bottom: none;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2><i class="fas fa-store me-2"></i>TechXpress</h2>
+        </div>
+        <ul class="nav flex-column">            
+        <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Customer" asp-action="Dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Home/Index">
+                    <i class="fas fa-home"></i> Home Page
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Orders" ? "active" : "")" asp-controller="Customer" asp-action="Orders">
+                    <i class="fas fa-shopping-bag"></i> My Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Cart" ? "active" : "")" asp-controller="Customer" asp-action="Cart">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Customer" asp-action="Profile">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar d-flex justify-content-between align-items-center">
+            <form class="search-form">
+                <i class="fas fa-search"></i>
+                <input type="search" class="form-control" placeholder="Search products...">
+            </form>
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge bg-danger">2</span>
+                </div>
+                <div class="me-3">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge bg-danger">3</span>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="https://via.placeholder.com/35" alt="User" class="me-2">
+                        <span>@(ViewBag.UserName ?? "Customer")</span>
+                    </a>                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" asp-controller="Customer" asp-action="Profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 
