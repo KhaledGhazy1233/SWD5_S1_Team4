@@ -1,8 +1,8 @@
-﻿@model DepiProject.Models.Product
+﻿@model Product
 
 @{
-    ViewData["Title"] = Model.Name;
-    Layout = "_Layout";
+   // ViewData["Title"] = Model.Name;
+   // Layout = "_Layout";
 }
 
 @section Styles {
@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-lg-5 mt-5">
                     <div class="card mb-3">
-                        <img class="card-img img-fluid" src="@Model.ImageUrl" alt="@Model.Name">
+                        <img class="card-img img-fluid" src="" alt="@Model.Name">
                     </div>
                 </div>
                 <!-- col end -->
@@ -95,7 +95,7 @@
                             <p>@Model.TechnicalSpecifications</p>
 
                             <form action="/Cart/AddToCart" method="GET">
-                                <input type="hidden" name="productId" value="@Model.Id">
+                                <input type="hidden" name="productId" value="@Model.ProductId">
                                 <div class="row">
                                     <div class="col-auto">
                                         <ul class="list-inline pb-3">

@@ -209,6 +209,11 @@
                     <i class="fas fa-tags"></i> Categories
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-tags"></i> Home
+                </a>
+            </li>
         </ul>
     </div>
 

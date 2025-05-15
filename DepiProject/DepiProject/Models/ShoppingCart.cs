@@ -1,6 +1,7 @@
-﻿using DataLayer.Entities;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using BusinessLayer.ViewModel.Product;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DepiProject.Models
@@ -12,7 +13,7 @@ namespace DepiProject.Models
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
-        public Product? Product { get; set; }
+        public CreateProductVm? Product { get; set; }
         public int count { get; set; }
 
         public string? ApplicationUserId { get; set; }
