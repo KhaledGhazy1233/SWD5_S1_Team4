@@ -16,7 +16,7 @@ namespace DepiProject.Controllers
             _unitofOfWork = unitOfWork;
         }
         [Authorize]
-        public IActionResult AddToCart(int productId, int quantity)
+        public IActionResult AddToCart(int productId, int quantity = 1)
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)
             {

@@ -4,8 +4,8 @@
     ViewData["Title"] = "Product Listing";
     Layout = "_Layout";
 }
-<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="w-100 pt-1 mb-5 text-right">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -36,16 +36,16 @@
                     </a>
                     <ul class="collapse show list-unstyled pl-3">
                         <li>
-                            <a class="text-decoration-none"
-                               href="/Home/shop?category=laptops&subcategory=gaming">Gaming Laptops</a>
+                            <a class="text-decoration-none" href="/Home/shop?category=laptops&subcategory=gaming">Gaming
+                                Laptops</a>
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a>
+                                href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a>
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=laptops&subcategory=ultrabook">Ultrabooks</a>
+                                href="/Home/shop?category=laptops&subcategory=ultrabook">Ultrabooks</a>
                         </li>
                     </ul>
                 </li>
@@ -57,15 +57,15 @@
                     <ul id="collapseTwo" class="collapse list-unstyled pl-3">
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=mobiles&subcategory=smartphones">Smartphones</a>
+                                href="/Home/shop?category=mobiles&subcategory=smartphones">Smartphones</a>
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=mobiles&subcategory=tablets">Tablets</a>
+                                href="/Home/shop?category=mobiles&subcategory=tablets">Tablets</a>
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=mobiles&subcategory=accessories">Accessories</a>
+                                href="/Home/shop?category=mobiles&subcategory=accessories">Accessories</a>
                         </li>
                     </ul>
                 </li>
@@ -83,11 +83,11 @@
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=cameras&subcategory=mirrorless">Mirrorless Cameras</a>
+                                href="/Home/shop?category=cameras&subcategory=mirrorless">Mirrorless Cameras</a>
                         </li>
                         <li>
                             <a class="text-decoration-none"
-                               href="/Home/shop?category=cameras&subcategory=accessories">Camera Accessories</a>
+                                href="/Home/shop?category=cameras&subcategory=accessories">Camera Accessories</a>
                         </li>
                     </ul>
                 </li>
@@ -148,15 +148,13 @@
                         </li>
                         <li class="list-inline-item">
                             <a class="h3 text-dark text-decoration-none mr-3"
-                               href="/Home/shop?category=laptops">Laptops</a>
+                                href="/Home/shop?category=laptops">Laptops</a>
                         </li>
                         <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none"
-                               href="/Home/shop?category=mobiles">Mobiles</a>
+                            <a class="h3 text-dark text-decoration-none" href="/Home/shop?category=mobiles">Mobiles</a>
                         </li>
                         <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none"
-                               href="/Home/shop?category=cameras">Cameras</a>
+                            <a class="h3 text-dark text-decoration-none" href="/Home/shop?category=cameras">Cameras</a>
                         </li>
                     </ul>
                 </div>
@@ -179,7 +177,8 @@
                             <div class="card mb-4 product-wap rounded-0">
                                 <div class="card rounded-0">
                                     <img class="card-img rounded-0 img-fluid" src="@product.ImageUrl">
-                                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                    <div
+                                        class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
                                             <li>
                                                 <a class="btn btn-success text-white" href="#">
@@ -188,13 +187,13 @@
                                             </li>
                                             <li>
                                                 <a class="btn btn-success text-white mt-2" asp-controller="Home"
-                                                   asp-action="shopsingle" asp-route-id="@product.Id">
+                                                    asp-action="shopsingle" asp-route-id="@product.Id">
                                                     <i class="far fa-eye"></i>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="btn btn-success text-white mt-2"
-                                                   href="/Cart/AddToCart?productId=@product.Id">
+                                                    href="/Cart/AddToCart?productId=@product.Id">
                                                     <i class="fas fa-cart-plus"></i>
                                                 </a>
                                             </li>
@@ -203,7 +202,7 @@
                                 </div>
                                 <div class="card-body">
                                     <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
-                                       class="h3 text-decoration-none">@product.Name</a>
+                                        class="h3 text-decoration-none">@product.Name</a>
                                     <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                         <li>@product.Brand</li>
                                         <li class="pt-2">
@@ -230,11 +229,11 @@
                 <ul class="pagination pagination-lg justify-content-end">
                     <li class="page-item disabled">
                         <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#"
-                           tabindex="-1">1</a>
+                            tabindex="-1">1</a>
                     </li>
                     <li class="page-item">
                         <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark"
-                           href="#">2</a>
+                            href="#">2</a>
                     </li>
                     <li class="page-item">
                         <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
@@ -269,7 +268,7 @@
                     <!--Carousel Wrapper-->
                     <div class="col">
                         <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="multi-item-example"
-                             data-bs-ride="carousel">
+                            data-bs-ride="carousel">
                             <!--Slides-->
                             <div class="carousel-inner product-links-wap" role="listbox">
                                 <!--First slide-->
@@ -278,29 +277,29 @@
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/apple-logo-png/apple-logo-png-dallas-shootings-don-add-are-speech-zones-used-4.png"
-                                                     alt="Apple">
+                                                    src="https://www.freepnglogos.com/uploads/apple-logo-png/apple-logo-png-dallas-shootings-don-add-are-speech-zones-used-4.png"
+                                                    alt="Apple">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/samsung-logo-png/samsung-logo-vectors-download-8.png"
-                                                     alt="Samsung">
+                                                    src="https://www.freepnglogos.com/uploads/samsung-logo-png/samsung-logo-vectors-download-8.png"
+                                                    alt="Samsung">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/dell-png-logo/dell-png-logo-0.png"
-                                                     alt="Dell">
+                                                    src="https://www.freepnglogos.com/uploads/dell-png-logo/dell-png-logo-0.png"
+                                                    alt="Dell">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/hp-logo-png/hp-logo-png-hewlett-packard-logos-download-0.png"
-                                                     alt="HP">
+                                                    src="https://www.freepnglogos.com/uploads/hp-logo-png/hp-logo-png-hewlett-packard-logos-download-0.png"
+                                                    alt="HP">
                                             </a>
                                         </div>
                                     </div>
@@ -311,29 +310,29 @@
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/sony-png-logo/sony-png-logo-0.png"
-                                                     alt="Sony">
+                                                    src="https://www.freepnglogos.com/uploads/sony-png-logo/sony-png-logo-0.png"
+                                                    alt="Sony">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/canon-png-logo/canon-inc-png-logo-1.png"
-                                                     alt="Canon">
+                                                    src="https://www.freepnglogos.com/uploads/canon-png-logo/canon-inc-png-logo-1.png"
+                                                    alt="Canon">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/lenovo-png-logo/lenovo-logo-design-png-0.png"
-                                                     alt="Lenovo">
+                                                    src="https://www.freepnglogos.com/uploads/lenovo-png-logo/lenovo-logo-design-png-0.png"
+                                                    alt="Lenovo">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/asus-png-logo/asus-png-logo-rog-0.png"
-                                                     alt="Asus">
+                                                    src="https://www.freepnglogos.com/uploads/asus-png-logo/asus-png-logo-rog-0.png"
+                                                    alt="Asus">
                                             </a>
                                         </div>
                                     </div>
@@ -344,29 +343,29 @@
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
-                                                     alt="Google">
+                                                    src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
+                                                    alt="Google">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/microsoft-logo-png/microsoft-logo-png-symbols-logos-5.png"
-                                                     alt="Microsoft">
+                                                    src="https://www.freepnglogos.com/uploads/microsoft-logo-png/microsoft-logo-png-symbols-logos-5.png"
+                                                    alt="Microsoft">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/xiaomi-png-logo/xiaomi-png-logo-6.png"
-                                                     alt="Xiaomi">
+                                                    src="https://www.freepnglogos.com/uploads/xiaomi-png-logo/xiaomi-png-logo-6.png"
+                                                    alt="Xiaomi">
                                             </a>
                                         </div>
                                         <div class="col-3 p-md-5">
                                             <a href="#">
                                                 <img class="img-fluid brand-img"
-                                                     src="https://www.freepnglogos.com/uploads/huawei-logo-png/huawei-logo-communication-13.png"
-                                                     alt="Huawei">
+                                                    src="https://www.freepnglogos.com/uploads/huawei-logo-png/huawei-logo-communication-13.png"
+                                                    alt="Huawei">
                                             </a>
                                         </div>
                                     </div>
@@ -391,12 +390,12 @@
     </div>
 </section>
 <!--End Brands-->
-    @section Scripts {
+@section Scripts {
     <script>
         // Product filtering scripts could go here
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initialize any needed components
-            $('.product-img').on('error', function() {
+            $('.product-img').on('error', function () {
                 $(this).attr('src', '/images/placeholder.png');
             });
         });

@@ -187,6 +187,19 @@
     <!-- Start Slider Script -->
     <script>
         $(document).ready(function () {
+            // Verify and log the productId value for debugging
+            console.log("Page loaded. Debugging product info:");
+            console.log("Product ID from hidden field:", $("#productId").val());
+            console.log("Initial quantity value:", $("#product-quantity").val());
+            console.log("Initial quantity display:", $("#var-value").html());
+
+            // Make sure the product-quantity field is properly initialized
+            if (!$("#product-quantity").val() || $("#product-quantity").val() === "0") {
+                console.log("Initializing product quantity to 1");
+                $("#product-quantity").val(1);
+                $("#var-value").html(1);
+            }
+
             $('#carousel-related-product').slick({
                 infinite: true,
                 arrows: false,
@@ -229,46 +242,118 @@
                 val++;
                 $("#var-value").html(val);
                 $("#product-quantity").val(val);
-            });
-
-            // Handle Add to Cart button
+            });            // Handle Add to Cart button
             $("#addToCartBtn").click(function () {
                 var productId = $("#productId").val();
                 var quantity = $("#product-quantity").val();
 
+                // Enhanced debugging
+                console.log("Add to Cart button clicked");
+                console.log("Product ID:", productId);
+                console.log("Quantity:", quantity);
+
+                if (!productId || productId <= 0) {
+                    console.error("Invalid product ID");
+                    alert("Error: Invalid product ID. Please refresh the page and try again.");
+                    return;
+                }
+
+                if (!quantity || quantity <= 0) {
+                    console.error("Invalid quantity");
+                    alert("Error: Please select a valid quantity.");
+                    return;
+                }
+
+                // Show loading indicator
+                $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Adding...');
+                var btn = $(this);
+
                 $.ajax({
                     type: "GET",
                     url: "/Cart/AddToCart",
-                    data: { productId: productId, quantity: quantity },
+                    data: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
                     success: function (data) {
-                        if (data.success) {
+                        console.log("AJAX success response:", data);
+                        if (data && data.success) {
                             // Update the cart count in the navbar
                             $("#cartCount").html(data.count);
                             // Show success message
                             alert("Product added to cart successfully!");
+                        } else {
+                            console.error("Server returned success=false:", data);
+                            alert("Failed to add product to cart. Please try again.");
                         }
                     },
-                    error: function () {
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", error);
+                        console.error("Status:", status);
+                        console.error("Response:", xhr.responseText);
                         alert("Failed to add product to cart. Please try again.");
+                    },
+                    complete: function () {
+                        // Reset button state
+                        btn.prop('disabled', false).html('Add To Cart');
                     }
                 });
-            });
-
-            // Handle Buy Now button
+            });            // Handle Buy Now button
             $("#buyNowBtn").click(function () {
                 var productId = $("#productId").val();
                 var quantity = $("#product-quantity").val();
+
+                // Enhanced debugging
+                console.log("Buy Now button clicked");
+                console.log("Product ID:", productId);
+                console.log("Quantity:", quantity);
+
+                if (!productId || productId <= 0) {
+                    console.error("Invalid product ID");
+                    alert("Error: Invalid product ID. Please refresh the page and try again.");
+                    return;
+                }
+
+                if (!quantity || quantity <= 0) {
+                    console.error("Invalid quantity");
+                    alert("Error: Please select a valid quantity.");
+                    return;
+                }
+
+                // Show loading indicator
+                $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                var btn = $(this);
 
                 // First add to cart, then redirect to cart page
                 $.ajax({
                     type: "GET",
                     url: "/Cart/AddToCart",
-                    data: { productId: productId, quantity: quantity },
-                    success: function () {
-                        window.location.href = "/Cart/Index";
+                    data: {
+                        productId: productId,
+                        quantity: quantity
                     },
-                    error: function () {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    success: function (data) {
+                        console.log("AJAX success response:", data);
+                        if (data && data.success) {
+                            window.location.href = "/Cart/Index";
+                        } else {
+                            console.error("Server returned success=false:", data);
+                            alert("Failed to add product to cart. Please try again.");
+                            btn.prop('disabled', false).html('Buy Now');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", error);
+                        console.error("Status:", status);
+                        console.error("Response:", xhr.responseText);
                         alert("Failed to add product to cart. Please try again.");
+                        btn.prop('disabled', false).html('Buy Now');
                     }
                 });
             });
@@ -276,3 +361,6 @@
     </script>
     <!-- End Slider Script -->
 }
+
+   
+       

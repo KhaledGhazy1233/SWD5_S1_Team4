@@ -6,13 +6,14 @@
 
 <div class="container mt-5">
     <h1>Products - @ViewBag.CurrentCategory</h1>
-    
+
     <div class="row">
         @foreach (var product in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: contain;">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name"
+                        style="height: 200px; object-fit: contain;">
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
                         <p class="card-text">@product.Description</p>
@@ -24,7 +25,8 @@
                                 @if (product.DiscountPercentage > 0)
                                 {
                                     var discountedPrice = product.Price - (product.Price * (product.DiscountPercentage / 100));
-                                    <span class="text-danger text-decoration-line-through">$@product.Price.ToString("0.00")</span>
+                                    <span
+                                        class="text-danger text-decoration-line-through">$@product.Price.ToString("0.00")</span>
                                     <span class="text-success fw-bold ms-2">$@discountedPrice.ToString("0.00")</span>
                                 }
                                 else
@@ -36,7 +38,8 @@
                     </div>
                     <div class="card-footer bg-white">
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-outline-primary">View Details</a>
+                            <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-outline-primary">View
+                                Details</a>
                             <button class="btn btn-success">Add to Cart</button>
                         </div>
                     </div>
