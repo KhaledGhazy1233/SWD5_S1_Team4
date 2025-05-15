@@ -8,8 +8,9 @@ namespace DepiProject.Controllers
 {
     public class CartController : Controller
     {
-        private IUnitOfWork _unitofOfWork;
-        public ShoppingCartVM ShoppingCartVM { get; set; }
+        private readonly IUnitOfWork _unitofOfWork;
+        public ShoppingCartVM ShoppingCartVM { get; set; } = new();
+
         public CartController(IUnitOfWork unitOfWork)
         {
             _unitofOfWork = unitOfWork;
@@ -17,20 +18,33 @@ namespace DepiProject.Controllers
         [Authorize]
         public IActionResult AddToCart(int productId, int quantity)
         {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var cartItem = _unitofOfWork.ShoppingCart.Get(c => c.ApplicationUserId == userId && c.ProductId == productId);
-
 
             if (cartItem != null)
             {
                 cartItem.Count += quantity;
-
                 _unitofOfWork.ShoppingCart.Update(cartItem);
             }
             else
-            {                // Get the product to ensure it exists and to get its price
+            {
+                // Get the product to ensure it exists and to get its price
                 var product = _unitofOfWork.Product.Get(p => p.ProductId == productId);
                 if (product == null)
                 {
@@ -49,19 +63,48 @@ namespace DepiProject.Controllers
             }
 
             _unitofOfWork.Save();
-            return RedirectToAction("Index", "Home", new { id = productId });
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                // If AJAX request, return JSON with cart count
+                var cartCount = _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId)
+                    .Sum(c => c.Count);
+
+                return Json(new { success = true, count = cartCount });
+            }
+
+            // If not AJAX, redirect back to the referring page or home page
+            if (!string.IsNullOrEmpty(Request.Headers["Referer"]))
+            {
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
+
+            return RedirectToAction("Index", "Home");
         }
+        [Authorize]
         public IActionResult Plus(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             cartfromdb.Count += 1;
             _unitofOfWork.ShoppingCart.Update(cartfromdb);
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
         public IActionResult Minus(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             if (cartfromdb.Count <= 1)
             {
                 _unitofOfWork.ShoppingCart.Remove(cartfromdb);
@@ -74,48 +117,80 @@ namespace DepiProject.Controllers
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
         public IActionResult Remove(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             _unitofOfWork.ShoppingCart.Remove(cartfromdb);
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
-
-
         public IActionResult Index()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            ShoppingCartVM = new()
+            // Reset OrderTotal to 0
+            ShoppingCartVM.OrderTotal = 0;
+
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                ShoppingCartList = _unitofOfWork.ShoppingCart.GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product"),
-                OrderHeader = new()
-            };
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity != null)
+                {
+                    var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
+                    if (!string.IsNullOrEmpty(userId))
+                    {
+                        // Get shopping cart items with product and product images
+                        ShoppingCartVM.ShoppingCartList = _unitofOfWork.ShoppingCart
+                            .GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product,Product.ProductImages");
 
+                        // Initialize order header if needed
+                        if (ShoppingCartVM.OrderHeader == null)
+                        {
+                            ShoppingCartVM.OrderHeader = new OrderHeader();
+                        }
 
-            foreach (var cart in ShoppingCartVM.ShoppingCartList)
-            {
-                ShoppingCartVM.OrderHeader.OrderTotal += (double)(cart.Product.Price * cart.Count);
+                        // Set application user
+                        ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
+
+                        // Calculate total
+                        foreach (var cart in ShoppingCartVM.ShoppingCartList)
+                        {
+                            ShoppingCartVM.OrderTotal += (double)(cart.Price * cart.Count);
+                        }
+                    }
+                }
             }
+
             return View(ShoppingCartVM);
         }
         //AddInIConCartINNavBar(Header)
         [AllowAnonymous]
         public int GetCartCount()
         {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return 0;
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity == null)
+            {
+                return 0;
+            }
+
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             if (string.IsNullOrEmpty(userId))
             {
                 return 0;
             }
-            else
-                return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
+
+            return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
         }
         [HttpGet]
         public IActionResult Checkout()
