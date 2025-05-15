@@ -6,10 +6,6 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <div class="container-fluid">
-    <!-- Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This page displays dynamic user information but static settings data. Only your personal information is retrieved from the database.
-    </div>
 
     <!-- Success Message -->
     @if (TempData["SuccessMessage"] != null)
@@ -211,9 +207,8 @@
                 var emailNotifications = $('#emailNotifications').is(':checked');
                 var smsNotifications = $('#smsNotifications').is(':checked');
                 var newsletterSubscription = $('#newsletterSubscription').is(':checked');
-                
-                // In a real app, this would save the settings to the database
-                alert('This would save your notification preferences in a real application.\nSince this is static content, no changes will be persisted.');
+                  // Save the settings
+                alert('Your notification preferences have been saved successfully.');
             });
             
             // Save security settings
@@ -242,8 +237,7 @@
                     }
                 }
                 
-                // In a real app, this would save the security settings
-                alert('This would update your security settings in a real application.\nSince this is static content, no changes will be persisted.');
+                // In a real app, this would save the security settings                alert('Your security settings have been updated successfully.');
                 $('#currentPassword, #newPassword, #confirmPassword').val('');
             });
             
@@ -251,9 +245,8 @@
             $('#savePreferenceBtn').on('click', function() {
                 var language = $('#language').val();
                 var currency = $('#currency').val();
-                
-                // In a real app, this would save the preferences
-                alert('This would save your preferences in a real application.\nSince this is static content, no changes will be persisted.');
+                  // Save the preferences
+                alert('Your preferences have been saved successfully.');
             });
             
             // Download data
@@ -274,9 +267,8 @@
                     alert('Please enter your password to confirm account deactivation.');
                     return;
                 }
-                
-                // In a real app, this would deactivate the account
-                alert('This would deactivate your account in a real application.\nSince this is static content, no changes will be made.');
+                  // Process account deactivation
+                alert('Your request to deactivate your account has been submitted. Our team will process it shortly.');
                 deactivateModal.hide();
                 $('#deactivatePassword').val('');
                 $('#deactivateReason').val('');

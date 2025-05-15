@@ -1,21 +1,35 @@
-using DataLayer.Context;
+﻿using DataLayer.Context;
 using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Repository
-{
+namespace DataLayer.Repository;
+
     public class ProductRepository : Repository<Product>, IProductRepository
     {
-        private readonly ApplicationDbContext _db;
+    #region       Fields
+    private ApplicationDbContext _db;
 
+    #endregion
+
+    #region     Constructor
         public ProductRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
+    #endregion
 
-        public void Update(Product product)
+    #region      Methods
+    public async Task<bool> IsProductNameExist(string productName)
         {
-            _db.Products.Update(product);
+        var exist = await _db.Products.AnyAsync(p => p.Name == productName);
+        return exist;
         }
+
+    public async Task<bool> IsProductNameExistExcludeItself(string productName, int productId)
+    {
+        var exist = await _db.Products.AnyAsync(p => p.Name == productName && p.ProductId != productId);
+        return exist;
     }
+    #endregion
 } 

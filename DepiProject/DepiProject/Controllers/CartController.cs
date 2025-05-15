@@ -1,10 +1,9 @@
-﻿using DataLayer.Repository.IRepository;
+﻿using DataLayer.Entities;
+using DataLayer.Repository.IRepository;
 using DepiProject.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using DataLayer.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 namespace DepiProject.Controllers
 {
     public class CartController : Controller

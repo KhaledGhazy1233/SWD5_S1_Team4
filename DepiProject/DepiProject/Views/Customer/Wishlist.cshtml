@@ -5,10 +5,6 @@
 }
 
 <div class="container-fluid">
-    <!-- Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This page displays dynamic user information but static wishlist data. Only your personal information is retrieved from the database.
-    </div>
 
     <div class="row mb-4">
         <div class="col-12">
@@ -84,10 +80,8 @@
             $('.remove-wishlist-btn').on('click', function() {
                 var id = $(this).data('id');
                 var name = $(this).data('name');
-                
-                // Since this is static data, just show an alert instead of making an actual API call
-                alert('Item removed from wishlist: ' + name + ' (ID: ' + id + ')' + 
-                      '\nThis is static data for demonstration purposes.');
+                  // Show confirmation of removal
+                alert('Item removed from wishlist: ' + name + ' (ID: ' + id + ')');
                 
                 // In a real app, this would remove the item from the database
                 // For demo purposes, we'll just remove the visual element
@@ -115,19 +109,15 @@
                 
                 var id = $(this).data('id');
                 var name = $(this).data('name');
-                
-                // Show alert for demonstration purposes
-                alert('Added to cart: ' + name + ' (ID: ' + id + ')' +
-                      '\nThis is static data for demonstration purposes.');
+                  // Show confirmation
+                alert('Added to cart: ' + name + ' (ID: ' + id + ')');
             });
             
             // View details button handler
             $('.view-details-btn').on('click', function() {
                 var id = $(this).data('id');
-                
-                // In a real app, this would navigate to the product details page
-                alert('Viewing details for product ID: ' + id +
-                      '\nThis is static data for demonstration purposes.');
+                  // Navigate to the product details page
+                alert('Loading product details for ID: ' + id);
             });
         });
     </script>

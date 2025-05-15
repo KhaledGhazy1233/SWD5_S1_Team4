@@ -1,12 +1,7 @@
 ﻿using DataLayer.Context;
+using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
-using DataLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
@@ -18,6 +13,8 @@ namespace DataLayer.Repository
         public IUserRepository User { get; private set; }
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IOrderDetailsRepository OrderDetails { get; private set; }
+        public ICategoryRepository Category { get; private set; }
+
         public UnitOfWork(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
@@ -27,9 +24,10 @@ namespace DataLayer.Repository
             OrderHeader = new OrderHeaderRepository(_db);
             User = new UserRepository(_db, userManager);
             ShoppingCart = new ShoppingCartRepository(_db);
+            Category = new CategoryRepository(_db);
         }
-            
-        
+
+
         public void Save()
         {
             _db.SaveChanges();

@@ -1,4 +1,4 @@
-@model List<DepiProject.Models.Product>
+@model List<ProductForCategoryVm>
 
 @{
     ViewData["Title"] = "Products by Category";
@@ -36,7 +36,7 @@
                     </div>
                     <div class="card-footer bg-white">
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-primary">View Details</a>
+                            <a asp-action="Details" asp-route-id="@product.ProductId" class="btn btn-outline-primary">View Details</a>
                             <button class="btn btn-success">Add to Cart</button>
                         </div>
                     </div>

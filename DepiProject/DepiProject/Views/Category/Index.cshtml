@@ -1,41 +1,31 @@
+﻿@model IEnumerable<DataLayer.Entities.Category>
+
 @{
     ViewData["Title"] = "Categories";
 }
 
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col d-flex justify-content-between align-items-center">
-            <h1>Categories</h1>
-            <a asp-action="Create" class="btn btn-primary">Add New Category</a>
-        </div>
-    </div>
+<h2>Categories</h2>
 
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped">
+<a class="btn btn-primary mb-3" asp-action="Create">Create New Category</a>
+
+<table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>SubCategory</th>
+            <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null)
-                    {
-                        @foreach (var category in Model)
+        @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@category.Id</td>
-                                <td>@category.Name</td>
-                                <td>@category.SubCategory</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-outline-primary">Edit</a>
-                                        <a asp-action="Details" asp-route-id="@category.Id" class="btn btn-sm btn-outline-info">Details</a>
-                                        <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-outline-danger">Delete</a>
-                                    </div>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
                                 </td>
                             </tr>
                         }

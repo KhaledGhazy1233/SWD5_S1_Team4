@@ -1,4 +1,4 @@
-@model IEnumerable<DepiProject.Models.Product>
+@model List<GetProductDashboard>
 
 @{
     ViewData["Title"] = "Products Management";
@@ -6,16 +6,12 @@
 }
 
 <div class="container-fluid px-4">
-    <!-- Static Dashboard Notice -->
-    <div class="alert alert-info mb-4">
-        <i class="fas fa-info-circle me-2"></i> This is a static products view. Changes made here will not be saved to the database.
-    </div>
-    
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">
             <i class="fas fa-box me-2"></i>Products Management
         </h1>
-        <a href="javascript:void(0);" class="btn btn-primary">
+        <a asp-action="Create" asp-controller="Product" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i>Add New Product
         </a>
     </div>
@@ -36,44 +32,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var product in Model)
+                        @if (Model is not null)
                         {
-                            <tr>
-                                <td>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>
                                     @if (!string.IsNullOrEmpty(product.ImageUrl))
                                     {
                                         <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 50px;" />
-                                    }
-                                    else
-                                    {
+                                                                            }
+                                        else
+                                        {
                                         <i class="fas fa-image text-muted"></i>
-                                    }
-                                </td>
-                                <td>@product.Name</td>
-                                <td>@product.Category?.Name</td>
-                                <td>@product.Price.ToString("C")</td>
-                                <td>@product.StockQuantity</td>
-                                <td>
-                                    @if (product.IsAvailable)
+                                        }
+                                    </td>
+                                    <td>@product.Name</td>
+                                    <td>@product.CategoryNAme</td>
+                                    <td>@product.Price.ToString("C")</td>
+                                    <td>@product.StockQuantity</td>
+                                    <td>
+                                                                            @if (product.IsAvailable)
                                     {
                                         <span class="badge bg-success">Active</span>
                                     }
-                                    else
-                                    {
+                                        else
+                                        {
                                         <span class="badge bg-danger">Inactive</span>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-controller="Product" asp-route-id="@product.ProductId" class="btn btn-sm btn-primary d-block">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-controller="Product" asp-route-id="@product.ProductId" class="btn btn-sm btn-danger d-block" style="margin-left:10px">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -89,7 +88,7 @@
             if (!$.fn.DataTable.isDataTable('#productsTable')) {
                 $('#productsTable').DataTable({
                     "order": [[1, "asc"]],
-                    "pageLength": 25,
+                    "pageLength": 2,
                     "language": {
                         "search": "Search products:",
                         "lengthMenu": "Show _MENU_ products per page",

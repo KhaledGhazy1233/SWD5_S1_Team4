@@ -192,20 +192,20 @@
         <div class="sidebar-brand">
             <h2><i class="fas fa-store me-2"></i>TechXpress</h2>
         </div>
-        <ul class="nav flex-column">
-            <li class="nav-item">
+        <ul class="nav flex-column">            
+        <li class="nav-item">
                 <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Customer" asp-action="Dashboard">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Orders" ? "active" : "")" asp-controller="Customer" asp-action="Orders">
-                    <i class="fas fa-shopping-bag"></i> My Orders
+                <a class="nav-link" href="/Home/Index">
+                    <i class="fas fa-home"></i> Home Page
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Wishlist" ? "active" : "")" asp-controller="Customer" asp-action="Wishlist">
-                    <i class="fas fa-heart"></i> Wishlist
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Orders" ? "active" : "")" asp-controller="Customer" asp-action="Orders">
+                    <i class="fas fa-shopping-bag"></i> My Orders
                 </a>
             </li>
             <li class="nav-item">
@@ -216,11 +216,6 @@
             <li class="nav-item">
                 <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Customer" asp-action="Profile">
                     <i class="fas fa-user"></i> Profile
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Settings" ? "active" : "")" asp-controller="Customer" asp-action="Settings">
-                    <i class="fas fa-cog"></i> Settings
                 </a>
             </li>
         </ul>
@@ -245,10 +240,8 @@
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <img src="https://via.placeholder.com/35" alt="User" class="me-2">
                         <span>@(ViewBag.UserName ?? "Customer")</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    </a>                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" asp-controller="Customer" asp-action="Profile"><i class="fas fa-user me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" asp-controller="Customer" asp-action="Settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
