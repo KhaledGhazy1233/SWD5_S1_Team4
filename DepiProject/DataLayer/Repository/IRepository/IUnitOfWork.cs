@@ -6,8 +6,10 @@
         IUserRepository User { get; }
         IOrderHeaderRepository OrderHeader { get; }
         IOrderDetailsRepository OrderDetails { get; }
+        IOrderRepository Orders { get; }
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
+        object Order { get; }
 
         void Save();
     }

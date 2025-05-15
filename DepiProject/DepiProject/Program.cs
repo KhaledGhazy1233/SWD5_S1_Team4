@@ -3,6 +3,8 @@ using BusinessLayer.Services;
 using DataLayer.Extensions;
 using DataLayer.Repository;
 using DataLayer.Repository.IRepository;
+using Stripe;
+//using DataLayer.Seed;
 
 namespace DepiProject;
 
@@ -22,18 +24,19 @@ public class Program
                         .AddInterfacesDependencies()
                         .AddRepoDependencies();
         // Add repositories and unit of work
-        //builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+        builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Add services
-        //builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
 
         // Add RoleInitializer as a hosted service
         builder.Services.AddHostedService<RoleInitializer>();
 
-        builder.Services.AddHttpClient();
+        builder.Services.AddHttpClient(); var app = builder.Build();
 
-        var app = builder.Build();
+        // Configure Stripe API key
+        StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
@@ -47,11 +50,14 @@ public class Program
         app.UseRouting();
 
         app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllerRoute(
+        app.UseAuthorization(); app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        // Seed the database with initial data
+        // app.Services.CreateScope().ServiceProvider.GetRequiredService<ILogger<Program>>()
+        //     .LogInformation("Starting database seeding");
+        // app.SeedDatabase();
 
         app.Run();
     }

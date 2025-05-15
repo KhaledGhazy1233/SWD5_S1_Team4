@@ -1,0 +1,468 @@
+@model IEnumerable<DataLayer.Entities.Order>
+@{
+    ViewData["Title"] = "Orders Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 text-gray-800">Orders Management</h1>
+            <p>View and manage all customer orders</p>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Orders</h6>
+            <div class="d-flex gap-2">
+                <select class="form-select" id="orderStatusFilter">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Search orders..." id="orderSearch">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped admin-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Products</th>
+                            <th>Total</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>#ORD-@order.OrderId</td>
+                                    <td>@order.Name</td>
+                                    <td>@order.NumberOfProduct products</td>
+                                    <td>$@order.FinalPrice.ToString("N2")</td>
+                                    <td>@order.CreatedAt.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @{
+                                            var statusClass = "bg-secondary";
+                                            if (order.IsDeleted)
+                                            {
+                                                statusClass = "bg-danger";
+                                            }
+                                            else
+                                            {
+                                                statusClass = "bg-success";
+                                            }
+                                        }
+                                        <span class="badge @statusClass">
+                                            @(order.IsDeleted ? "Cancelled" : "Delivered")
+                                        </span>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn btn-sm btn-info view-order-btn" data-id="@order.OrderId"
+                                            title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary edit-order-btn" data-id="@order.OrderId"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger cancel-order-btn" data-id="@order.OrderId"
+                                            title="Cancel">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">No orders found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Order Details Modal -->
+<div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Order Information</h6>
+                        <p><strong>Order ID:</strong> <span id="orderDetailId"></span></p>
+                        <p><strong>Date:</strong> <span id="orderDetailDate"></span></p>
+                        <p><strong>Status:</strong> <span id="orderDetailStatus" class="badge"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Customer Information</h6>
+                        <p><strong>Name:</strong> <span id="customerName"></span></p>
+                        <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+                        <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h6>Shipping Address</h6>
+                        <p id="shippingAddress"></p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Brand</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderProducts">
+                            <!-- Products will be populated via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-6">
+                        <div class="text-end">
+                            <p><strong>Subtotal:</strong> $<span id="orderSubtotal"></span></p>
+                            <p><strong>Discount:</strong> -$<span id="orderDiscount"></span></p>
+                            <p><strong>Tax:</strong> $<span id="orderTax"></span></p>
+                            <p class="h5"><strong>Total:</strong> $<span id="orderTotal"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Order Status Modal -->
+<div class="modal fade" id="updateOrderModal" tabindex="-1" aria-labelledby="updateOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateOrderModalLabel">Update Order Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateOrderForm">
+                    <input type="hidden" id="updateOrderId" name="orderId">
+                    <div class="mb-3">
+                        <label for="orderStatus" class="form-label">Order Status</label>
+                        <select class="form-select" id="orderStatus" name="orderStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveOrderStatus">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Order Confirmation Modal -->
+<div class="modal fade" id="deleteOrderModal" tabindex="-1" aria-labelledby="deleteOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteOrderModalLabel">Confirm Order Cancellation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel order <strong>#ORD-<span id="deleteOrderId"></span></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep Order</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteOrder">Yes, Cancel Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include Toastr CSS and JS files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            $('#ordersTable').DataTable({
+                "order": [[4, "desc"]], // Sort by order date by default (newest first)
+                "pageLength": 25,
+                "language": {
+                    "search": "Search orders:",
+                    "lengthMenu": "Show _MENU_ orders per page",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ orders",
+                    "infoEmpty": "No orders available",
+                    "infoFiltered": "(filtered from _MAX_ total orders)"
+                }
+            });            // View order details
+            $('.view-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                showOrderDetails(orderId);
+            });
+
+            // Edit order
+            $('.edit-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                showUpdateOrderStatusModal(orderId);
+            });
+
+            // Cancel order
+            $('.cancel-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                showDeleteOrderConfirmation(orderId);
+            });
+
+            // Save status update
+            $('#saveOrderStatus').on('click', function () {
+                updateOrderStatus();
+            });
+
+            // Confirm order deletion
+            $('#confirmDeleteOrder').on('click', function () {
+                deleteOrder();
+            });
+
+            // Filter by status
+            $('#orderStatusFilter').on('change', function () {
+                var table = $('#ordersTable').DataTable();
+                var status = $(this).val();
+
+                // Clear any existing filter and apply new one if value is not empty
+                table.column(5).search(status).draw();
+            });
+
+            // Search
+            $('#orderSearch').on('keyup', function () {
+                var table = $('#ordersTable').DataTable();
+                table.search($(this).val()).draw();
+            });
+        }); function showOrderDetails(orderId) {
+            // Clear previous data
+            $('#orderProducts').empty();
+
+            // Show loading state
+            $('#viewOrderModalLabel').text('Loading Order Details...');
+
+            // Open the modal first to show loading state
+            $('#viewOrderModal').modal('show');
+
+            // Make AJAX call to get order details
+            $.ajax({
+                url: '/Admin/GetOrderDetails',
+                type: 'GET',
+                data: { id: orderId },
+                success: function (response) {
+                    console.log("Order details response:", response);
+                    if (response.success) {
+                        var order = response.data;
+
+                        // Update order info
+                        $('#orderDetailId').text('ORD-' + order.orderId);
+                        $('#orderDetailDate').text(new Date(order.createdAt).toLocaleDateString());
+
+                        // Set status with appropriate badge class
+                        var statusClass = order.isDeleted ? 'bg-danger' : 'bg-success';
+                        var statusText = order.isDeleted ? 'Cancelled' : 'Delivered';
+                        $('#orderDetailStatus').text(statusText).removeClass().addClass('badge ' + statusClass);
+
+                        // Customer info
+                        $('#customerName').text(order.name);
+                        $('#customerPhone').text(order.phoneNumber);
+                        $('#customerEmail').text(order.applicationUser ? order.applicationUser.email : 'N/A');
+
+                        // Shipping address
+                        var addressComponents = [
+                            order.streetAddress,
+                            order.city,
+                            order.state,
+                            order.postalCode
+                        ].filter(Boolean);
+                        $('#shippingAddress').text(addressComponents.join(', '));
+
+                        // Order products
+                        var productRows = '';
+                        var subtotal = 0;
+
+                        if (order.productOrders && order.productOrders.length > 0) {
+                            order.productOrders.forEach(function (item) {
+                                var itemTotal = item.price * item.amount;
+                                subtotal += itemTotal;
+
+                                productRows += '<tr>' +
+                                    '<td>' + item.name + '</td>' +
+                                    '<td>' + item.brand + '</td>' +
+                                    '<td>$' + item.price.toFixed(2) + '</td>' +
+                                    '<td>' + item.amount + '</td>' +
+                                    '<td>$' + itemTotal.toFixed(2) + '</td>' +
+                                    '</tr>';
+                            });
+                        } else {
+                            productRows = '<tr><td colspan="5" class="text-center">No products found</td></tr>';
+                        }
+
+                        $('#orderProducts').html(productRows);
+
+                        // Order totals
+                        $('#orderSubtotal').text(subtotal.toFixed(2));
+                        $('#orderDiscount').text(order.discount.toFixed(2));
+                        $('#orderTax').text(order.fax.toFixed(2));
+                        $('#orderTotal').text(order.finalPrice.toFixed(2));
+
+                        // Update modal title
+                        $('#viewOrderModalLabel').text('Order #ORD-' + order.orderId);
+                    } else {
+                        // Handle error
+                        $('#orderProducts').html('<tr><td colspan="5" class="text-center text-danger">Error loading order details</td></tr>');
+                        $('#viewOrderModalLabel').text('Error');
+                    }
+                },
+                error: function () {
+                    // Handle error
+                    $('#orderProducts').html('<tr><td colspan="5" class="text-center text-danger">Error loading order details</td></tr>');
+                    $('#viewOrderModalLabel').text('Error');
+                }
+            });
+        } function showUpdateOrderStatusModal(orderId) {
+            // Set the order ID in the form
+            $('#updateOrderId').val(orderId);
+
+            // Get current status text from the table row
+            var statusText = $('button.view-order-btn[data-id="' + orderId + '"]').closest('tr').find('td:eq(5) .badge').text().trim();
+            console.log("Current status from row:", statusText);
+
+            // Set the current status in the dropdown
+            $('#orderStatus').val(statusText);
+
+            // Show the modal
+            $('#updateOrderModal').modal('show');
+            $('#updateOrderModalLabel').text('Update Status for Order #ORD-' + orderId);
+        }
+
+        function showDeleteOrderConfirmation(orderId) {
+            // Set the order ID
+            $('#deleteOrderId').text(orderId);
+
+            // Show the modal
+            $('#deleteOrderModal').modal('show');
+        }
+
+        function updateOrderStatus() {
+            var orderId = $('#updateOrderId').val();
+            var newStatus = $('#orderStatus').val();
+
+            // Disable save button and show loading state
+            $('#saveOrderStatus').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
+
+            // Make AJAX call to update order status
+            $.ajax({
+                url: '/Admin/UpdateOrderStatus',
+                type: 'POST',
+                data: {
+                    id: orderId,
+                    status: newStatus
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Show success message
+                        toastr.success('Order status updated successfully');
+
+                        // Close the modal
+                        $('#updateOrderModal').modal('hide');
+
+                        // Refresh the page to show updated status
+                        location.reload();
+                    } else {
+                        // Show error message
+                        toastr.error(response.message || 'Error updating order status');
+
+                        // Enable save button
+                        $('#saveOrderStatus').prop('disabled', false).text('Save Changes');
+                    }
+                },
+                error: function () {
+                    // Show error message
+                    toastr.error('An error occurred while updating order status');
+
+                    // Enable save button
+                    $('#saveOrderStatus').prop('disabled', false).text('Save Changes');
+                }
+            });
+        }
+
+        function deleteOrder() {
+            var orderId = $('#deleteOrderId').text();
+
+            // Disable delete button and show loading state
+            $('#confirmDeleteOrder').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+
+            // Make AJAX call to delete/cancel order
+            $.ajax({
+                url: '/Admin/CancelOrder',
+                type: 'POST',
+                data: { id: orderId },
+                success: function (response) {
+                    if (response.success) {
+                        // Show success message
+                        toastr.success('Order cancelled successfully');
+
+                        // Close the modal
+                        $('#deleteOrderModal').modal('hide');
+
+                        // Refresh the page to show updated list
+                        location.reload();
+                    } else {
+                        // Show error message
+                        toastr.error(response.message || 'Error cancelling order');
+
+                        // Enable delete button
+                        $('#confirmDeleteOrder').prop('disabled', false).text('Yes, Cancel Order');
+                    }
+                },
+                error: function () {
+                    // Show error message
+                    toastr.error('An error occurred while cancelling the order');
+
+                    // Enable delete button
+                    $('#confirmDeleteOrder').prop('disabled', false).text('Yes, Cancel Order');
+                }
+            });
+        }
+    </script>
+}
