@@ -169,14 +169,15 @@
                 </div>
             </div>
             <div class="row">
-                @if (ViewBag.Products != null && ViewBag.Products.Count > 0)
+                @if (Model != null && Model.Count > 0)
                 {
-                    foreach (var product in ViewBag.Products)
+                    foreach (var product in Model)
                     {
                         <div class="col-md-4">
                             <div class="card mb-4 product-wap rounded-0">
                                 <div class="card rounded-0">
-                                    <img class="card-img rounded-0 img-fluid" src="@product.ImageUrl">
+                                    <img class="card-img rounded-0 img-fluid"
+                                        src="@(product.ProductImages.FirstOrDefault()?.Path ?? "/images/placeholder.png")">
                                     <div
                                         class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
@@ -187,13 +188,13 @@
                                             </li>
                                             <li>
                                                 <a class="btn btn-success text-white mt-2" asp-controller="Home"
-                                                    asp-action="shopsingle" asp-route-id="@product.Id">
+                                                    asp-action="shopsingle" asp-route-id="@product.ProductId">
                                                     <i class="far fa-eye"></i>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="btn btn-success text-white mt-2"
-                                                    href="/Cart/AddToCart?productId=@product.Id">
+                                                    href="/Cart/AddToCart?productId=@product.ProductId">
                                                     <i class="fas fa-cart-plus"></i>
                                                 </a>
                                             </li>
@@ -201,7 +202,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
+                                    <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.ProductId"
                                         class="h3 text-decoration-none">@product.Name</a>
                                     <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                         <li>@product.Brand</li>
@@ -401,4 +402,3 @@
         });
     </script>
 }
-
