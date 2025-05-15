@@ -184,4 +184,128 @@ public class AdminController : Controller
             return RedirectToAction("Dashboard");
         }
     }
+    [HttpGet]
+    public IActionResult GetOrderDetails(int id)
+    {
+        try
+        {
+            var order = _unitOfWork.Orders.Get(o => o.OrderId == id, includeProperties: "ApplicationUser,ProductOrders");
+
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found" });
+            }
+
+            // Create a dynamic object to ensure property names are camelCase for JavaScript
+            var orderDetails = new
+            {
+                orderId = order.OrderId,
+                numberOfProduct = order.NumberOfProduct,
+                totalPrice = order.TotalPrice,
+                discount = order.Discount,
+                fax = order.Fax,
+                finalPrice = order.FinalPrice,
+                addressDelivered = order.AddressDelivered,
+                createdAt = order.CreatedAt,
+                isDeleted = order.IsDeleted,
+                phoneNumber = order.PhoneNumber,
+                streetAddress = order.StreetAddress,
+                city = order.City,
+                state = order.State,
+                postalCode = order.PostalCode,
+                name = order.Name,
+                applicationUser = new
+                {
+                    id = order.ApplicationUser?.Id,
+                    email = order.ApplicationUser?.Email,
+                    name = order.ApplicationUser?.UserName
+                },
+                productOrders = order.ProductOrders.Select(po => new
+                {
+                    productOrderId = po.ProductOrderId,
+                    name = po.Name,
+                    price = po.Price,
+                    amount = po.Amount,
+                    brand = po.Brand
+                }).ToList()
+            };
+
+            return Json(new { success = true, data = orderDetails });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting order details for ID {OrderId}: {ErrorMessage}", id, ex.Message);
+            return Json(new { success = false, message = "An error occurred while retrieving order details" });
+        }
+    }
+    [HttpPost]
+    public IActionResult UpdateOrderStatus(int id, string status)
+    {
+        try
+        {
+            _logger.LogInformation("Attempting to update order {OrderId} to status {Status}", id, status);
+
+            var order = _unitOfWork.Orders.Get(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found" });
+            }
+
+            // Update order status based on status parameter
+            if (status == "Cancelled")
+            {
+                order.IsDeleted = true;
+                _logger.LogInformation("Setting order {OrderId} as Cancelled (IsDeleted=true)", id);
+            }
+            else
+            {
+                order.IsDeleted = false;
+                // In a real application, you'd likely have a more complex status system
+                // e.g., order.Status = status;
+                _logger.LogInformation("Setting order {OrderId} as active (IsDeleted=false), Status: {Status}", id, status);
+            }
+
+            _unitOfWork.Orders.Update(order);
+            _unitOfWork.Save();
+
+            _logger.LogInformation("Successfully updated order {OrderId} status to {Status}", id, status);
+
+            return Json(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating order status for ID {OrderId}: {ErrorMessage}", id, ex.Message);
+            return Json(new { success = false, message = "An error occurred while updating order status" });
+        }
+    }
+
+    [HttpPost]
+    public IActionResult CancelOrder(int id)
+    {
+        try
+        {
+            var order = _unitOfWork.Orders.Get(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Order not found" });
+            }
+
+            // Mark the order as deleted (cancelled) instead of actually removing it
+            order.IsDeleted = true;
+
+            _unitOfWork.Orders.Update(order);
+            _unitOfWork.Save();
+
+            _logger.LogInformation("Order {OrderId} cancelled", id);
+
+            return Json(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error cancelling order ID {OrderId}: {ErrorMessage}", id, ex.Message);
+            return Json(new { success = false, message = "An error occurred while cancelling the order" });
+        }
+    }
 }
