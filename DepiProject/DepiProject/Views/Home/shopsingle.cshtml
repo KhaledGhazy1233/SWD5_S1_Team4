@@ -3,6 +3,20 @@
 @{
     // ViewData["Title"] = Model.Name;
     // Layout = "_Layout";
+
+    string GetImagePath(ICollection<DataLayer.Entities.ProductImage> images)
+    {
+        if (images == null || images.Count == 0)
+            return "/images/placeholder.png";
+
+        var firstImage = images.ToList()[0];
+        if (string.IsNullOrEmpty(firstImage.Path))
+            return "/images/placeholder.png";
+
+        return firstImage.Path.StartsWith("http")
+        ? firstImage.Path
+        : "/images/" + firstImage.Path;
+    }
 }
 
 @section Styles {
@@ -21,7 +35,7 @@
         <div class="row">
             <div class="col-lg-5 mt-5">
                 <div class="card mb-3">
-                    <img class="card-img img-fluid" src="" alt="@Model.Name">
+                    <img class="card-img img-fluid" src="@GetImagePath(Model.ProductImages)" alt="@Model.Name">
                 </div>
             </div>
             <!-- col end -->
@@ -148,23 +162,24 @@
                     <div class="col-md-3">
                         <div class="card mb-4 product-wap rounded-0">
                             <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="@product.ImageUrl">
+                                <img class="card-img rounded-0 img-fluid" src="@GetImagePath(product.ProductImages)"
+                                    alt="@product.Name">
                                 <div
                                     class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                     <ul class="list-unstyled">
                                         <li><a class="btn btn-success text-white" href="#"><i class="far fa-heart"></i></a>
                                         </li>
                                         <li><a class="btn btn-success text-white mt-2" asp-controller="Home"
-                                                asp-action="shopsingle" asp-route-id="@product.Id"><i
+                                                asp-action="shopsingle" asp-route-id="@product.ProductId"><i
                                                     class="far fa-eye"></i></a></li>
                                         <li><a class="btn btn-success text-white mt-2"
-                                                href="/Cart/AddToCart?productId=@product.Id"><i
+                                                href="/Cart/AddToCart?productId=@product.ProductId"><i
                                                     class="fas fa-cart-plus"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
+                                <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.ProductId"
                                     class="h3 text-decoration-none">@product.Name</a>
                                 <p class="text-center mb-0">$@product.Price.ToString("0.00")</p>
                             </div>
@@ -361,6 +376,3 @@
     </script>
     <!-- End Slider Script -->
 }
-
-   
-       

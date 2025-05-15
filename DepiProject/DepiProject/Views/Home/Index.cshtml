@@ -233,7 +233,8 @@
                                         </div>
                                     </div>
                                     <h5 class="card-title mb-3">
-                                        <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Brand"
+                                        <a asp-controller="Product"
+                                                    asp-action="Details" asp-route-id="@product.ProductId"
                                             class="text-decoration-none text-dark">@product.Name</a>
                                     </h5>
                                     <p class="card-text flex-grow-1 text-muted">

@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Product Listing";
     Layout = "_Layout";
+
+    string GetImagePath(ICollection<DataLayer.Entities.ProductImage> images)
+    {
+        if (images == null || images.Count == 0)
+            return "/images/products/apple-macbook-pro-16-main.png";
+
+        var firstImage = images.ToList()[0];
+        if (string.IsNullOrEmpty(firstImage.Path))
+            return "/images/products/apple-macbook-pro-16-main.png";
+
+        return firstImage.Path.StartsWith("http")
+        ? firstImage.Path
+        : "/images/" + firstImage.Path;
+    }
 }
 <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -29,68 +43,75 @@
         <div class="col-lg-3">
             <h1 class="h2 pb-4">Categories</h1>
             <ul class="list-unstyled templatemo-accordion">
-                <li class="pb-3">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                        Laptops
-                        <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
-                    </a>
-                    <ul class="collapse show list-unstyled pl-3">
-                        <li>
-                            <a class="text-decoration-none" href="/Home/shop?category=laptops&subcategory=gaming">Gaming
-                                Laptops</a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=laptops&subcategory=ultrabook">Ultrabooks</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="pb-3">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                        Mobiles
-                        <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
-                    </a>
-                    <ul id="collapseTwo" class="collapse list-unstyled pl-3">
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=mobiles&subcategory=smartphones">Smartphones</a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=mobiles&subcategory=tablets">Tablets</a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=mobiles&subcategory=accessories">Accessories</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="pb-3">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                        Cameras
-                        <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
-                    </a>
-                    <ul id="collapseThree" class="collapse list-unstyled pl-3">
-                        <li>
-                            <a class="text-decoration-none" href="/Home/shop?category=cameras&subcategory=dslr">
-                                DSLR
-                                Cameras
+                @if (ViewBag.Categories != null)
+                {
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <li class="pb-3">
+                            <a class="collapsed d-flex justify-content-between h3 text-decoration-none"
+                                href="/Home/shop?category=@category.Name.ToLower()">
+                                @category.Name
+                                <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                             </a>
+                            @if (category.Name.ToLower() == "laptops")
+                            {
+                                <ul class="collapse show list-unstyled pl-3">
+                                    <li>
+                                        <a class="text-decoration-none" href="/Home/shop?category=laptops&subcategory=gaming">Gaming
+                                            Laptops</a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=laptops&subcategory=ultrabook">Ultrabooks</a>
+                                    </li>
+                                </ul>
+                            }
+                            else if (category.Name.ToLower() == "mobiles")
+                            {
+                                <ul id="collapseTwo" class="collapse list-unstyled pl-3">
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=mobiles&subcategory=smartphones">Smartphones</a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=mobiles&subcategory=tablets">Tablets</a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=mobiles&subcategory=accessories">Accessories</a>
+                                    </li>
+                                </ul>
+                            }
+                            else if (category.Name.ToLower() == "cameras")
+                            {
+                                <ul id="collapseThree" class="collapse list-unstyled pl-3">
+                                    <li>
+                                        <a class="text-decoration-none" href="/Home/shop?category=cameras&subcategory=dslr">
+                                            DSLR Cameras
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=cameras&subcategory=mirrorless">Mirrorless Cameras</a>
+                                    </li>
+                                    <li>
+                                        <a class="text-decoration-none"
+                                            href="/Home/shop?category=cameras&subcategory=accessories">Camera Accessories</a>
+                                    </li>
+                                </ul>
+                            }
                         </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=cameras&subcategory=mirrorless">Mirrorless Cameras</a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none"
-                                href="/Home/shop?category=cameras&subcategory=accessories">Camera Accessories</a>
-                        </li>
-                    </ul>
-                </li>
+                    }
+                }
+                else
+                {
+                    <li>No categories found</li>
+                }
             </ul>
 
             <div class="mt-5">
@@ -146,16 +167,16 @@
                         <li class="list-inline-item">
                             <a class="h3 text-dark text-decoration-none mr-3" href="/Home/shop">All Products</a>
                         </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3"
-                                href="/Home/shop?category=laptops">Laptops</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none" href="/Home/shop?category=mobiles">Mobiles</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none" href="/Home/shop?category=cameras">Cameras</a>
-                        </li>
+                        @if (ViewBag.Categories != null)
+                        {
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <li class="list-inline-item">
+                                    <a class="h3 text-dark text-decoration-none mr-3"
+                                        href="/Home/shop?category=@category.Name.ToLower()">@category.Name</a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
                 <div class="col-md-6 pb-4">
@@ -176,8 +197,9 @@
                         <div class="col-md-4">
                             <div class="card mb-4 product-wap rounded-0">
                                 <div class="card rounded-0">
-                                    <img class="card-img rounded-0 img-fluid"
-                                        src="@(product.ProductImages.FirstOrDefault()?.Path ?? "/images/placeholder.png")">
+                                    <img class="card-img rounded-0 img-fluid product-img"
+                                        src="@GetImagePath(product.ProductImages)"
+                                        onerror="this.src='/images/products/apple-macbook-pro-16-main.png'">
                                     <div
                                         class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
@@ -187,8 +209,8 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="btn btn-success text-white mt-2" asp-controller="Home"
-                                                    asp-action="shopsingle" asp-route-id="@product.ProductId">
+                                                <a class="btn btn-success text-white mt-2" asp-controller="Product"
+                                                    asp-action="Details" asp-route-id="@product.ProductId">
                                                     <i class="far fa-eye"></i>
                                                 </a>
                                             </li>
@@ -202,7 +224,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.ProductId"
+                                    <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId"
                                         class="h3 text-decoration-none">@product.Name</a>
                                     <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                         <li>@product.Brand</li>
@@ -397,7 +419,14 @@
         $(document).ready(function () {
             // Initialize any needed components
             $('.product-img').on('error', function () {
-                $(this).attr('src', '/images/placeholder.png');
+                $(this).attr('src', '/images/products/apple-macbook-pro-16-main.png');
+            });
+
+            // Add error handler for all images that fail to load
+            $('img').on('error', function () {
+                if (!$(this).hasClass('brand-img')) {  // Skip brand logos
+                    $(this).attr('src', '/images/products/apple-macbook-pro-16-main.png');
+                }
             });
         });
     </script>
