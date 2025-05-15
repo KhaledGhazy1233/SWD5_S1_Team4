@@ -280,7 +280,7 @@ namespace DepiProject.Controllers
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<Stripe.Checkout.SessionLineItemOptions>(),
                 Mode = "payment",
-                SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                SuccessUrl = domain + $"Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
                 CancelUrl = domain + "Customer/Cart/Index",
             };
 
@@ -314,61 +314,77 @@ namespace DepiProject.Controllers
         }
         public IActionResult OrderConfirmation(int id)
         {
-            OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
-
-            if (orderHeader == null)
+            try
             {
-                return NotFound();
-            }
+                OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
 
-            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
-            {
-                var service = new Stripe.Checkout.SessionService();
-                Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
-
-                if (session.PaymentStatus.ToLower() == "paid")
+                if (orderHeader == null)
                 {
-                    _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
-                    _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    return NotFound();
+                }
+
+                if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+                {
+                    var service = new Stripe.Checkout.SessionService();
+                    Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
+
+                    if (session.PaymentStatus.ToLower() == "paid")
+                    {
+                        _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
+                        _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                        _unitofOfWork.Save();
+                    }
+
+                    List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
+                        .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+                    _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);
                     _unitofOfWork.Save();
                 }
 
-                List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
-                    .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
-                _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-                _unitofOfWork.Save();
-            }
+                // Get order details for the confirmation page
+                var orderDetails = _unitofOfWork.OrderDetails.GetAll(
+                    od => od.OrderHeaderId == id,
+                    includeProperties: "Product,Product.ProductImages"
+                ).ToList();
 
-            // Get order details for the confirmation page
-            var orderDetails = _unitofOfWork.OrderDetails.GetAll(
-                od => od.OrderHeaderId == id,
-                includeProperties: "Product,Product.ProductImages"
-            ).ToList(); var orderConfirmation = new OrderConfirmationViewModel
-            {
-                OrderId = orderHeader.Id,
-                OrderDate = orderHeader.OrderDate,
-                ShippingAddress = $"{orderHeader.FirstName} {orderHeader.LastName}, {orderHeader.StreetAddress}, {orderHeader.City}, {orderHeader.State} {orderHeader.PostalCode}, {orderHeader.Country}",
-                PaymentMethod = "Stripe", // Using Stripe for payment processing
-                CustomerName = $"{orderHeader.FirstName} {orderHeader.LastName}",
-                TrackingNumber = orderHeader.TrackingNumber ?? "Not available yet",
-                OrderStatus = orderHeader.OrderStatus,
-                TotalPrice = (decimal)orderHeader.OrderTotal,
-                Items = new List<OrderItemViewModel>()
-            };
-
-            foreach (var detail in orderDetails)
-            {
-                orderConfirmation.Items.Add(new OrderItemViewModel
+                var orderConfirmation = new OrderConfirmationViewModel
                 {
-                    Id = detail.ProductId,
-                    Name = detail.Product.Name,
-                    Image = detail.Product.ProductImages.FirstOrDefault()?.Path ?? "/images/no-image.jpg",
-                    Count = detail.Count,
-                    Price = (decimal)detail.Price
-                });
-            }
+                    OrderId = orderHeader.Id,
+                    OrderDate = orderHeader.OrderDate,
+                    ShippingAddress = $"{orderHeader.FirstName} {orderHeader.LastName}, {orderHeader.StreetAddress}, {orderHeader.City}, {orderHeader.State} {orderHeader.PostalCode}, {orderHeader.Country}",
+                    PaymentMethod = "Stripe", // Using Stripe for payment processing
+                    CustomerName = $"{orderHeader.FirstName} {orderHeader.LastName}",
+                    TrackingNumber = orderHeader.TrackingNumber ?? "Not available yet",
+                    OrderStatus = orderHeader.OrderStatus,
+                    TotalPrice = (decimal)orderHeader.OrderTotal,
+                    Items = new List<OrderItemViewModel>()
+                };
 
-            return View(orderConfirmation);
+                foreach (var detail in orderDetails)
+                {
+                    orderConfirmation.Items.Add(new OrderItemViewModel
+                    {
+                        Id = detail.ProductId,
+                        Name = detail.Product.Name,
+                        Image = detail.Product.ProductImages.FirstOrDefault()?.Path ?? "/images/no-image.jpg",
+                        Count = detail.Count,
+                        Price = (decimal)detail.Price
+                    });
+                }
+
+                return View(orderConfirmation);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in OrderConfirmation: {ex.Message}");
+
+                // For development, you might want to see the full error
+                return Content($"Error processing order: {ex.Message}. {ex.StackTrace}");
+
+                // For production, redirect to a friendly error page
+                // return RedirectToAction("Error", "Home", new { message = "There was an error processing your order." });
+            }
         }
         [HttpPost]
         public IActionResult PlaceOrder(OrderHeader orderHeader)
@@ -435,6 +451,29 @@ namespace DepiProject.Controllers
             }
             _unitofOfWork.Save();
 
+            Order order = new()
+            {
+                NumberOfProduct = shoppingCarts.Count,
+                TotalPrice = (decimal)newOrder.OrderTotal,
+                Discount = 0,
+                Fax = 0,
+                FinalPrice = (decimal)newOrder.OrderTotal,
+                AddressDelivered = orderHeader.StreetAddress,
+                CreatedAt = DateTime.Now,
+                IsDeleted = false,
+                PhoneNumber = orderHeader.PhoneNumber,
+                StreetAddress = orderHeader.StreetAddress,
+                City = orderHeader.City,
+                State = orderHeader.State,
+                PostalCode = orderHeader.PostalCode,
+                Name = $"{orderHeader.FirstName} {orderHeader.LastName}",
+                ApplicationUserId = userId
+            };
+
+            // Add order to the database
+            _unitofOfWork.Orders.Add(order);
+            _unitofOfWork.Save();
+
             // Process payment via Stripe
             var domain = Request.Scheme + "://" + Request.Host.Value + "/";
             var options = new Stripe.Checkout.SessionCreateOptions
@@ -444,14 +483,23 @@ namespace DepiProject.Controllers
                 Mode = "payment",
                 SuccessUrl = domain + $"Cart/OrderConfirmation?id={newOrder.Id}",
                 CancelUrl = domain + "Cart/Checkout",
-            };
-
-            foreach (var item in shoppingCarts)
+            }; foreach (var item in shoppingCarts)
             {
-                var description = item.Product.Description;
-                if (description != null && description.Length > 100)
+                // Skip items with null Product to avoid NullReferenceException
+                if (item.Product == null)
                 {
-                    description = description.Substring(0, 100);
+                    continue;
+                }
+
+                // Safely handle Description
+                string description = string.Empty;
+                if (item.Product.Description != null)
+                {
+                    description = item.Product.Description;
+                    if (description.Length > 100)
+                    {
+                        description = description.Substring(0, 100);
+                    }
                 }
 
                 var sessionItem = new Stripe.Checkout.SessionLineItemOptions
@@ -462,17 +510,24 @@ namespace DepiProject.Controllers
                         Currency = "usd",
                         ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = item.Product.Name,
-                            Description = description
+                            Name = item.Product.Name ?? "Product",
+                            Description = string.IsNullOrEmpty(description) ? "No description available" : description
                         }
                     },
                     Quantity = item.Count
                 };
                 options.LineItems.Add(sessionItem);
+            }            // Create Stripe checkout session
+            var service = new Stripe.Checkout.SessionService();
+
+            // Check if we have valid line items before creating a session
+            if (options.LineItems.Count == 0)
+            {
+                // No valid items to purchase
+                TempData["Error"] = "No valid products found in your cart.";
+                return RedirectToAction("Index", "Cart");
             }
 
-            // Create Stripe checkout session
-            var service = new Stripe.Checkout.SessionService();
             Stripe.Checkout.Session session = service.Create(options);
 
             // Update order with Stripe session information

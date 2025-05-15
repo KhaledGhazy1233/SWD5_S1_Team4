@@ -33,9 +33,9 @@ public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderReposi
             {
                 orderfromDb.PaymentStatus = PaymentStatus;
             }
+            _db.SaveChanges();
         }
     }
-
     public void UpdateStripePaymentID(int id, string sessionId, string paymentIntendId)
     {
         var orderfromDb = _db.OrderHeaders.First(u => u.Id == id);
@@ -50,5 +50,6 @@ public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderReposi
             orderfromDb.PaymentIntentId = paymentIntendId;
             orderfromDb.PaymentDate = DateTime.Now;
         }
+        _db.SaveChanges();
     }
 }
