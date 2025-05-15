@@ -3,7 +3,7 @@ using BusinessLayer.Services;
 using DataLayer.Extensions;
 using DataLayer.Repository;
 using DataLayer.Repository.IRepository;
-using DataLayer.Seed;
+//using DataLayer.Seed;
 
 namespace DepiProject;
 
@@ -53,9 +53,9 @@ public class Program
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
         // Seed the database with initial data
-        app.Services.CreateScope().ServiceProvider.GetRequiredService<ILogger<Program>>()
-            .LogInformation("Starting database seeding");
-        app.SeedDatabase();
+        // app.Services.CreateScope().ServiceProvider.GetRequiredService<ILogger<Program>>()
+        //     .LogInformation("Starting database seeding");
+        // app.SeedDatabase();
 
         app.Run();
     }
