@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DepiProject.Controllers;
 
-
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : Controller
 {
@@ -19,7 +18,6 @@ public class AdminController : Controller
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ICategoryService _categoryService;
     private readonly IProductService _productService;
-
 
     public AdminController(
         IUnitOfWork unitOfWork,
@@ -47,7 +45,6 @@ public class AdminController : Controller
     {
         return RedirectToAction(nameof(Dashboard));
     }
-
     [HttpGet]
     public async Task<IActionResult> Dashboard()
     {
@@ -62,11 +59,19 @@ public class AdminController : Controller
                 return RedirectToAction("Login", "Account", new { returnUrl = "/Admin/Dashboard" });
             }
 
-            // Get statistics for dashboard from database
-            ViewBag.TotalProducts = 10;
-            ViewBag.TotalCategories = 3;
-            ViewBag.TotalOrders = 25;
-            ViewBag.TotalCustomers = 50;
+            // Get real statistics for dashboard from database
+            var totalProducts = _unitOfWork.Product.GetAll().Count();
+            var totalCategories = _unitOfWork.Category.GetAll().Count();
+            var totalOrders = _unitOfWork.Orders.GetAll().Count();
+
+            // Get customer count - assumes users with Customer role
+            var customerUsers = await _userManager.GetUsersInRoleAsync(Roles.Customer);
+            var totalCustomers = customerUsers.Count;
+
+            ViewBag.TotalProducts = totalProducts;
+            ViewBag.TotalCategories = totalCategories;
+            ViewBag.TotalOrders = totalOrders;
+            ViewBag.TotalCustomers = totalCustomers;
 
             // Administrator info
             ViewBag.UserName = user.UserName;
@@ -75,50 +80,35 @@ public class AdminController : Controller
 
             _logger.LogInformation("Admin {UserName} accessed the dashboard", user.UserName);
 
-            // Demo Orders (static data)
-            ViewBag.RecentOrders = new List<object> {
-            new {
-                Id = "ORD-001",
-                Customer = "John Doe",
-                Date = DateTime.Now.AddDays(-1),
-                Total = 1299.99m,
-                Status = "Completed"
-            },
-            new {
-                Id = "ORD-002",
-                Customer = "Jane Smith",
-                Date = DateTime.Now.AddDays(-2),
-                Total = 899.99m,
-                Status = "Processing"
-            },
-            new {
-                Id = "ORD-003",
-                Customer = "Mike Johnson",
-                Date = DateTime.Now.AddDays(-3),
-                Total = 2199.99m,
-                Status = "Pending"
-            },
-            };
+            // Get recent orders from database
+            var recentOrders = _unitOfWork.Orders.GetAll(includeProperties: "ApplicationUser")
+                .OrderByDescending(o => o.CreatedAt)
+                .Take(5)
+                .Select(o => new
+                {
+                    Id = $"ORD-{o.OrderId}",
+                    Customer = o.Name,
+                    Date = o.CreatedAt,
+                    Total = o.FinalPrice,
+                    Status = o.IsDeleted ? "Cancelled" : "Delivered"
+                })
+                .ToList();
 
-            // Top Selling (Demo)
-            ViewBag.TopProducts = new List<object> {
-                new {
-                    Name = "UltraPhone 12",
-                    Sales = 42,
-                    Revenue = 37799.58m
-                },
-                new {
-                    Name = "TechBook Pro",
-                    Sales = 28,
-                    Revenue = 36399.72m
-                },
-                new {
-                    Name = "ProShot DSLR X200",
-                    Sales = 15,
-                    Revenue = 22499.85m
-                }
-            };
+            ViewBag.RecentOrders = recentOrders;
 
+            // Get top selling products (top 3 by sales)
+            // This is a simplified example - in a real application you would calculate this from order details
+            var topProducts = _unitOfWork.Product.GetAll()
+                .Take(3)
+                .Select(p => new
+                {
+                    Name = p.Name,
+                    Sales = new Random().Next(10, 50), // Example placeholder - replace with real data
+                    Revenue = new Random().Next(10000, 40000) / 100.0m // Example placeholder - replace with real data
+                })
+                .ToList();
+
+            ViewBag.TopProducts = topProducts;
             ViewBag.RoleBasedCss = true;
 
             return View();
@@ -171,6 +161,26 @@ public class AdminController : Controller
         {
             _logger.LogError(ex, "Error in Categories action: {ErrorMessage}", ex.Message);
             TempData["ErrorMessage"] = "There was an error loading the categories. Please try again.";
+            return RedirectToAction("Dashboard");
+        }
+    }
+    public IActionResult Orders()
+    {
+        try
+        {
+            // Get orders from the database
+            var orders = _unitOfWork.Orders.GetAll(includeProperties: "ApplicationUser")
+                .OrderByDescending(o => o.CreatedAt)
+                .ToList();
+
+            _logger.LogInformation("Admin accessed orders page with {OrderCount} orders", orders.Count);
+
+            return View(orders);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in Orders action: {ErrorMessage}", ex.Message);
+            TempData["ErrorMessage"] = "There was an error loading the orders. Please try again.";
             return RedirectToAction("Dashboard");
         }
     }

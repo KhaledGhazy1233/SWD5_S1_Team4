@@ -1,0 +1,166 @@
+@model IEnumerable<DataLayer.Entities.Order>
+@{
+    ViewData["Title"] = "Orders Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 text-gray-800">Orders Management</h1>
+            <p>View and manage all customer orders</p>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Orders</h6>
+            <div class="d-flex gap-2">
+                <select class="form-select" id="orderStatusFilter">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Search orders..." id="orderSearch">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped admin-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Products</th>
+                            <th>Total</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>#ORD-@order.OrderId</td>
+                                    <td>@order.Name</td>
+                                    <td>@order.NumberOfProduct products</td>
+                                    <td>$@order.FinalPrice.ToString("N2")</td>
+                                    <td>@order.CreatedAt.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @{
+                                            var statusClass = "bg-secondary";
+                                            if (order.IsDeleted)
+                                            {
+                                                statusClass = "bg-danger";
+                                            }
+                                            else
+                                            {
+                                                statusClass = "bg-success";
+                                            }
+                                        }
+                                        <span class="badge @statusClass">
+                                            @(order.IsDeleted ? "Cancelled" : "Delivered")
+                                        </span>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn btn-sm btn-info view-order-btn" data-id="@order.OrderId"
+                                            title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary edit-order-btn" data-id="@order.OrderId"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger cancel-order-btn" data-id="@order.OrderId"
+                                            title="Cancel">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center">No orders found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            $('#ordersTable').DataTable({
+                "order": [[4, "desc"]], // Sort by order date by default (newest first)
+                "pageLength": 25,
+                "language": {
+                    "search": "Search orders:",
+                    "lengthMenu": "Show _MENU_ orders per page",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ orders",
+                    "infoEmpty": "No orders available",
+                    "infoFiltered": "(filtered from _MAX_ total orders)"
+                }
+            });
+
+            // View order details
+            $('.view-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                showOrderDetails(orderId);
+            });
+
+            // Edit order
+            $('.edit-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                showUpdateOrderStatusModal(orderId);
+            });
+
+            // Cancel order
+            $('.cancel-order-btn').on('click', function () {
+                var orderId = $(this).data('id');
+                if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+                    // Add AJAX call to cancel order
+                    alert('Order #' + orderId + ' has been cancelled.');
+                    location.reload();
+                }
+            });
+
+            // Filter by status
+            $('#orderStatusFilter').on('change', function () {
+                var table = $('#ordersTable').DataTable();
+                var status = $(this).val();
+                
+                // Clear any existing filter and apply new one if value is not empty
+                table.column(5).search(status).draw();
+            });
+
+            // Search
+            $('#orderSearch').on('keyup', function () {
+                var table = $('#ordersTable').DataTable();
+                table.search($(this).val()).draw();
+            });
+        });
+
+        function showOrderDetails(orderId) {
+            // Show the order details modal - in production, this would fetch data via AJAX
+            alert('Viewing details for order #' + orderId);
+        }
+
+        function showUpdateOrderStatusModal(orderId) {
+            // Show the order status update modal - in production, this would fetch data via AJAX
+            alert('Updating status for order #' + orderId);
+        }
+    </script>
+}
