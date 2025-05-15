@@ -1,20 +1,21 @@
 ﻿using BusinessLayer.Services.Interface;
 using BusinessLayer.ViewModel.Category;
+using BusinessLayer.Wrapper;
 using DataLayer.Entities;
-using DataLayer.Repository;
 using DataLayer.Repository.IRepository;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BusinessLayer.Services.Implementation
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IFileService _fileService;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+
+        public CategoryService(ICategoryRepository categoryRepository, IFileService fileService)
         {
             _categoryRepository = categoryRepository;
+            _fileService = fileService;
         }
 
         public async Task<string> Create(CreateCategoryVm vm)
@@ -22,14 +23,16 @@ namespace BusinessLayer.Services.Implementation
             if (await _categoryRepository.IsCategoryNameExist(vm.Name))
                 return "This name already exists";
 
+            var path = await _fileService.UploadFileAsync(vm.ImageUrl);
             var category = new Category()
             {
                 Name = vm.Name,
                 Description = vm.Description,
-                IsDeleted = false
+                IsDeleted = false,
+                ImageUrl = path,
             };
 
-             _categoryRepository.Add(category);
+            _categoryRepository.Add(category);
             await _categoryRepository.SaveChangesAsync();
 
             return "Success";
@@ -41,8 +44,17 @@ namespace BusinessLayer.Services.Implementation
             if (category == null)
                 return "Category not found";
 
+            var newNAmeExist = await _categoryRepository.IsCategoryNameExistExcludeItself(vm.Name, vm.Id);
+            if (newNAmeExist)
+                return "this new name is already exsit";
+
+
+            await _fileService.DeleteImageByUrlAsync(category.ImageUrl);
+            var path = await _fileService.UploadFileAsync(vm.ImageUrl);
+
             category.Name = vm.Name;
             category.Description = vm.Description;
+            category.ImageUrl = path;
 
             await _categoryRepository.SaveChangesAsync();
 
@@ -60,9 +72,24 @@ namespace BusinessLayer.Services.Implementation
             return "Success";
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public async Task<List<ShowAllCategoryVm>> GetAllCategories()
         {
-            return await _categoryRepository.GetAllCategoriesAsync();
+            var result = await _categoryRepository.GetAllCategoriesIncludeProductsAsync();
+
+            var response = new List<ShowAllCategoryVm>();
+            foreach (var category in result)
+            {
+                var vm = new ShowAllCategoryVm()
+                {
+                    Description = category.Description,
+                    Id = category.CategoryId,
+                    Name = category.Name,
+                    ProductCount = category.Products.Count,
+                };
+                response.Add(vm);
+            }
+
+            return response;
         }
 
         public async Task<Category> GetCategoryById(int id)
@@ -84,6 +111,49 @@ namespace BusinessLayer.Services.Implementation
             };
         }
 
+        public async Task<List<ShowAllCategoryVm>?> GetPaginatedCategories(int pageNumber, int pageSize)
+        {
+            PaginateResult<Category> result = await _categoryRepository.GetQuerableCategories()
+                                                                     .ToPaginatedListAsync(pageNumber, pageSize);
+
+            var response = new List<ShowAllCategoryVm>();
+            if (result.Data == null || result.Data.Count <= 0)
+            {
+                return null;
+            }
+
+            foreach (var category in result.Data)
+            {
+                var vm = new ShowAllCategoryVm()
+                {
+                    Description = category.Description,
+                    Id = category.CategoryId,
+                    Name = category.Name,
+                    ProductCount = category.Products.Count,
+                };
+                response.Add(vm);
+            }
+            return response;
+        }
+
+        public List<CategoryDropDown> GetDropDown()
+        {
+            var result = _categoryRepository.GetAll();
+
+            var response = new List<CategoryDropDown>();
+
+            foreach (var category in result)
+            {
+                var vm = new CategoryDropDown()
+                {
+                    Id = category.CategoryId,
+                    Name = category.Name,
+                };
+                response.Add(vm);
+            }
+
+            return response;
+        }
     }
 }
 

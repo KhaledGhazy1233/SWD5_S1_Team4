@@ -5,11 +5,17 @@ namespace BusinessLayer.ViewModel.Product;
 
 public class CreateProductVm
 {
-    [Required] public string Name { get; set; } = string.Empty;
-    [Required] public string Description { get; set; } = string.Empty;
+    public int? Id { get; set; }
+    [Required] public string? Name { get; set; }
+    [Required] public string? Description { get; set; }
     [Required] public decimal Price { get; set; }
-    [Required] public int Amount { get; set; }
-    [Required] public string Brand { get; set; } = string.Empty;
+    [Required] public IFormFile ImageUrl { get; set; }
     [Required] public int CategoryId { get; set; }
-    [Required] public List<IFormFile> Files { get; set; }
+    [Required] public string? Brand { get; set; }
+    [Required] public string? Model { get; set; }
+    [Required] public string? TechnicalSpecifications { get; set; }
+    [Required] public decimal DiscountPercentage { get; set; }
+    [Required] public bool IsFeatured { get; set; }
+    [Required] public string? WarrantyInfo { get; set; }
+    [Required] public int StockQuantity { get; set; }
 }

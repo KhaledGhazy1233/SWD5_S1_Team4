@@ -10,6 +10,8 @@ public static class InterfacesDependencies
     {
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<ICategoryService, CategoryService>();
+        services.AddTransient<ISharedService, SharedService>();
+
 
         return services;
     }

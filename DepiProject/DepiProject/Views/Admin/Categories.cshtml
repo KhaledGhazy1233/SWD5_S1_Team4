@@ -1,4 +1,4 @@
-@model IEnumerable<DepiProject.Models.Category>
+@model List<ShowAllCategoryVm>
 
 @{
     ViewData["Title"] = "Categories Management";
@@ -9,7 +9,7 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">Categories Management</h1>
-        <a href="javascript:void(0);" class="btn btn-primary">
+        <a  class="btn btn-primary" asp-action="Create" asp-controller="Category">
             <i class="fas fa-plus"></i> Create New Category
         </a>
     </div>
@@ -41,7 +41,8 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>SubCategory</th>
+                            <th>Description</th>
+                            <th>ProductCount</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -53,16 +54,15 @@
                                 <tr>
                                     <td>@category.Id</td>
                                     <td>@category.Name</td>
-                                    <td>@category.SubCategory</td>
+                                    <td>@category.Description</td>
+                                    <td>@category.ProductCount</td>
+
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-primary">
+                                            <a asp-action="Edit" asp-controller="Category" asp-route-id="@category.Id" class="btn btn-sm btn-primary" d-block>
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-info">
-                                                <i class="fas fa-info-circle"></i> Details
-                                            </a>
-                                            <a href="javascript:void(0);" class="btn btn-sm btn-danger">
+                                            <a asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id"  class="btn btn-sm btn-danger d-block" style="margin-left:10px">
                                                 <i class="fas fa-trash-alt"></i> Delete
                                             </a>
                                         </div>

@@ -1,15 +1,11 @@
 using BusinessLayer.Constants;
+using BusinessLayer.Services.Interface;
 using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DepiProject.Controllers;
 
@@ -21,17 +17,24 @@ public class AdminController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<AdminController> _logger;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ICategoryService _categoryService;
+    private readonly IProductService _productService;
+
 
     public AdminController(
         IUnitOfWork unitOfWork,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ILogger<AdminController> logger)
+        ILogger<AdminController> logger,
+        ICategoryService categoryService,
+        IProductService productService)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _categoryService = categoryService;
+        _productService = productService;
     }
 
     public override void OnActionExecuting(ActionExecutingContext context)
@@ -134,75 +137,12 @@ public class AdminController : Controller
         {
             _logger.LogInformation("Admin accessed the static products page");
 
-            var electronicsCategory = new DepiProject.Models.Category { Id = 1, Name = "Electronics" };
-            var clothingCategory = new DepiProject.Models.Category { Id = 2, Name = "Clothing" };
-            var booksCategory = new DepiProject.Models.Category { Id = 3, Name = "Books" };
+            //var electronicsCategory = new DepiProject.Models.Category { Id = 1, Name = "Electronics" };
+            //var clothingCategory = new DepiProject.Models.Category { Id = 2, Name = "Clothing" };
+            //var booksCategory = new DepiProject.Models.Category { Id = 3, Name = "Books" };
 
-            var products = new List<DepiProject.Models.Product>
-            {
-                new DepiProject.Models.Product {
-                    Id = 1,
-                    Name = "UltraPhone 12",
-                    Description = "Latest smartphone with advanced features",
-                    Price = 899.99m,
-                    IsAvailable = true,
-                    CategoryId = 1,
-                    Category = electronicsCategory,
-                    Brand = "TechCo",
-                    StockQuantity = 25,
-                    ImageUrl = "/images/products/phone.jpg"
-                },
-                new DepiProject.Models.Product {
-                    Id = 2,
-                    Name = "TechBook Pro",
-                    Description = "High-performance laptop for professionals",
-                    Price = 1299.99m,
-                    IsAvailable = true,
-                    CategoryId = 1,
-                    Category = electronicsCategory,
-                    Brand = "TechCo",
-                    StockQuantity = 15,
-                    ImageUrl = "/images/products/laptop.jpg"
-                },
-                new DepiProject.Models.Product {
-                    Id = 3,
-                    Name = "Casual T-Shirt",
-                    Description = "Comfortable cotton t-shirt",
-                    Price = 24.99m,
-                    IsAvailable = true,
-                    CategoryId = 2,
-                    Category = clothingCategory,
-                    Brand = "FashionStyle",
-                    StockQuantity = 100,
-                    ImageUrl = "/images/products/tshirt.jpg"
-                },
-                new DepiProject.Models.Product {
-                    Id = 4,
-                    Name = "Programming Guide",
-                    Description = "Complete guide to modern programming",
-                    Price = 39.99m,
-                    IsAvailable = true,
-                    CategoryId = 3,
-                    Category = booksCategory,
-                    Brand = "Tech Publishing",
-                    StockQuantity = 50,
-                    ImageUrl = "/images/products/book.jpg"
-                },
-                new DepiProject.Models.Product {
-                    Id = 5,
-                    Name = "ProShot DSLR X200",
-                    Description = "Professional DSLR Camera with 4K video",
-                    Price = 1499.99m,
-                    IsAvailable = true,
-                    CategoryId = 1,
-                    Category = electronicsCategory,
-                    Brand = "ProImage",
-                    StockQuantity = 10,
-                    ImageUrl = "/images/products/camera.jpg"
-                }
-            };
-
-            return View(products);
+            var result = _productService.GetProductsVm();
+            return View(result);
         }
         catch (Exception ex)
         {
@@ -212,21 +152,19 @@ public class AdminController : Controller
         }
     }
 
-    public IActionResult Categories()
+    public async Task<IActionResult> Categories(int pageNumber, int pageSize)
     {
         try
         {
             _logger.LogInformation("Admin accessed the static categories page");
+            //if (pageNumber == 0 || pageSize == 0)
+            //{
+            //    pageNumber = 1;
+            //    pageSize = 5;
+            //}
 
-            var categories = new List<DepiProject.Models.Category>
-            {
-                new DepiProject.Models.Category { Id = 1, Name = "Electronics", SubCategory = "" },
-                new DepiProject.Models.Category { Id = 2, Name = "Clothing", SubCategory = "" },
-                new DepiProject.Models.Category { Id = 3, Name = "Books", SubCategory = "" },
-                new DepiProject.Models.Category { Id = 4, Name = "Home & Garden", SubCategory = "" },
-                new DepiProject.Models.Category { Id = 5, Name = "Sports", SubCategory = "" }
-            };
-
+            //var categories = await _categoryService.GetPaginatedCategories(pageNumber, pageSize);
+            var categories = await _categoryService.GetAllCategories();
             return View(categories);
         }
         catch (Exception ex)

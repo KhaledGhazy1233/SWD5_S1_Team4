@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLayer.Repository.IRepository
+﻿namespace DataLayer.Repository.IRepository
 {
     public interface IUnitOfWork
     {
@@ -13,6 +7,8 @@ namespace DataLayer.Repository.IRepository
         IOrderHeaderRepository OrderHeader { get; }
         IOrderDetailsRepository OrderDetails { get; }
         IProductRepository Product { get; }
+        ICategoryRepository Category { get; }
+
         void Save();
     }
 }

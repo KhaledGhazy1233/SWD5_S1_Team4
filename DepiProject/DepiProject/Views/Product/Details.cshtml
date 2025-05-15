@@ -1,4 +1,4 @@
-@model DepiProject.Models.Product
+@model GetProductDetails
 
 @{
     ViewData["Title"] = "Product Details";
@@ -40,7 +40,7 @@
             
             <div class="d-flex align-items-center mb-3">
                 <span class="me-3">Availability:</span>
-                @if (Model.IsAvailable && Model.StockQuantity > 0)
+                @if ( Model.StockQuantity > 0)
                 {
                     <span class="badge bg-success">In Stock (@Model.StockQuantity available)</span>
                 }
@@ -62,7 +62,7 @@
                 <span class="fw-bold">Warranty:</span> @Model.WarrantyInfo
             </div>
 
-            @if (Model.IsAvailable && Model.StockQuantity > 0)
+            @if (Model.StockQuantity > 0)
             {
                 <div class="d-flex align-items-center mb-4">
                     <div class="input-group me-3" style="max-width: 150px;">

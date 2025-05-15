@@ -18,6 +18,8 @@ namespace DataLayer.Repository
         public void Add(T entity)
         {
             dbSet.Add(entity);
+            _db.SaveChanges();
+
         }
 
         public T Get(Expression<Func<T, bool>> filter, string includeProperties = null)

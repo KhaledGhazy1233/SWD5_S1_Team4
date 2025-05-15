@@ -5,6 +5,7 @@ using DataLayer.Entities;
 using DataLayer.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BusinessLayer.Services.Implementation;
 
@@ -28,6 +29,136 @@ public class ProductService : IProductService
     #endregion
 
     #region    Handle Methods
+    public List<GetProductDashboard> GetProductsVm()
+    {
+        var products = _productRepository.GetAll(p => !p.IsDeleted, "Category");
+        var response = new List<GetProductDashboard>();
+        foreach (var product in products)
+        {
+            var vm = new GetProductDashboard()
+            {
+
+                IsAvailable = product.IsAvailable,
+                Name = product.Name,
+                Price = product.Price,
+                ProductId = product.ProductId,
+                StockQuantity = product.StockQuantity,
+
+            };
+
+            if (product.Category != null)
+            {
+                vm.CategoryNAme = product.Category.Name;
+            }
+
+            response.Add(vm);
+        }
+
+        return response;
+    }
+    public async Task<List<ProductForCategoryVm>> GetFeaturedProduct()
+    {
+        return await getProductByCategory(p => p.IsFeatured);
+    }
+    public async Task<List<ProductForCategoryVm>> GetProductByCategoryID(int categoryId)
+    {
+        return await getProductByCategory(p => p.CategoryId == categoryId);
+    }
+    private async Task<List<ProductForCategoryVm>> getProductByCategory(Expression<Func<Product, bool>> action)
+    {
+        var products = await _dbContext.Products
+                                                  .Include(p => p.Category)
+                                                  .Include(p => p.ProductImages)
+                                                  .Where(action)
+                                                  .ToListAsync();
+
+        var response = new List<ProductForCategoryVm>();
+        foreach (var product in products)
+        {
+            var vm = new ProductForCategoryVm()
+            {
+                Brand = product.Brand,
+                CategoryName = product.Category.Name,
+                ProductId = product.ProductId,
+                Description = product.Description,
+                Name = product.Name,
+                Price = product.Price,
+            };
+            if (product.ProductImages.Count > 0)
+            {
+                vm.ImageUrl = product.ProductImages!.FirstOrDefault().Path;
+            }
+
+            response.Add(vm);
+        }
+
+        return response;
+    }
+
+    public GetProductDetails GetProductDetailsVm(int productID)
+    {
+        var product = _productRepository.GetAll(p => !p.IsDeleted && p.ProductId == productID, "ProductImages").FirstOrDefault();
+
+        var response = new GetProductDetails()
+        {
+            Brand = product.Brand,
+            Description = product.Description,
+            DiscountPercentage = product.DiscountPercentage,
+            Model = product.Model,
+            Name = product.Name,
+            Price = product.Price,
+            ProductId = productID,
+            StockQuantity = product.StockQuantity,
+            TechnicalSpecifications = product.TechnicalSpecifications,
+            WarrantyInfo = product.WarrantyInfo,
+        };
+
+        if (product.ProductImages.FirstOrDefault() != null)
+        {
+            response.ImageUrl = product.ProductImages.FirstOrDefault()!.Path;
+        }
+
+        return response;
+    }
+    public Task<UpdateProductVm> GetProductByIdVm(int productID)
+    {
+        throw new NotImplementedException();
+    }
+    public Task<UpdateProductVm> GetUpdateProductVmById(int productID)
+    {
+        //var produnt = _productRepository.Get(p => !p.IsDeleted, "Category");
+        //var categories = _dbContext.Categories.Where(c => !c.IsDeleted);
+        //var editVm = new UpdateProductVm()
+        //{
+        //    StockQuantity = produnt.StockQuantity,
+        //    Brand = produnt.Brand,
+        //    //CategoryName = produnt.Category.Name,
+        //    Name = produnt.Name,
+        //    Description = produnt.Description,
+        //    Price = produnt.Price,
+        //    ProductId = productID,
+        //    DiscountPercentage = produnt.DiscountPercentage,
+        //    Id = productID,
+        //    IsFeatured = produnt.IsFeatured,
+        //    TechnicalSpecifications = produnt.TechnicalSpecifications,
+        //    WarrantyInfo = produnt.WarrantyInfo,
+        //    Model = produnt.Model,
+        //};
+
+        //foreach (var category in categories)
+        //{
+        //    var categoryVm = new CategoryDropDown()
+        //    {
+        //        Id = category.CategoryId,
+        //        Name = category.Name,
+        //    };
+
+        //    editVm.categoryDropDowns.Add(categoryVm);
+        //}
+
+        //return Task.FromResult(editVm);
+        return Task.FromResult(new UpdateProductVm());
+    }
     public async Task<string> CreateAsync(CreateProductVm vm)
     {
         // check if name exist
@@ -38,10 +169,16 @@ public class ProductService : IProductService
         {
             Name = vm.Name,
             Description = vm.Description,
-            Amount = vm.Amount,
+            StockQuantity = vm.StockQuantity,
             Brand = vm.Brand,
             CategoryId = vm.CategoryId,
             Price = vm.Price,
+            Model = vm.Model,
+            DiscountPercentage = vm.DiscountPercentage,
+            IsAvailable = true,
+            IsFeatured = vm.IsFeatured,
+            TechnicalSpecifications = vm.TechnicalSpecifications,
+            WarrantyInfo = vm.WarrantyInfo,
         };
 
         try
@@ -52,7 +189,9 @@ public class ProductService : IProductService
             _productRepository.Add(product);
 
             // then save image
-            await saveNewFilesAsync(vm.Files, product.ProductId);
+            var files = new List<IFormFile>();
+            files.Add(vm.ImageUrl);
+            await saveNewFilesAsync(files, product.ProductId);
 
             // commit
             await _dbContext.SaveChangesAsync();
@@ -83,9 +222,14 @@ public class ProductService : IProductService
         product.Price = vm.Price;
         product.CategoryId = vm.CategoryId;
         product.Name = vm.Name;
-        product.Amount = vm.Amount;
+        product.StockQuantity = vm.StockQuantity;
         product.Description = vm.Description;
         product.Brand = vm.Brand;
+        product.WarrantyInfo = vm.WarrantyInfo;
+        product.DiscountPercentage = vm.DiscountPercentage;
+        product.Model = vm.Model;
+        product.IsFeatured = vm.IsFeatured;
+        product.TechnicalSpecifications = vm.TechnicalSpecifications;
 
         List<IFormFile> oldPaths = new List<IFormFile>();
 
@@ -94,8 +238,9 @@ public class ProductService : IProductService
             // start transaction
             await _dbContext.Database.BeginTransactionAsync();
             // if there is a image get old image then deleted then save new 
-
-            await saveNewFilesAsync(vm.Files, product.ProductId);
+            var files = new List<IFormFile>();
+            files.Add(vm.ImageUrl);
+            await saveNewFilesAsync(files, product.ProductId);
 
             // then update product
             await _productRepository.Update(product);
