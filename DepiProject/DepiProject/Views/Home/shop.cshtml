@@ -51,60 +51,7 @@
                             <a class="collapsed d-flex justify-content-between h3 text-decoration-none"
                                 href="/Home/shop?category=@category.Name.ToLower()">
                                 @category.Name
-                                <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                             </a>
-                            @if (category.Name.ToLower() == "laptops")
-                            {
-                                <ul class="collapse show list-unstyled pl-3">
-                                    <li>
-                                        <a class="text-decoration-none" href="/Home/shop?category=laptops&subcategory=gaming">Gaming
-                                            Laptops</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=laptops&subcategory=ultrabook">Ultrabooks</a>
-                                    </li>
-                                </ul>
-                            }
-                            else if (category.Name.ToLower() == "mobiles")
-                            {
-                                <ul id="collapseTwo" class="collapse list-unstyled pl-3">
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=mobiles&subcategory=smartphones">Smartphones</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=mobiles&subcategory=tablets">Tablets</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=mobiles&subcategory=accessories">Accessories</a>
-                                    </li>
-                                </ul>
-                            }
-                            else if (category.Name.ToLower() == "cameras")
-                            {
-                                <ul id="collapseThree" class="collapse list-unstyled pl-3">
-                                    <li>
-                                        <a class="text-decoration-none" href="/Home/shop?category=cameras&subcategory=dslr">
-                                            DSLR Cameras
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=cameras&subcategory=mirrorless">Mirrorless Cameras</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-decoration-none"
-                                            href="/Home/shop?category=cameras&subcategory=accessories">Camera Accessories</a>
-                                    </li>
-                                </ul>
-                            }
                         </li>
                     }
                 }
@@ -127,8 +74,10 @@
                         <select class="form-select" name="category">
                             <option value="">All Categories</option>
                             <option value="laptops">Laptops</option>
-                            <option value="mobiles">Mobiles</option>
-                            <option value="cameras">Cameras</option>
+                            <option value="smartphones">Smartphones</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="audio">Audio</option>
+                            <option value="gaming">Gaming</option>
                         </select>
                     </div>
 
@@ -165,14 +114,14 @@
                 <div class="col-md-6">
                     <ul class="list-inline shop-top-menu pb-3 pt-1">
                         <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="/Home/shop">All Products</a>
+                            <a class="h6 text-dark text-decoration-none mr-3" href="/Home/shop">All Products</a>
                         </li>
                         @if (ViewBag.Categories != null)
                         {
                             @foreach (var category in ViewBag.Categories)
                             {
                                 <li class="list-inline-item">
-                                    <a class="h3 text-dark text-decoration-none mr-3"
+                                    <a class="h6 text-dark text-decoration-none mr-3"
                                         href="/Home/shop?category=@category.Name.ToLower()">@category.Name</a>
                                 </li>
                             }
@@ -203,11 +152,6 @@
                                     <div
                                         class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                         <ul class="list-unstyled">
-                                            <li>
-                                                <a class="btn btn-success text-white" href="#">
-                                                    <i class="far fa-heart"></i>
-                                                </a>
-                                            </li>
                                             <li>
                                                 <a class="btn btn-success text-white mt-2" asp-controller="Product"
                                                     asp-action="Details" asp-route-id="@product.ProductId">
