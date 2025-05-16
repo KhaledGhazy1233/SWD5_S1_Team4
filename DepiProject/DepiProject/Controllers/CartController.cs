@@ -3,34 +3,56 @@ using DataLayer.Repository.IRepository;
 using DepiProject.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Stripe;
 using System.Security.Claims;
+
 namespace DepiProject.Controllers
 {
     public class CartController : Controller
     {
-        private IUnitOfWork _unitofOfWork;
-        public ShoppingCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitofOfWork;
+        private readonly IConfiguration _configuration;
+        public ShoppingCartVM ShoppingCartVM { get; set; } = new();
+
+        public CartController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitofOfWork = unitOfWork;
+            _configuration = configuration;
+
+            // Ensure Stripe API key is set
+            StripeConfiguration.ApiKey = _configuration.GetSection("Stripe:SecretKey").Get<string>();
         }
         [Authorize]
-        public IActionResult AddToCart(int productId, int quantity)
+        public IActionResult AddToCart(int productId, int quantity = 1)
         {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var cartItem = _unitofOfWork.ShoppingCart.Get(c => c.ApplicationUserId == userId && c.ProductId == productId);
-
 
             if (cartItem != null)
             {
                 cartItem.Count += quantity;
-
                 _unitofOfWork.ShoppingCart.Update(cartItem);
             }
             else
-            {                // Get the product to ensure it exists and to get its price
+            {
+                // Get the product to ensure it exists and to get its price
                 var product = _unitofOfWork.Product.Get(p => p.ProductId == productId);
                 if (product == null)
                 {
@@ -49,19 +71,48 @@ namespace DepiProject.Controllers
             }
 
             _unitofOfWork.Save();
-            return RedirectToAction("Index", "Home", new { id = productId });
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                // If AJAX request, return JSON with cart count
+                var cartCount = _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId)
+                    .Sum(c => c.Count);
+
+                return Json(new { success = true, count = cartCount });
+            }
+
+            // If not AJAX, redirect back to the referring page or home page
+            if (!string.IsNullOrEmpty(Request.Headers["Referer"]))
+            {
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
+
+            return RedirectToAction("Index", "Home");
         }
+        [Authorize]
         public IActionResult Plus(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             cartfromdb.Count += 1;
             _unitofOfWork.ShoppingCart.Update(cartfromdb);
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
         public IActionResult Minus(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             if (cartfromdb.Count <= 1)
             {
                 _unitofOfWork.ShoppingCart.Remove(cartfromdb);
@@ -74,48 +125,80 @@ namespace DepiProject.Controllers
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize]
         public IActionResult Remove(int cartId)
         {
             var cartfromdb = _unitofOfWork.ShoppingCart.Get(s => s.Id == cartId);
+            if (cartfromdb == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             _unitofOfWork.ShoppingCart.Remove(cartfromdb);
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
-
-
         public IActionResult Index()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            ShoppingCartVM = new()
+            // Reset OrderTotal to 0
+            ShoppingCartVM.OrderTotal = 0;
+
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                ShoppingCartList = _unitofOfWork.ShoppingCart.GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product"),
-                OrderHeader = new()
-            };
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity != null)
+                {
+                    var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
+                    if (!string.IsNullOrEmpty(userId))
+                    {
+                        // Get shopping cart items with product and product images
+                        ShoppingCartVM.ShoppingCartList = _unitofOfWork.ShoppingCart
+                            .GetAll(a => a.ApplicationUserId == userId, includeProperties: "Product,Product.ProductImages");
 
+                        // Initialize order header if needed
+                        if (ShoppingCartVM.OrderHeader == null)
+                        {
+                            ShoppingCartVM.OrderHeader = new OrderHeader();
+                        }
 
-            foreach (var cart in ShoppingCartVM.ShoppingCartList)
-            {
-                ShoppingCartVM.OrderHeader.OrderTotal += (double)(cart.Product.Price * cart.Count);
+                        // Set application user
+                        ShoppingCartVM.OrderHeader.ApplicationUser = _unitofOfWork.User.GetUser(userId);
+
+                        // Calculate total
+                        foreach (var cart in ShoppingCartVM.ShoppingCartList)
+                        {
+                            ShoppingCartVM.OrderTotal += (double)(cart.Price * cart.Count);
+                        }
+                    }
+                }
             }
+
             return View(ShoppingCartVM);
         }
         //AddInIConCartINNavBar(Header)
         [AllowAnonymous]
         public int GetCartCount()
         {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return 0;
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity == null)
+            {
+                return 0;
+            }
+
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             if (string.IsNullOrEmpty(userId))
             {
                 return 0;
             }
-            else
-                return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
+
+            return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
         }
         [HttpGet]
         public IActionResult Checkout()
@@ -197,7 +280,7 @@ namespace DepiProject.Controllers
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<Stripe.Checkout.SessionLineItemOptions>(),
                 Mode = "payment",
-                SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                SuccessUrl = domain + $"Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
                 CancelUrl = domain + "Customer/Cart/Index",
             };
 
@@ -218,77 +301,90 @@ namespace DepiProject.Controllers
                 };
                 options.LineItems.Add(sessionItem);
             }
-
             var service = new Stripe.Checkout.SessionService();
             var session = service.Create(options);
 
             _unitofOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitofOfWork.Save();
 
-            Response.Headers.Add("Location", session.Url);
+            Response.Headers["Location"] = session.Url;
             return new StatusCodeResult(303); // Redirect to Stripe Checkout
 
 
         }
         public IActionResult OrderConfirmation(int id)
         {
-            OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
-
-            if (orderHeader == null)
+            try
             {
-                return NotFound();
-            }
+                OrderHeader orderHeader = _unitofOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
 
-            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
-            {
-                var service = new Stripe.Checkout.SessionService();
-                Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
-
-                if (session.PaymentStatus.ToLower() == "paid")
+                if (orderHeader == null)
                 {
-                    _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
-                    _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    return NotFound();
+                }
+
+                if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+                {
+                    var service = new Stripe.Checkout.SessionService();
+                    Stripe.Checkout.Session session = service.Get(orderHeader.SessionId);
+
+                    if (session.PaymentStatus.ToLower() == "paid")
+                    {
+                        _unitofOfWork.OrderHeader.UpdateStripePaymentID(id, session.Id, session.PaymentIntentId);
+                        _unitofOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                        _unitofOfWork.Save();
+                    }
+
+                    List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
+                        .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+                    _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);
                     _unitofOfWork.Save();
                 }
 
-                List<ShoppingCart> shoppingCarts = _unitofOfWork.ShoppingCart
-                    .GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
-                _unitofOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-                _unitofOfWork.Save();
-            }
+                // Get order details for the confirmation page
+                var orderDetails = _unitofOfWork.OrderDetails.GetAll(
+                    od => od.OrderHeaderId == id,
+                    includeProperties: "Product,Product.ProductImages"
+                ).ToList();
 
-            // Get order details for the confirmation page
-            var orderDetails = _unitofOfWork.OrderDetails.GetAll(
-                od => od.OrderHeaderId == id,
-                includeProperties: "Product,Product.ProductImages"
-            ).ToList();
-
-            var orderConfirmation = new OrderConfirmationViewModel
-            {
-                OrderId = orderHeader.Id,
-                OrderDate = orderHeader.OrderDate,
-                ShippingAddress = $"{orderHeader.FirstName} {orderHeader.LastName}, {orderHeader.StreetAddress}, {orderHeader.City}, {orderHeader.State} {orderHeader.PostalCode}, {orderHeader.Country}",
-                PaymentMethod = "Credit Card", // Adjust as needed based on your payment methods
-                CustomerName = $"{orderHeader.FirstName} {orderHeader.LastName}",
-                TrackingNumber = orderHeader.TrackingNumber ?? "Not available yet",
-                OrderStatus = orderHeader.OrderStatus,
-                TotalPrice = (decimal)orderHeader.OrderTotal,
-                Items = new List<OrderItemViewModel>()
-            };
-
-            foreach (var detail in orderDetails)
-            {
-                orderConfirmation.Items.Add(new OrderItemViewModel
+                var orderConfirmation = new OrderConfirmationViewModel
                 {
-                    Id = detail.ProductId,
-                    Name = detail.Product.Name,
-                    Image = detail.Product.ProductImages.FirstOrDefault()?.Path ?? "/images/no-image.jpg",
-                    Count = detail.Count,
-                    Price = (decimal)detail.Price
-                });
-            }
+                    OrderId = orderHeader.Id,
+                    OrderDate = orderHeader.OrderDate,
+                    ShippingAddress = $"{orderHeader.FirstName} {orderHeader.LastName}, {orderHeader.StreetAddress}, {orderHeader.City}, {orderHeader.State} {orderHeader.PostalCode}, {orderHeader.Country}",
+                    PaymentMethod = "Stripe", // Using Stripe for payment processing
+                    CustomerName = $"{orderHeader.FirstName} {orderHeader.LastName}",
+                    TrackingNumber = orderHeader.TrackingNumber ?? "Not available yet",
+                    OrderStatus = orderHeader.OrderStatus,
+                    TotalPrice = (decimal)orderHeader.OrderTotal,
+                    Items = new List<OrderItemViewModel>()
+                };
 
-            return View(orderConfirmation);
+                foreach (var detail in orderDetails)
+                {
+                    orderConfirmation.Items.Add(new OrderItemViewModel
+                    {
+                        Id = detail.ProductId,
+                        Name = detail.Product.Name,
+                        Image = detail.Product.ProductImages.FirstOrDefault()?.Path ?? "/images/no-image.jpg",
+                        Count = detail.Count,
+                        Price = (decimal)detail.Price
+                    });
+                }
+
+                return View(orderConfirmation);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in OrderConfirmation: {ex.Message}");
+
+                // For development, you might want to see the full error
+                return Content($"Error processing order: {ex.Message}. {ex.StackTrace}");
+
+                // For production, redirect to a friendly error page
+                // return RedirectToAction("Error", "Home", new { message = "There was an error processing your order." });
+            }
         }
         [HttpPost]
         public IActionResult PlaceOrder(OrderHeader orderHeader)
@@ -327,6 +423,7 @@ namespace DepiProject.Controllers
                 OrderStatus = SD.StatusPending,
                 PaymentStatus = SD.PaymentStatusPending,
                 TrackingNumber = Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
+                Carrier = "Pending", // Setting a default value for Carrier to prevent NULL constraint violation
                 OrderTotal = 0
             };
 
@@ -354,6 +451,29 @@ namespace DepiProject.Controllers
             }
             _unitofOfWork.Save();
 
+            Order order = new()
+            {
+                NumberOfProduct = shoppingCarts.Count,
+                TotalPrice = (decimal)newOrder.OrderTotal,
+                Discount = 0,
+                Fax = 0,
+                FinalPrice = (decimal)newOrder.OrderTotal,
+                AddressDelivered = orderHeader.StreetAddress,
+                CreatedAt = DateTime.Now,
+                IsDeleted = false,
+                PhoneNumber = orderHeader.PhoneNumber,
+                StreetAddress = orderHeader.StreetAddress,
+                City = orderHeader.City,
+                State = orderHeader.State,
+                PostalCode = orderHeader.PostalCode,
+                Name = $"{orderHeader.FirstName} {orderHeader.LastName}",
+                ApplicationUserId = userId
+            };
+
+            // Add order to the database
+            _unitofOfWork.Orders.Add(order);
+            _unitofOfWork.Save();
+
             // Process payment via Stripe
             var domain = Request.Scheme + "://" + Request.Host.Value + "/";
             var options = new Stripe.Checkout.SessionCreateOptions
@@ -363,14 +483,23 @@ namespace DepiProject.Controllers
                 Mode = "payment",
                 SuccessUrl = domain + $"Cart/OrderConfirmation?id={newOrder.Id}",
                 CancelUrl = domain + "Cart/Checkout",
-            };
-
-            foreach (var item in shoppingCarts)
+            }; foreach (var item in shoppingCarts)
             {
-                var description = item.Product.Description;
-                if (description != null && description.Length > 100)
+                // Skip items with null Product to avoid NullReferenceException
+                if (item.Product == null)
                 {
-                    description = description.Substring(0, 100);
+                    continue;
+                }
+
+                // Safely handle Description
+                string description = string.Empty;
+                if (item.Product.Description != null)
+                {
+                    description = item.Product.Description;
+                    if (description.Length > 100)
+                    {
+                        description = description.Substring(0, 100);
+                    }
                 }
 
                 var sessionItem = new Stripe.Checkout.SessionLineItemOptions
@@ -381,17 +510,24 @@ namespace DepiProject.Controllers
                         Currency = "usd",
                         ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = item.Product.Name,
-                            Description = description
+                            Name = item.Product.Name ?? "Product",
+                            Description = string.IsNullOrEmpty(description) ? "No description available" : description
                         }
                     },
                     Quantity = item.Count
                 };
                 options.LineItems.Add(sessionItem);
+            }            // Create Stripe checkout session
+            var service = new Stripe.Checkout.SessionService();
+
+            // Check if we have valid line items before creating a session
+            if (options.LineItems.Count == 0)
+            {
+                // No valid items to purchase
+                TempData["Error"] = "No valid products found in your cart.";
+                return RedirectToAction("Index", "Cart");
             }
 
-            // Create Stripe checkout session
-            var service = new Stripe.Checkout.SessionService();
             Stripe.Checkout.Session session = service.Create(options);
 
             // Update order with Stripe session information

@@ -50,22 +50,25 @@
         color: #333;
     }
 
-    .payment-option {
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .payment-method-info {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 15px;
+        background-color: white;
     }
 
-    .payment-option:hover {
-        border-color: #59ab6e;
+    .payment-notice {
+        background-color: #f8f9fa;
+        border-left: 4px solid #59ab6e;
     }
 
-    .payment-option.selected {
-        border-color: #59ab6e;
-        background-color: #f0f9f2;
+    .accepted-cards i {
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .accepted-cards i:hover {
+        opacity: 1;
     }
 </style>
 
@@ -143,83 +146,44 @@
                                 <option value="IND">India</option>
                             </select>
                         </div>
-                    </div>
-
-                    <!-- Payment Information -->
+                    </div> <!-- Payment Information -->
                     <div class="form-section">
                         <h4 class="section-title">Payment Method</h4>
 
-                        <div class="payment-option selected">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
-                                    value="creditCard" checked>
-                                <label class="form-check-label d-flex align-items-center" for="creditCard">
-                                    <i class="fas fa-credit-card me-2"></i> Credit/Debit Card
-                                </label>
+                        <div class="payment-method-info mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="payment-icon me-3">
+                                    <i class="fab fa-stripe fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Secure Payment with Stripe</h6>
+                                    <p class="text-muted small mb-0">You will be redirected to Stripe's secure payment page
+                                        after submitting your order</p>
+                                </div>
+                            </div>
+
+                            <div class="accepted-cards mt-2">
+                                <div class="d-flex flex-wrap">
+                                    <i class="fab fa-cc-visa fa-2x me-2 text-secondary"></i>
+                                    <i class="fab fa-cc-mastercard fa-2x me-2 text-secondary"></i>
+                                    <i class="fab fa-cc-amex fa-2x me-2 text-secondary"></i>
+                                    <i class="fab fa-cc-discover fa-2x me-2 text-secondary"></i>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="payment-option">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="paypal"
-                                    value="paypal">
-                                <label class="form-check-label d-flex align-items-center" for="paypal">
-                                    <i class="fab fa-paypal me-2"></i> PayPal
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="payment-details mt-3">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="cardName" class="form-label">Name on Card</label>
-                                    <input type="text" class="form-control" id="cardName" name="CardName">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="cardNumber" class="form-label">Card Number</label>
-                                    <input type="text" class="form-control" id="cardNumber" name="CardNumber"
-                                        placeholder="XXXX XXXX XXXX XXXX">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="expiryMonth" class="form-label">Expiry Month</label>
-                                    <select class="form-select" id="expiryMonth" name="ExpiryMonth">
-                                        <option value="01">01 - January</option>
-                                        <option value="02">02 - February</option>
-                                        <option value="03">03 - March</option>
-                                        <option value="04">04 - April</option>
-                                        <option value="05">05 - May</option>
-                                        <option value="06">06 - June</option>
-                                        <option value="07">07 - July</option>
-                                        <option value="08">08 - August</option>
-                                        <option value="09">09 - September</option>
-                                        <option value="10">10 - October</option>
-                                        <option value="11">11 - November</option>
-                                        <option value="12">12 - December</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="expiryYear" class="form-label">Expiry Year</label>
-                                    <select class="form-select" id="expiryYear" name="ExpiryYear">
-                                        <option value="2023">2023</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2026">2026</option>
-                                        <option value="2027">2027</option>
-                                        <option value="2028">2028</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="cvv" class="form-label">CVV</label>
-                                    <input type="text" class="form-control" id="cvv" name="CVV" placeholder="XXX">
+                        <div class="payment-notice bg-light p-3 rounded">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-shield-alt text-success me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Secure Payment Processing</h6>
+                                    <p class="mb-0 small">Your payment information is securely processed through Stripe. We
+                                        do not store your credit card details.</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <button type="submit" class="btn place-order-btn w-100 py-3 mt-4">
-                        <i class="fas fa-lock me-2"></i> Place Your Order
+                    </div> <button type="submit" class="btn place-order-btn w-100 py-3 mt-4">
+                        <i class="fas fa-lock me-2"></i> Complete Order and Pay with Stripe
                     </button>
                 </form>
             }
@@ -274,6 +238,12 @@
                         <span class="fw-bold">Total:</span>
                         <span class="fw-bold text-success">$@((Model.OrderHeader.OrderTotal * 1.08).ToString("F2"))</span>
                     </div>
+                    <div class="bg-light p-2 rounded mt-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle text-primary me-2"></i>
+                            <small class="text-muted">Final amount will be charged securely via Stripe</small>
+                        </div>
+                    </div>
                 </div>
             }
 
@@ -301,33 +271,5 @@
         if (countryValue) {
             countrySelect.value = countryValue;
         }
-
-        // Payment option handling
-        const paymentOptions = document.querySelectorAll('.payment-option');
-        const paymentDetails = document.querySelector('.payment-details');
-
-        // Toggle payment option selection
-        paymentOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // Remove selected class from all options
-                paymentOptions.forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-
-                // Add selected class to clicked option
-                option.classList.add('selected');
-
-                // Check the radio button
-                const radio = option.querySelector('input[type="radio"]');
-                radio.checked = true;
-
-                // Show/hide payment details based on selected option
-                if (radio.value === 'creditCard') {
-                    paymentDetails.style.display = 'block';
-                } else {
-                    paymentDetails.style.display = 'none';
-                }
-            });
-        });
     });
 </script>

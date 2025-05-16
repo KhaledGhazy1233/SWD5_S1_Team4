@@ -14,128 +14,25 @@ public class HomeController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ISharedService _sharedService;
+    private readonly IProductService _productService;
+    private readonly ICategoryService _categoryService;
 
+    // Sample data removed
 
-    // Sample data for demonstration
-    private static List<Category> _categories = new List<Category>
-        {
-            new Category {  CategoryId = 1, Name = "Laptops" },
-            new Category { CategoryId = 2, Name = "Mobiles" },
-            new Category { CategoryId = 3, Name = "Cameras" }
-        };
-
-    // Sample products data
-    private static List<Product> _products = new List<Product>
-        {            // Laptops
-            new Product {
-                ProductId = 1,
-                Name = "TechBook Pro",
-                Description = "Powerful laptop with high-performance features for professionals.",
-                Price = 1299.99m,
-                IsAvailable = true,
-                //ImageUrl = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain",
-                CategoryId = 1,
-                Brand = "TechXpress",
-                Model = "TB-2023",
-                TechnicalSpecifications = "Intel Core i7, 16GB RAM, 512GB SSD, 15.6\" 4K Display",
-                DiscountPercentage = 5,
-                IsFeatured = true,
-                WarrantyInfo = "2 Years Limited Warranty",
-                StockQuantity = 15
-            },
-            new Product {
-                ProductId = 2,
-                Name = "GamerStation X",
-                Description = "Ultimate gaming laptop with top-tier graphics and cooling system.",
-                Price = 1899.99m,
-                IsAvailable = true,
-                //ImageUrl = "https://tse4.mm.bing.net/th/id/OIP.okPHK-lOk_E5nzOZsGx2dwHaFI?cb=iwc2&rs=1&pid=ImgDetMain",
-                CategoryId = 1,
-                Brand = "TechXpress",
-                Model = "GS-X500",
-                TechnicalSpecifications = "AMD Ryzen 9, 32GB RAM, 1TB SSD, NVIDIA RTX 3080, 17.3\" 144Hz Display",
-                DiscountPercentage = 0,
-                IsFeatured = true,
-                WarrantyInfo = "3 Years Premium Warranty",
-                StockQuantity = 8
-            },
-              // Mobiles
-            new Product {
-                ProductId = 3,
-                Name = "UltraPhone 12",
-                Description = "Flagship smartphone with advanced camera system and all-day battery.",
-                Price = 899.99m,
-                IsAvailable = true,
-                //ImageUrl = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png",
-                CategoryId = 2,
-                Brand = "UltraTech",
-                Model = "UP-12",
-                TechnicalSpecifications = "6.7\" OLED Display, 12GB RAM, 256GB Storage, 5000mAh Battery",
-                DiscountPercentage = 10,
-                IsFeatured = true,
-                WarrantyInfo = "1 Year Manufacturer Warranty",
-                StockQuantity = 25
-            },
-            new Product {
-                ProductId = 4,
-                Name = "SlimTab Pro",
-                Description = "Ultra-thin tablet perfect for productivity and entertainment on the go.",
-                Price = 649.99m,
-                IsAvailable = true,
-               // ImageUrl = "https://purepng.com/public/uploads/large/purepng.com-mobile-phone-with-touchmobilemobile-phonehandymobile-devicetouchscreenmobile-phone-device-231519333033crymn.png",
-                CategoryId = 2,
-                Brand = "SlimTech",
-                Model = "ST-P10",
-                TechnicalSpecifications = "10.5\" Retina Display, 8GB RAM, 128GB Storage, 12MP Camera",
-                DiscountPercentage = 0,
-                IsFeatured = false,
-                WarrantyInfo = "1 Year Limited Warranty",
-                StockQuantity = 12
-            },
-              // Cameras
-            new Product {
-                ProductId = 5,
-                Name = "ProShot DSLR X200",
-                Description = "Professional DSLR camera with exceptional image quality and versatile lens options.",
-                Price = 1499.99m,
-                IsAvailable = true,
-               // ImageUrl = "https://tse3.mm.bing.net/th/id/OIP.Kuw2tT6BMjFfN3UpgO1j2QHaE8?cb=iwc2&rs=1&pid=ImgDetMain",
-                CategoryId = 3,
-                Brand = "ProShot",
-                Model = "X200",
-                TechnicalSpecifications = "24.2MP Full-Frame Sensor, 4K Video, 45-Point AF System, ISO 100-25600",
-                DiscountPercentage = 7,
-                IsFeatured = true,
-                WarrantyInfo = "2 Years International Warranty",
-                StockQuantity = 5
-            },
-            new Product {
-                ProductId = 6,
-                Name = "MirrorLite M50",
-                Description = "Compact mirrorless camera offering the perfect balance of quality and portability.",
-                Price = 799.99m,
-                IsAvailable = true,
-               // ImageUrl = "https://tse3.mm.bing.net/th/id/OIP.Kuw2tT6BMjFfN3UpgO1j2QHaE8?cb=iwc2&rs=1&pid=ImgDetMain",
-                CategoryId = 3,
-                Brand = "CameraElite",
-                Model = "ML-M50",
-                TechnicalSpecifications = "20.1MP APS-C Sensor, 4K/30p Video, 3\" Vari-angle Touchscreen",
-                DiscountPercentage = 0,
-                IsFeatured = false,
-                WarrantyInfo = "1 Year Manufacturer Warranty",
-                StockQuantity = 10
-            }
-        };
     public HomeController(
         ILogger<HomeController> logger,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ISharedService sharedService)
+        ISharedService sharedService,
+        IProductService productService,
+        ICategoryService categoryService)
     {
         _logger = logger;
         _userManager = userManager;
         _signInManager = signInManager;
         _sharedService = sharedService;
+        _productService = productService;
+        _categoryService = categoryService;
     }
 
     public IActionResult Privacy()
@@ -190,40 +87,109 @@ public class HomeController : Controller
             return View();
         }
     }
-    public IActionResult shop(string category)
+    public async Task<IActionResult> shop(string category, string search, string brand, decimal? minPrice, decimal? maxPrice)
     {
         try
         {
             _logger.LogInformation("Shop page accessed with category filter: {Category}", category ?? "All");
 
-            var products = _products;
+            List<Product> products = new List<Product>();
 
-            // Filter by category if specified
+            // Get all categories for the filter
+            var categories = await _categoryService.GetAllCategories();
+            ViewBag.Categories = categories;
+
             if (!string.IsNullOrEmpty(category))
             {
-                if (category.ToLower() == "laptops")
+                // Find the category ID by name
+                var categoryObj = categories.FirstOrDefault(c => c.Name.ToLower() == category.ToLower());
+                if (categoryObj != null)
                 {
-                    products = products.Where(p => p.CategoryId == 1).ToList();
-                    ViewBag.CurrentCategory = "Laptops";
-                }
-                else if (category.ToLower() == "mobiles")
-                {
-                    products = products.Where(p => p.CategoryId == 2).ToList();
-                    ViewBag.CurrentCategory = "Mobiles";
-                }
-                else if (category.ToLower() == "cameras")
-                {
-                    products = products.Where(p => p.CategoryId == 3).ToList();
-                    ViewBag.CurrentCategory = "Cameras";
+                    var categoryProducts = await _productService.GetProductByCategoryID(categoryObj.Id);
+
+                    // Convert view model to Product (or modify your view to use the view model directly)
+                    foreach (var product in categoryProducts)
+                    {
+                        var newProduct = new Product
+                        {
+                            ProductId = product.ProductId,
+                            Name = product.Name,
+                            Description = product.Description,
+                            Price = product.Price,
+                            Brand = product.Brand,
+                            DiscountPercentage = product.DiscountPercentage,
+                            ProductImages = new List<ProductImage>()
+                        };
+
+                        if (!string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            newProduct.ProductImages.Add(new ProductImage { Path = product.ImageUrl });
+                        }
+
+                        products.Add(newProduct);
+                    }
+
+                    ViewBag.CurrentCategory = categoryObj.Name;
                 }
             }
+            else
+            {
+                // Get all featured products if no category is selected
+                var allProducts = await _productService.GetFeaturedProduct();
+
+                // Convert view model to Product (or modify your view to use the view model directly)
+                foreach (var product in allProducts)
+                {
+                    var newProduct = new Product
+                    {
+                        ProductId = product.ProductId,
+                        Name = product.Name,
+                        Description = product.Description,
+                        Price = product.Price,
+                        Brand = product.Brand,
+                        DiscountPercentage = product.DiscountPercentage,
+                        ProductImages = new List<ProductImage>()
+                    };
+
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        newProduct.ProductImages.Add(new ProductImage { Path = product.ImageUrl });
+                    }
+
+                    products.Add(newProduct);
+                }
+            }
+
+            // Apply additional filters
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                               p.Description.Contains(search, StringComparison.OrdinalIgnoreCase))
+                                    .ToList();
+            }
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                products = products.Where(p => p.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (minPrice.HasValue)
+            {
+                products = products.Where(p => p.Price >= minPrice.Value).ToList();
+            }
+
+            if (maxPrice.HasValue)
+            {
+                products = products.Where(p => p.Price <= maxPrice.Value).ToList();
+            }
+
             return View(products);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred when loading shop page: {Message}", ex.Message);
             TempData["ErrorMessage"] = "An error occurred while loading the products. Please try again.";
-            return View();
+            return View(new List<Product>());
         }
     }
     public IActionResult shopsingle(int id)
@@ -232,16 +198,62 @@ public class HomeController : Controller
         {
             _logger.LogInformation("Product detail page accessed for product ID: {ProductId}", id);
 
-            var product = _products.FirstOrDefault(p => p.ProductId == id);
-            if (product == null)
+            var productDetails = _productService.GetProductDetailsVm(id);
+            if (productDetails == null)
             {
                 _logger.LogWarning("Product with ID {ProductId} not found", id);
                 return NotFound();
-            }            // Get related products from the same category
-            ViewBag.RelatedProducts = _products
-                .Where(p => p.CategoryId == product.CategoryId && p.ProductId != id)
+            }
+
+            // Convert to Product model for view compatibility
+            var product = new Product
+            {
+                ProductId = productDetails.ProductId,
+                Name = productDetails.Name,
+                Description = productDetails.Description,
+                Price = productDetails.Price,
+                StockQuantity = productDetails.StockQuantity,
+                Brand = productDetails.Brand,
+                Model = productDetails.Model,
+                TechnicalSpecifications = productDetails.TechnicalSpecifications,
+                DiscountPercentage = productDetails.DiscountPercentage,
+                WarrantyInfo = productDetails.WarrantyInfo,
+                ProductImages = new List<ProductImage>()
+            };
+
+            if (!string.IsNullOrEmpty(productDetails.ImageUrl))
+            {
+                product.ProductImages.Add(new ProductImage { Path = productDetails.ImageUrl });
+            }
+
+            // Get related products from the same category (using Featured Products for now)
+            var featuredProducts = _productService.GetFeaturedProduct().Result;
+            var relatedProducts = featuredProducts
+                .Where(p => p.ProductId != id)
                 .Take(4)
+                .Select(p =>
+                {
+                    var relatedProduct = new Product
+                    {
+                        ProductId = p.ProductId,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Brand = p.Brand,
+                        DiscountPercentage = p.DiscountPercentage,
+                        ProductImages = new List<ProductImage>()
+                    };
+
+                    if (!string.IsNullOrEmpty(p.ImageUrl))
+                    {
+                        relatedProduct.ProductImages.Add(new ProductImage { Path = p.ImageUrl });
+                    }
+
+                    return relatedProduct;
+                })
                 .ToList();
+
+            ViewBag.RelatedProducts = relatedProducts;
 
             return View(product);
         }
@@ -249,10 +261,8 @@ public class HomeController : Controller
         {
             _logger.LogError(ex, "Error occurred when loading product details for ID {ProductId}: {Message}", id, ex.Message);
             TempData["ErrorMessage"] = "An error occurred while loading the product details. Please try again.";
-            return RedirectToAction(nameof(shop));
+            return RedirectToAction("shop");
         }
-
-
     }
 
     public IActionResult contact()
@@ -267,7 +277,7 @@ public class HomeController : Controller
 
     public IActionResult admin()
     {
-        ViewBag.Products = _products;
+        ViewBag.Products = _productService.GetProductsVm();
         return View();
     }
     public new IActionResult NotFound()

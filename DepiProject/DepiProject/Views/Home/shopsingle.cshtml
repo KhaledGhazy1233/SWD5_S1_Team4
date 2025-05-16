@@ -1,191 +1,220 @@
-﻿@model Product
+﻿@model DataLayer.Entities.Product
 
 @{
-   // ViewData["Title"] = Model.Name;
-   // Layout = "_Layout";
+    // ViewData["Title"] = Model.Name;
+    // Layout = "_Layout";
+
+    string GetImagePath(ICollection<DataLayer.Entities.ProductImage> images)
+    {
+        if (images == null || images.Count == 0)
+            return "/images/placeholder.png";
+
+        var firstImage = images.ToList()[0];
+        if (string.IsNullOrEmpty(firstImage.Path))
+            return "/images/placeholder.png";
+
+        return firstImage.Path.StartsWith("http")
+        ? firstImage.Path
+        : "/images/" + firstImage.Path;
+    }
 }
 
 @section Styles {
     <!-- Product Detail Styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
 
     <!-- Slick -->
     <link rel="stylesheet" type="text/css" href="assets/css/slick.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css">
-}<!-- Start Content -->
+}
+<!-- Start Content -->
 <section class="bg-light">
-        <div class="container pb-5">
-            <div class="row">
-                <div class="col-lg-5 mt-5">
-                    <div class="card mb-3">
-                        <img class="card-img img-fluid" src="" alt="@Model.Name">
-                    </div>
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    <img class="card-img img-fluid" src="@GetImagePath(Model.ProductImages)" alt="@Model.Name">
                 </div>
-                <!-- col end -->
-                <div class="col-lg-7 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="h2">@Model.Name</h1>
-                            @if (Model.DiscountPercentage > 0)
-                            {
-                                decimal discountedPrice = Model.Price * (1 - (Model.DiscountPercentage / 100));
-                                <p class="h3 py-2">
-                                    <span class="text-danger"><del>$@Model.Price.ToString("0.00")</del></span>
-                                    <span class="ms-3">$@discountedPrice.ToString("0.00")</span>
-                                    <span class="badge bg-danger ms-2">Save @Model.DiscountPercentage%</span>
-                                </p>
-                            }
-                            else
-                            {
-                                <p class="h3 py-2">$@Model.Price.ToString("0.00")</p>
-                            }
-                            <p class="py-2">
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-secondary"></i>
-                                <span class="list-inline-item text-dark">Rating 4.8 | 36 Reviews</span>
+            </div>
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2">@Model.Name</h1>
+                        @if (Model.DiscountPercentage > 0)
+                        {
+                            decimal discountedPrice = Model.Price * (1 - (Model.DiscountPercentage / 100));
+                            <p class="h3 py-2">
+                                <span class="text-danger"><del>$@Model.Price.ToString("0.00")</del></span>
+                                <span class="ms-3">$@discountedPrice.ToString("0.00")</span>
+                                <span class="badge bg-danger ms-2">Save @Model.DiscountPercentage%</span>
                             </p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h6>Brand:</h6>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="text-muted"><strong>@Model.Brand</strong></p>
-                                </li>
-                            </ul>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h6>Model:</h6>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="text-muted"><strong>@Model.Model</strong></p>
-                                </li>
-                            </ul>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h6>Availability:</h6>
-                                </li>
-                                <li class="list-inline-item">
-                                    @if (Model.StockQuantity > 0)
-                                    {
-                                        <p class="text-success"><strong>In Stock (@Model.StockQuantity units)</strong></p>
-                                    }
-                                    else
-                                    {
-                                        <p class="text-danger"><strong>Out of Stock</strong></p>
-                                    }
-                                </li>
-                            </ul>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h6>Warranty:</h6>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="text-muted"><strong>@Model.WarrantyInfo</strong></p>
-                                </li>
-                            </ul>
+                        }
+                        else
+                        {
+                            <p class="h3 py-2">$@Model.Price.ToString("0.00")</p>
+                        }
+                        <p class="py-2">
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            <span class="list-inline-item text-dark">Rating 4.8 | 36 Reviews</span>
+                        </p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Brand:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>@Model.Brand</strong></p>
+                            </li>
+                        </ul>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Model:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>@Model.Model</strong></p>
+                            </li>
+                        </ul>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Availability:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                @if (Model.StockQuantity > 0)
+                                {
+                                    <p class="text-success"><strong>In Stock (@Model.StockQuantity units)</strong></p>
+                                }
+                                else
+                                {
+                                    <p class="text-danger"><strong>Out of Stock</strong></p>
+                                }
+                            </li>
+                        </ul>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Warranty:</h6>
+                            </li>
+                            <li class="list-inline-item">
+                                <p class="text-muted"><strong>@Model.WarrantyInfo</strong></p>
+                            </li>
+                        </ul>
+                        <h6>Description:</h6>
+                        <p>@Model.Description</p>
 
-                            <h6>Description:</h6>
-                            <p>@Model.Description</p>
+                        <h6>Technical Specifications:</h6>
+                        <p>@Model.TechnicalSpecifications</p>
 
-                            <h6>Technical Specifications:</h6>
-                            <p>@Model.TechnicalSpecifications</p>
-
-                            <form action="/Cart/AddToCart" method="GET">
-                                <input type="hidden" name="productId" value="@Model.ProductId">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <ul class="list-inline pb-3">
-                                            <li class="list-inline-item">Quantity:
-                                                <input type="hidden" name="quantity" id="product-quanity" value="1">
-                                            </li>
-                                            <li class="list-inline-item"><span class="btn btn-success"
-                                                    id="btn-minus">-</span></li>
-                                            <li class="list-inline-item"><span class="badge bg-secondary"
-                                                    id="var-value">1</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success"
-                                                    id="btn-plus">+</span></li>
-                                        </ul>
-                                    </div>
+                        <div>
+                            <input type="hidden" id="productId" value="@Model.ProductId">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <ul class="list-inline pb-3">
+                                        <li class="list-inline-item">Quantity:
+                                            <input type="hidden" id="product-quantity" value="1">
+                                        </li>
+                                        <li class="list-inline-item"><span class="btn btn-success"
+                                                id="btn-minus">-</span></li>
+                                        <li class="list-inline-item"><span class="badge bg-secondary"
+                                                id="var-value">1</span></li>
+                                        <li class="list-inline-item"><span class="btn btn-success"
+                                                id="btn-plus">+</span></li>
+                                    </ul>
                                 </div>
-                                <div class="row pb-3">
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit"
-                                            value="buy">Buy Now</button>
-                                    </div>
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit"
-                                            value="addtocard">Add To Cart</button>
-                                    </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <button type="button" id="buyNowBtn" class="btn btn-success btn-lg">Buy Now</button>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Content -->
-
-    <!-- Start Related Products -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-center py-3">
-                <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Related Products</h1>
-                    <p>Explore other products you might like from our collection</p>
-                </div>
-            </div>
-
-            <div class="row">
-                @if (ViewBag.RelatedProducts != null && ViewBag.RelatedProducts.Count > 0)
-                {
-                    foreach (var product in ViewBag.RelatedProducts)
-                    {
-                        <div class="col-md-3">
-                            <div class="card mb-4 product-wap rounded-0">
-                                <div class="card rounded-0">
-                                    <img class="card-img rounded-0 img-fluid" src="@product.ImageUrl">
-                                    <div
-                                        class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                        <ul class="list-unstyled">
-                                            <li><a class="btn btn-success text-white" href="#"><i class="far fa-heart"></i></a>
-                                            </li>
-                                            <li><a class="btn btn-success text-white mt-2" asp-controller="Home"
-                                                    asp-action="shopsingle" asp-route-id="@product.Id"><i
-                                                        class="far fa-eye"></i></a></li>
-                                            <li><a class="btn btn-success text-white mt-2"
-                                                    href="/Cart/AddToCart?productId=@product.Id"><i
-                                                        class="fas fa-cart-plus"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.Id"
-                                        class="h3 text-decoration-none">@product.Name</a>
-                                    <p class="text-center mb-0">$@product.Price.ToString("0.00")</p>
+                                <div class="col d-grid">
+                                    <button type="button" id="addToCartBtn" class="btn btn-success btn-lg">Add To
+                                        Cart</button>
                                 </div>
                             </div>
                         </div>
-                    }
-                }
-                else
-                {
-                    <div class="col-12 text-center">
-                        <p>No related products found.</p>
-                    </div>                }
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-    <!-- End Related Products -->
+    </div>
+</section>
+<!-- End Content -->
+
+<!-- Start Related Products -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Related Products</h1>
+                <p>Explore other products you might like from our collection</p>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (ViewBag.RelatedProducts != null && ViewBag.RelatedProducts.Count > 0)
+            {
+                foreach (var product in ViewBag.RelatedProducts)
+                {
+                    <div class="col-md-3">
+                        <div class="card mb-4 product-wap rounded-0">
+                            <div class="card rounded-0">
+                                <img class="card-img rounded-0 img-fluid" src="@GetImagePath(product.ProductImages)"
+                                    alt="@product.Name">
+                                <div
+                                    class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                    <ul class="list-unstyled">
+                                        <li><a class="btn btn-success text-white" href="#"><i class="far fa-heart"></i></a>
+                                        </li>
+                                        <li><a class="btn btn-success text-white mt-2" asp-controller="Home"
+                                                asp-action="shopsingle" asp-route-id="@product.ProductId"><i
+                                                    class="far fa-eye"></i></a></li>
+                                        <li><a class="btn btn-success text-white mt-2"
+                                                href="/Cart/AddToCart?productId=@product.ProductId"><i
+                                                    class="fas fa-cart-plus"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <a asp-controller="Home" asp-action="shopsingle" asp-route-id="@product.ProductId"
+                                    class="h3 text-decoration-none">@product.Name</a>
+                                <p class="text-center mb-0">$@product.Price.ToString("0.00")</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p>No related products found.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- End Related Products -->
 
 @section Scripts {
     <!-- Start Slider Script -->
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            // Verify and log the productId value for debugging
+            console.log("Page loaded. Debugging product info:");
+            console.log("Product ID from hidden field:", $("#productId").val());
+            console.log("Initial quantity value:", $("#product-quantity").val());
+            console.log("Initial quantity display:", $("#var-value").html());
+
+            // Make sure the product-quantity field is properly initialized
+            if (!$("#product-quantity").val() || $("#product-quantity").val() === "0") {
+                console.log("Initializing product quantity to 1");
+                $("#product-quantity").val(1);
+                $("#var-value").html(1);
+            }
+
             $('#carousel-related-product').slick({
                 infinite: true,
                 arrows: false,
@@ -213,6 +242,135 @@
                         slidesToScroll: 3
                     }
                 }]
+            });
+
+            // Handle the quantity buttons
+            $("#btn-minus").click(function () {
+                var val = $("#var-value").html();
+                val = (val == 1) ? 1 : val - 1;
+                $("#var-value").html(val);
+                $("#product-quantity").val(val);
+            });
+
+            $("#btn-plus").click(function () {
+                var val = $("#var-value").html();
+                val++;
+                $("#var-value").html(val);
+                $("#product-quantity").val(val);
+            });            // Handle Add to Cart button
+            $("#addToCartBtn").click(function () {
+                var productId = $("#productId").val();
+                var quantity = $("#product-quantity").val();
+
+                // Enhanced debugging
+                console.log("Add to Cart button clicked");
+                console.log("Product ID:", productId);
+                console.log("Quantity:", quantity);
+
+                if (!productId || productId <= 0) {
+                    console.error("Invalid product ID");
+                    alert("Error: Invalid product ID. Please refresh the page and try again.");
+                    return;
+                }
+
+                if (!quantity || quantity <= 0) {
+                    console.error("Invalid quantity");
+                    alert("Error: Please select a valid quantity.");
+                    return;
+                }
+
+                // Show loading indicator
+                $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Adding...');
+                var btn = $(this);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Cart/AddToCart",
+                    data: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    success: function (data) {
+                        console.log("AJAX success response:", data);
+                        if (data && data.success) {
+                            // Update the cart count in the navbar
+                            $("#cartCount").html(data.count);
+                            // Show success message
+                            alert("Product added to cart successfully!");
+                        } else {
+                            console.error("Server returned success=false:", data);
+                            alert("Failed to add product to cart. Please try again.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", error);
+                        console.error("Status:", status);
+                        console.error("Response:", xhr.responseText);
+                        alert("Failed to add product to cart. Please try again.");
+                    },
+                    complete: function () {
+                        // Reset button state
+                        btn.prop('disabled', false).html('Add To Cart');
+                    }
+                });
+            });            // Handle Buy Now button
+            $("#buyNowBtn").click(function () {
+                var productId = $("#productId").val();
+                var quantity = $("#product-quantity").val();
+
+                // Enhanced debugging
+                console.log("Buy Now button clicked");
+                console.log("Product ID:", productId);
+                console.log("Quantity:", quantity);
+
+                if (!productId || productId <= 0) {
+                    console.error("Invalid product ID");
+                    alert("Error: Invalid product ID. Please refresh the page and try again.");
+                    return;
+                }
+
+                if (!quantity || quantity <= 0) {
+                    console.error("Invalid quantity");
+                    alert("Error: Please select a valid quantity.");
+                    return;
+                }
+
+                // Show loading indicator
+                $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                var btn = $(this);
+
+                // First add to cart, then redirect to cart page
+                $.ajax({
+                    type: "GET",
+                    url: "/Cart/AddToCart",
+                    data: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    success: function (data) {
+                        console.log("AJAX success response:", data);
+                        if (data && data.success) {
+                            window.location.href = "/Cart/Index";
+                        } else {
+                            console.error("Server returned success=false:", data);
+                            alert("Failed to add product to cart. Please try again.");
+                            btn.prop('disabled', false).html('Buy Now');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", error);
+                        console.error("Status:", status);
+                        console.error("Response:", xhr.responseText);
+                        alert("Failed to add product to cart. Please try again.");
+                        btn.prop('disabled', false).html('Buy Now');
+                    }
+                });
             });
         });
     </script>

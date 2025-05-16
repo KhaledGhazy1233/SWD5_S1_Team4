@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TechXpress</title>    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - TechXpress</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DepiProject.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/role-based.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout-fix.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <style>
-        html, body {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        html,
+        body {
             height: 100%;
         }
-        
+
         body {
             min-height: 100vh;
             display: flex;
@@ -25,15 +31,17 @@
         main {
             flex: 1 0 auto;
         }
-        
+
         footer {
             flex-shrink: 0;
             margin-top: auto;
-        }.navbar {
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
         }
-        
+
+        .navbar {
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
         /* Custom style for main navigation */
         #templatemo_main_nav {
             padding: 0.5rem 0;
@@ -52,14 +60,19 @@
 
         .nav-icon i {
             font-size: 1.3rem;
-        }        .navbar-nav .nav-item {
-            margin: 0 0.2rem;  /* Reduced margin to make tabs closer */
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 0.2rem;
+            /* Reduced margin to make tabs closer */
         }
 
         .navbar-nav .nav-link {
-            padding: 0.5rem 0.7rem;  /* Reduced padding to make tabs closer */
+            padding: 0.5rem 0.7rem;
+            /* Reduced padding to make tabs closer */
             transition: all 0.3s ease;
-            font-weight: 500;  /* Make the text slightly bolder */
+            font-weight: 500;
+            /* Make the text slightly bolder */
         }
 
         .navbar-nav .nav-link:hover {
@@ -68,7 +81,7 @@
 
         .dropdown-menu {
             border: none;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .dropdown-item:hover {
@@ -116,7 +129,7 @@
         <!-- Close Top Nav -->
         <!-- Header -->
         <nav class="navbar navbar-expand-lg navbar-light shadow">
-            <div class="container">                <a class="navbar-brand text-success logo h1 align-self-center" asp-controller="Home"
+            <div class="container"> <a class="navbar-brand text-success logo h1 align-self-center" asp-controller="Home"
                     asp-action="Index" style="font-size: 1.8rem; font-weight: bold;">
                     TechXpress
                 </a>
@@ -128,7 +141,8 @@
                 </button>
 
                 <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
-                    id="templatemo_main_nav">                    <div class="flex-fill">
+                    id="templatemo_main_nav">
+                    <div class="flex-fill">
                         <ul class="nav navbar-nav d-flex justify-content-evenly mx-lg-auto">
                             <li class="nav-item">
                                 <a class="nav-link" href="/Home/index">Home</a>
@@ -146,10 +160,13 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="/Home/shop?category=laptops">Laptops</a></li>
-                                    <li><a class="dropdown-item" href="/Home/shop?category=mobiles">Mobiles</a></li>
-                                    <li><a class="dropdown-item" href="/Home/shop?category=cameras">Cameras</a></li>
+                                    <li><a class="dropdown-item" href="/Home/shop?category=smartphones">Smartphones</a></li>
+                                    <li><a class="dropdown-item" href="/Home/shop?category=accessories">Accessories</a></li>
+                                    <li><a class="dropdown-item" href="/Home/shop?category=audio">Audio</a></li>
+                                    <li><a class="dropdown-item" href="/Home/shop?category=gaming">Gaming</a></li>
                                 </ul>
-                            </li>                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="/Home/contact">Contact</a>
                             </li>
                             @if (User.IsInRole(BusinessLayer.Constants.Roles.Admin))
@@ -161,7 +178,8 @@
                                 </li>
                             }
                         </ul>
-                    </div><div class="navbar align-self-center d-flex">
+                    </div>
+                    <div class="navbar align-self-center d-flex">
                         <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
@@ -172,11 +190,39 @@
                         </div>
                         <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal"
                             data-bs-target="#templatemo_search">
-                            <i class="fa fa-fw fa-search text-dark mr-2"></i>
-                        </a>
-                        <a asp-controller="Cart" asp-action="Index" class="nav-icon position-relative text-decoration-none me-3">
+                            <i class="fa fa-fw fa-search text-dark mr-2"></i>                        </a> <a asp-controller="Cart" asp-action="Index"
+                            class="nav-icon position-relative text-decoration-none me-3">
                             <i class="fa fa-fw fa-cart-arrow-down text-dark"></i>
-                            <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-success text-white">7</span>
+                            <span id="cartCount" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-success text-white">
+                                @{
+                                    var count = 0;
+                                    try {
+                                        if (User.Identity != null && User.Identity.IsAuthenticated)
+                                        {
+                                            var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+                                            if (claimsIdentity != null) {
+                                                var userId = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                                                
+                                                if (!string.IsNullOrEmpty(userId))
+                                                {
+                                                    var service = Context.RequestServices?.GetService(typeof(DataLayer.Repository.IRepository.IUnitOfWork));
+                                                    if (service != null) {
+                                                        var unitOfWork = service as DataLayer.Repository.IRepository.IUnitOfWork;
+                                                        if (unitOfWork != null)
+                                                        {
+                                                            var items = unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId);
+                                                            count = items != null ? items.Sum(c => c.Count) : 0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } catch (Exception) {
+                                        // Ignore errors and just show 0
+                                    }
+                                }
+                                @count
+                            </span>
                         </a>
                         <partial name="_LoginPartial" />
                     </div>
@@ -184,7 +230,9 @@
 
             </div>
         </nav>
-        <!-- Close Header -->    </header>    <div class="container d-flex flex-column flex-grow-1">
+        <!-- Close Header -->
+    </header>
+    <div class="container d-flex flex-column flex-grow-1">
         <main role="main" class="pb-3 flex-grow-1">
             <!-- Standard Alert Messages from TempData -->
             @if (TempData["success"] != null)
@@ -202,8 +250,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
-            
-            @RenderBody()        </main>
+
+            @RenderBody()
+        </main>
     </div>
 
     <footer class="bg-dark">
@@ -223,8 +272,7 @@
                         </li>
                         <li>
                             <i class="fa fa-envelope fa-fw"></i>
-                            <a class="text-decoration-none"
-                                href="mailto:info@techxpress.com">info@techxpress.com</a>
+                            <a class="text-decoration-none" href="mailto:info@techxpress.com">info@techxpress.com</a>
                         </li>
                     </ul>
                 </div>
@@ -232,8 +280,8 @@
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li><a class="text-decoration-none" href="/Home/shop?category=laptops">Laptops</a></li>
-                        <li><a class="text-decoration-none"
-                                href="/Home/shop?category=laptops&subcategory=gaming">Gaming Laptops</a></li>
+                        <li><a class="text-decoration-none" href="/Home/shop?category=laptops&subcategory=gaming">Gaming
+                                Laptops</a></li>
                         <li><a class="text-decoration-none"
                                 href="/Home/shop?category=laptops&subcategory=business">Business Laptops</a></li>
                         <li><a class="text-decoration-none" href="/Home/shop?category=mobiles">Mobiles</a></li>
@@ -261,16 +309,16 @@
                 <div class="col-auto me-auto">
                     <ul class="list-inline text-left footer-icons">
                         <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank"
-                                href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
+                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i
+                                    class="fab fa-facebook-f fa-lg fa-fw"></i></a>
                         </li>
                         <li class="list-inline-item border border-light rounded-circle text-center">
                             <a class="text-light text-decoration-none" target="_blank"
                                 href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
                         </li>
                         <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank"
-                                href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
+                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i
+                                    class="fab fa-twitter fa-lg fa-fw"></i></a>
                         </li>
                         <li class="list-inline-item border border-light rounded-circle text-center">
                             <a class="text-light text-decoration-none" target="_blank"
