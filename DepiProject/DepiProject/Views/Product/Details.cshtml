@@ -8,18 +8,19 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index">Products</a></li>
+            <li class="breadcrumb-item"><a href="/Home/shop">Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
         </ol>
     </nav>
 
     <div class="row">
         <div class="col-md-6">
-            <img src="@Model.ImageUrl" class="img-fluid product-image" alt="@Model.Name" style="max-height: 400px; width: auto;">
+            <img src="@Model.ImageUrl" class="img-fluid product-image" alt="@Model.Name"
+                style="max-height: 400px; width: auto;">
         </div>
         <div class="col-md-6">
             <h1 class="mb-4">@Model.Name</h1>
-            
+
             <div class="mb-3">
                 @if (Model.DiscountPercentage > 0)
                 {
@@ -35,12 +36,12 @@
                     <h4 class="text-success">$@Model.Price.ToString("0.00")</h4>
                 }
             </div>
-            
+
             <p class="lead">@Model.Description</p>
-            
+
             <div class="d-flex align-items-center mb-3">
                 <span class="me-3">Availability:</span>
-                @if ( Model.StockQuantity > 0)
+                @if (Model.StockQuantity > 0)
                 {
                     <span class="badge bg-success">In Stock (@Model.StockQuantity available)</span>
                 }
@@ -49,15 +50,15 @@
                     <span class="badge bg-danger">Out of Stock</span>
                 }
             </div>
-            
+
             <div class="mb-3">
                 <span class="fw-bold">Brand:</span> @Model.Brand
             </div>
-            
+
             <div class="mb-3">
                 <span class="fw-bold">Model:</span> @Model.Model
             </div>
-            
+
             <div class="mb-4">
                 <span class="fw-bold">Warranty:</span> @Model.WarrantyInfo
             </div>
@@ -67,7 +68,8 @@
                 <div class="d-flex align-items-center mb-4">
                     <div class="input-group me-3" style="max-width: 150px;">
                         <button class="btn btn-outline-secondary" type="button" id="decreaseBtn">-</button>
-                        <input type="number" class="form-control text-center" value="1" id="quantity" min="1" max="@Model.StockQuantity">
+                        <input type="number" class="form-control text-center" value="1" id="quantity" min="1"
+                            max="@Model.StockQuantity">
                         <button class="btn btn-outline-secondary" type="button" id="increaseBtn">+</button>
                     </div>
                     <button class="btn btn-success" id="addToCartBtn">Add to Cart</button>
@@ -92,21 +94,119 @@
             const quantityInput = document.getElementById('quantity');
             const decreaseBtn = document.getElementById('decreaseBtn');
             const increaseBtn = document.getElementById('increaseBtn');
+            const addToCartBtn = document.getElementById('addToCartBtn');
             const maxQuantity = @Model.StockQuantity;
-            
-            decreaseBtn?.addEventListener('click', function() {
+            const productId = @Model.ProductId;
+
+            // Quantity decrease button
+            decreaseBtn?.addEventListener('click', function () {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue > 1) {
                     quantityInput.value = currentValue - 1;
                 }
             });
-            
-            increaseBtn?.addEventListener('click', function() {
+
+            // Quantity increase button
+            increaseBtn?.addEventListener('click', function () {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue < maxQuantity) {
                     quantityInput.value = currentValue + 1;
                 }
             });
+
+            // Validate input when user types a value
+            quantityInput?.addEventListener('input', function () {
+                let value = parseInt(this.value);
+                if (isNaN(value) || value < 1) {
+                    this.value = 1;
+                } else if (value > maxQuantity) {
+                    this.value = maxQuantity;
+                }
+            });            // Add to cart button
+            addToCartBtn?.addEventListener('click', function () {
+                const quantity = parseInt(quantityInput.value);
+
+                // Make sure quantity is valid
+                if (isNaN(quantity) || quantity < 1) {
+                    showNotification('error', 'Please enter a valid quantity');
+                    return;
+                }
+
+                // Call the AddToCart action using fetch API
+                fetch(`/Cart/AddToCart?productId=${productId}&quantity=${quantity}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success notification
+                            showNotification('success', 'Product added to cart successfully!');
+
+                            // Update cart count in header
+                            if (document.getElementById('cartCount')) {
+                                document.getElementById('cartCount').textContent = data.count;
+                            }
+                        } else {
+                            showNotification('error', 'Failed to add product to cart.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding to cart:', error);
+                        showNotification('error', 'An error occurred while adding to cart.');
+                    });
+            });
+
+            // Function to show toast notification
+            function showNotification(type, message) {
+                // Create notification container if it doesn't exist
+                let notificationContainer = document.getElementById('notification-container');
+                if (!notificationContainer) {
+                    notificationContainer = document.createElement('div');
+                    notificationContainer.id = 'notification-container';
+                    notificationContainer.style.position = 'fixed';
+                    notificationContainer.style.top = '20px';
+                    notificationContainer.style.right = '20px';
+                    notificationContainer.style.zIndex = '9999';
+                    document.body.appendChild(notificationContainer);
+                }
+
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.classList.add('alert', type === 'success' ? 'alert-success' : 'alert-danger', 'fade', 'show');
+                notification.style.minWidth = '250px';
+                notification.style.marginBottom = '10px';
+                notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+
+                // Add content
+                const icon = document.createElement('i');
+                icon.classList.add('bi', type === 'success' ? 'bi-check-circle' : 'bi-exclamation-circle', 'me-2');
+                notification.appendChild(icon);
+
+                const messageText = document.createTextNode(message);
+                notification.appendChild(messageText);
+
+                // Add close button
+                const closeButton = document.createElement('button');
+                closeButton.type = 'button';
+                closeButton.classList.add('btn-close');
+                closeButton.dataset.bsDismiss = 'alert';
+                closeButton.setAttribute('aria-label', 'Close');
+                notification.appendChild(closeButton);
+
+                // Add to container
+                notificationContainer.appendChild(notification);
+
+                // Initialize Bootstrap alert
+                const bsAlert = new bootstrap.Alert(notification);
+
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    bsAlert.close();
+                }, 3000);
+            }
         });
     </script>
 }

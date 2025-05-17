@@ -256,11 +256,10 @@
                                         {
                                             <span class="badge bg-success rounded-pill">In Stock</span>
                                         }
-                                    </div>
-                                    <div class="d-flex mt-3">
-                                        <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.ProductId" class="btn btn-success flex-grow-1">
+                                    </div>                                    <div class="d-flex mt-3">
+                                        <button type="button" class="btn btn-success flex-grow-1 add-to-cart-btn" data-product-id="@product.ProductId">
                                             <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -276,3 +275,96 @@
             </div>
         </div>
     </section>    <!-- End Featured Product -->
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to all Add to Cart buttons
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product-id');
+                    addToCart(productId, 1); // Default quantity is 1
+                });
+            });
+            
+            // Function to add to cart with AJAX
+            function addToCart(productId, quantity) {
+                fetch(`/Cart/AddToCart?productId=${productId}&quantity=${quantity}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success notification
+                        showNotification('success', 'Product added to cart successfully!');
+                        
+                        // Update cart count in header
+                        if (document.getElementById('cartCount')) {
+                            document.getElementById('cartCount').textContent = data.count;
+                        }
+                    } else {
+                        showNotification('error', 'Failed to add product to cart.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error adding to cart:', error);
+                    showNotification('error', 'An error occurred while adding to cart.');
+                });
+            }
+            
+            // Function to show toast notification
+            function showNotification(type, message) {
+                // Create notification container if it doesn't exist
+                let notificationContainer = document.getElementById('notification-container');
+                if (!notificationContainer) {
+                    notificationContainer = document.createElement('div');
+                    notificationContainer.id = 'notification-container';
+                    notificationContainer.style.position = 'fixed';
+                    notificationContainer.style.top = '20px';
+                    notificationContainer.style.right = '20px';
+                    notificationContainer.style.zIndex = '9999';
+                    document.body.appendChild(notificationContainer);
+                }
+                
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.classList.add('alert', type === 'success' ? 'alert-success' : 'alert-danger', 'fade', 'show');
+                notification.style.minWidth = '250px';
+                notification.style.marginBottom = '10px';
+                notification.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                
+                // Add content
+                const icon = document.createElement('i');
+                icon.classList.add('bi', type === 'success' ? 'bi-check-circle' : 'bi-exclamation-circle', 'me-2');
+                notification.appendChild(icon);
+                
+                const messageText = document.createTextNode(message);
+                notification.appendChild(messageText);
+                
+                // Add close button
+                const closeButton = document.createElement('button');
+                closeButton.type = 'button';
+                closeButton.classList.add('btn-close');
+                closeButton.dataset.bsDismiss = 'alert';
+                closeButton.setAttribute('aria-label', 'Close');
+                notification.appendChild(closeButton);
+                
+                // Add to container
+                notificationContainer.appendChild(notification);
+                
+                // Initialize Bootstrap alert
+                const bsAlert = new bootstrap.Alert(notification);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    bsAlert.close();
+                }, 3000);
+            }
+        });
+    </script>
+}
