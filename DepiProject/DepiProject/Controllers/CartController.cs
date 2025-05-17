@@ -23,6 +23,8 @@ namespace DepiProject.Controllers
             // Ensure Stripe API key is set
             StripeConfiguration.ApiKey = _configuration.GetSection("Stripe:SecretKey").Get<string>();
         }
+
+        [HttpPost]
         [Authorize]
         public IActionResult AddToCart(int productId, int quantity = 1)
         {
@@ -89,6 +91,8 @@ namespace DepiProject.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
         [Authorize]
         public IActionResult Plus(int cartId)
         {
@@ -104,6 +108,7 @@ namespace DepiProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         [Authorize]
         public IActionResult Minus(int cartId)
         {
@@ -126,6 +131,7 @@ namespace DepiProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         [Authorize]
         public IActionResult Remove(int cartId)
         {
@@ -139,6 +145,8 @@ namespace DepiProject.Controllers
             _unitofOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
             // Reset OrderTotal to 0
@@ -177,7 +185,8 @@ namespace DepiProject.Controllers
 
             return View(ShoppingCartVM);
         }
-        //AddInIConCartINNavBar(Header)
+
+        [HttpGet]
         [AllowAnonymous]
         public int GetCartCount()
         {
@@ -200,6 +209,7 @@ namespace DepiProject.Controllers
 
             return _unitofOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == userId).Sum(c => c.Count);
         }
+
         [HttpGet]
         public IActionResult Checkout()
         {
@@ -238,6 +248,7 @@ namespace DepiProject.Controllers
 
             return View(ShoppingCartVM);
         }
+
         [HttpPost]
         public IActionResult SummaryPost()
         {
@@ -312,6 +323,8 @@ namespace DepiProject.Controllers
 
 
         }
+
+        [HttpGet]
         public IActionResult OrderConfirmation(int id)
         {
             try
@@ -386,6 +399,7 @@ namespace DepiProject.Controllers
                 // return RedirectToAction("Error", "Home", new { message = "There was an error processing your order." });
             }
         }
+
         [HttpPost]
         public IActionResult PlaceOrder(OrderHeader orderHeader)
         {

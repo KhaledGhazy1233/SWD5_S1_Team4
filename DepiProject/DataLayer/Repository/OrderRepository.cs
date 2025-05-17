@@ -2,9 +2,10 @@ using System;
 using System.Linq.Expressions;
 using DataLayer.Context;
 using DataLayer.Entities;
+using DataLayer.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Repository.IRepository;
+namespace DataLayer.Repository;
 
 public class OrderRepository : IRepository<Order>, IOrderRepository
 {
