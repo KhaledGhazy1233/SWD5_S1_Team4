@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Services.Implementation;
+﻿using BusinessLayer.Services;
+using BusinessLayer.Services.Implementation;
 using BusinessLayer.Services.Interface;
 using DataLayer.Settings;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ public static class FilesDependencies
         services.Configure<CloudinarySettings>(
         configuration.GetSection("CloudinarySettings"));
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 
         return services;
     }

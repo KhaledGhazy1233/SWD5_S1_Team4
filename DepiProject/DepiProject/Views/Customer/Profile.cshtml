@@ -18,16 +18,19 @@
             <div class="card shadow">                
             <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
-                </div>
-                <div class="card-body text-center">
-                    <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail mb-3" alt="Profile Picture">
+                </div>                <div class="card-body text-center">
+                    <img src="@(string.IsNullOrEmpty(Model.PhotoUrl) ? "/images/profiles/default-profile.png" : Model.PhotoUrl)" 
+                         class="rounded-circle img-thumbnail mb-3" 
+                         style="width: 150px; height: 150px; object-fit: cover;"
+                         alt="Profile Picture" 
+                         onerror="this.src='/images/profiles/default-profile.png'">
                     <h5 class="mb-1">@Model.FirstName @Model.LastName</h5>
                     <p class="text-muted mb-3">@Model.UserName</p>
                     <p class="small text-muted mb-0">Member since @(((DateTime)Model.JoinDate).ToString("MMMM dd, yyyy"))</p>
                     <div class="mt-4">
-                        <button class="btn btn-sm btn-outline-primary" id="changePhotoBtn">
+                        <a href="@Url.Action("Index", "Profile")" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-camera me-1"></i> Change Photo
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -79,12 +82,9 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-primary" id="editProfileBtn">
+                            <a href="@Url.Action("EditProfile", "Profile")" class="btn btn-primary">
                                 <i class="fas fa-edit me-1"></i> Edit Profile
-                            </button>
-                            <button type="button" class="btn btn-success d-none" id="saveProfileBtn">
-                                <i class="fas fa-save me-1"></i> Save Changes
-                            </button>
+                            </a>
                             <button type="button" class="btn btn-outline-secondary" id="changePasswordBtn">
                                 <i class="fas fa-lock me-1"></i> Change Password
                             </button>
@@ -195,34 +195,19 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
+@section Scripts {    <script>
         $(document).ready(function () {
             var passwordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
             
-            // Initialize DataTable
-            $('table').DataTable({
-                paging: false,
-                searching: false,
-                info: false,
-                order: [[1, 'desc']]
-            });
-            
-            // Edit profile button functionality
-            $('#editProfileBtn').on('click', function() {
-                $('#profileForm input').prop('disabled', false);
-                $('#editProfileBtn').addClass('d-none');
-                $('#saveProfileBtn').removeClass('d-none');
-            });
-            
-            // Save profile changes
-            $('#saveProfileBtn').on('click', function() {                // Submit the form to update the user's profile
-                alert('Your profile changes have been saved successfully.');
-                
-                $('#profileForm input').prop('disabled', true);
-                $('#saveProfileBtn').addClass('d-none');
-                $('#editProfileBtn').removeClass('d-none');
-            });
+            // Initialize DataTable if exists
+            if($('table').length > 0) {
+                $('table').DataTable({
+                    paging: false,
+                    searching: false,
+                    info: false,
+                    order: [[1, 'desc']]
+                });
+            }
             
             // Change password button
             $('#changePasswordBtn').on('click', function() {
@@ -244,21 +229,32 @@
                     alert('New password and confirmation do not match.');
                     return;
                 }
-                  // Submit the password change to the server
-                alert('Your password has been changed successfully.');
                 
-                passwordModal.hide();
-                $('#currentPassword, #newPassword, #confirmPassword').val('');
-            });
-              // View order functionality
-            $('.view-order-btn').on('click', function() {
-                // Navigate to the order details page
-                alert('Loading order details...');
+                // TODO: Implement actual password change functionality
+                // This would be an AJAX call to a password change endpoint
+                $.ajax({
+                    url: '/Account/ChangePassword',
+                    type: 'POST',
+                    data: {
+                        currentPassword: currentPassword,
+                        newPassword: newPassword,
+                        confirmPassword: confirmPassword
+                    },
+                    success: function(response) {
+                        alert('Your password has been changed successfully.');
+                        passwordModal.hide();
+                        $('#currentPassword, #newPassword, #confirmPassword').val('');
+                    },
+                    error: function(error) {
+                        alert('An error occurred while changing your password. Please try again.');
+                    }
+                });
             });
             
-            // Change photo functionality
-            $('#changePhotoBtn').on('click', function() {
-                alert('This would allow you to upload a new profile photo in a real application.');
+            // View order functionality for any order buttons
+            $('.view-order-btn').on('click', function() {
+                var orderId = $(this).data('order-id');
+                window.location.href = '/Customer/OrderDetails/' + orderId;
             });
         });
     </script>

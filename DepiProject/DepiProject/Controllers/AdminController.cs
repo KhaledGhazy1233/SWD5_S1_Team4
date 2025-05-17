@@ -72,11 +72,18 @@ public class AdminController : Controller
             ViewBag.TotalCategories = totalCategories;
             ViewBag.TotalOrders = totalOrders;
             ViewBag.TotalCustomers = totalCustomers;
-
             // Administrator info
+            // Use default photo if none exists
+            var photoUrl = user.PhotoUrl;
+            if (string.IsNullOrEmpty(photoUrl))
+            {
+                photoUrl = "/images/profiles/default-profile.png";
+            }
+            
             ViewBag.UserName = user.UserName;
             ViewBag.Email = user.Email;
             ViewBag.JoinDate = user.Created;
+            ViewBag.PhotoUrl = photoUrl;
 
             _logger.LogInformation("Admin {UserName} accessed the dashboard", user.UserName);
 

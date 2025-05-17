@@ -10,15 +10,26 @@
         var user = await UserManager.GetUserAsync(User);
         var isAdmin = user != null && await UserManager.IsInRoleAsync(user, Roles.Admin);
         var isCustomer = user != null && await UserManager.IsInRoleAsync(user, Roles.Customer);
-        
-        <li class="nav-item dropdown">
+          <li class="nav-item dropdown">
+            @{
+                string photoUrl = user?.PhotoUrl;
+                bool hasPhoto = !string.IsNullOrEmpty(photoUrl);
+            }
+
             @if (isAdmin)
             {
-                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user-shield me-1"></i>Admin
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">                    @if (hasPhoto)
+                    {
+                        <img src="@photoUrl" class="rounded-circle me-1" style="width: 24px; height: 24px; object-fit: cover;" onerror="this.src='/images/profiles/default-profile.png';">
+                    }
+                    else
+                    {
+                        <img src="/images/profiles/default-profile.png" class="rounded-circle me-1" style="width: 24px; height: 24px; object-fit: cover;">
+                    }
+                    Admin
+                </a><ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-user me-2"></i>My Profile</a></li>
                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Products"><i class="fas fa-box me-2"></i>Products</a></li>
                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Categories"><i class="fas fa-tags me-2"></i>Categories</a></li>
                     <li><a class="dropdown-item" asp-controller="Admin" asp-action="Orders"><i class="fas fa-shopping-cart me-2"></i>Orders</a></li>
@@ -30,14 +41,21 @@
                         </form>
                     </li>
                 </ul>
-            }
-            else if (isCustomer)
+            }            else if (isCustomer)
             {
-                <a class="nav-link dropdown-toggle" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user-circle me-1"></i>My Account
+                <a class="nav-link dropdown-toggle" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">                    @if (hasPhoto)
+                    {
+                        <img src="@photoUrl" class="rounded-circle me-1" style="width: 24px; height: 24px; object-fit: cover;" onerror="this.src='/images/profiles/default-profile.png';">
+                    }
+                    else
+                    {
+                        <img src="/images/profiles/default-profile.png" class="rounded-circle me-1" style="width: 24px; height: 24px; object-fit: cover;">
+                    }
+                    My Account
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" asp-controller="Customer" asp-action="Dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="fas fa-user me-2"></i>My Profile</a></li>
                     <li><a class="dropdown-item" asp-controller="Customer" asp-action="Orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
                     <li><a class="dropdown-item" asp-controller="Customer" asp-action="Wishlist"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
                     <li><hr class="dropdown-divider"></li>
