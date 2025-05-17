@@ -461,6 +461,38 @@ public class AccountController : Controller
         return RedirectToAction(nameof(RegisterConfirmation));
     }
 
+    // POST: /Account/ChangePassword
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+    {
+        if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+        {
+            return Json(new { success = false, message = "All fields are required." });
+        }
+
+        if (newPassword != confirmPassword)
+        {
+            return Json(new { success = false, message = "New password and confirmation do not match." });
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Json(new { success = false, message = "User not found." });
+        }
+
+        var changePasswordResult = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        if (!changePasswordResult.Succeeded)
+        {
+            var errors = string.Join(", ", changePasswordResult.Errors.Select(e => e.Description));
+            return Json(new { success = false, message = errors });
+        }
+
+        await _signInManager.RefreshSignInAsync(user);
+        return Json(new { success = true, message = "Your password has been changed successfully." });
+    }
+
     // Helper method
     private IActionResult RedirectToLocal(string returnUrl)
     {

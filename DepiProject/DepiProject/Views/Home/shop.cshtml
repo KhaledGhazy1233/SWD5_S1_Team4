@@ -152,11 +152,7 @@
                                         class="h3 text-decoration-none">@product.Name</a>
                                     <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                         <li>@product.Brand</li>
-                                        <li class="pt-2">
-                                            @if (product.DiscountPercentage > 0)
-                                            {
-                                                <span class="badge bg-danger">Sale @product.DiscountPercentage%</span>
-                                            }
+                                        <li class="pt-2">                                            @* Discount badge removed *@
                                         </li>
                                     </ul>
                                     <p class="text-center mb-0">$@product.Price.ToString("0.00")</p>

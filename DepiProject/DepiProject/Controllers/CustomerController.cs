@@ -44,12 +44,18 @@ public class CustomerController : Controller
         {
             _logger.LogWarning("User attempted to access Customer Dashboard without being logged in");
             return RedirectToAction("Login", "Account", new { returnUrl = "/Customer/Dashboard" });
+        }        // Use default photo if none exists
+        var photoUrl = user.PhotoUrl;
+        if (string.IsNullOrEmpty(photoUrl))
+        {
+            photoUrl = "/images/profiles/default-profile.png";
         }
-
+        
         ViewBag.UserName = user.UserName;
         ViewBag.Email = user.Email;
         ViewBag.FullName = $"{user.FirstName} {user.LastName}";
         ViewBag.JoinDate = user.Created;
+        ViewBag.PhotoUrl = photoUrl;
 
         // Get customer orders
         var orders = _unitOfWork.Orders.GetAll(o => o.ApplicationUserId == user.Id, "ProductOrders,ProductOrders.Product");
@@ -206,7 +212,13 @@ public class CustomerController : Controller
         {
             return RedirectToAction("Login", "Account");
         }
-
+        // Use default photo if none exists
+        var photoUrl = user.PhotoUrl;
+        if (string.IsNullOrEmpty(photoUrl))
+        {
+            photoUrl = "/images/profiles/default-profile.png";
+        }
+        
         var userProfile = new
         {
             UserName = user.UserName,
@@ -218,7 +230,8 @@ public class CustomerController : Controller
             City = user.City,
             State = user.State,
             PostalCode = user.PostalCode,
-            JoinDate = user.Created
+            JoinDate = user.Created,
+            PhotoUrl = photoUrl
         };
 
         _logger.LogInformation("Customer {UserName} accessed their profile with dynamic user info", user.UserName);

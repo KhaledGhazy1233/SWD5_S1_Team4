@@ -23,8 +23,7 @@
                             <div>
                                 <span class="text-muted">Brand: @product.Brand</span>
                             </div>
-                            <div>
-                                @if (product.DiscountPercentage > 0)
+                            <div>                                @if (product.DiscountPercentage > 0)
                                 {
                                     var discountedPrice = product.Price - (product.Price * (product.DiscountPercentage / 100));
                                     <span class="text-danger text-decoration-line-through">$@product.Price.ToString("0.00")</span>

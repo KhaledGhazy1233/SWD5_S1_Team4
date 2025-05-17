@@ -55,9 +55,9 @@ public class Program
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
         // Seed the database with initial data
-        // app.Services.CreateScope().ServiceProvider.GetRequiredService<ILogger<Program>>()
-        //     .LogInformation("Starting database seeding");
-        // app.SeedDatabase();
+        app.Services.CreateScope().ServiceProvider.GetRequiredService<ILogger<Program>>()
+            .LogInformation("Starting database seeding");
+        app.SeedDatabase();
 
         app.Run();
     }

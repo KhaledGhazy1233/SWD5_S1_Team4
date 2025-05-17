@@ -208,15 +208,7 @@
                 @if (Model.Products.Count > 0){
                     @foreach (var product in Model.Products)
                     {                        <div class="col-12 col-md-4 mb-4">
-                            <div class="product-card h-100">
-                                @if (product.DiscountPercentage > 0)
-                                {
-                                    <div class="position-absolute top-0 left-0 p-3">
-                                        <span class="badge bg-danger px-3 py-2 rounded-pill">
-                                            <i class="fas fa-tag me-1"></i>@product.DiscountPercentage% OFF
-                                        </span>
-                                    </div>
-                                }
+                            <div class="product-card h-100">                                @* Discount percentage UI removed *@
                         <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId" class="position-relative">
                                     <img src="@product.Path" class="card-img-top" alt="@product.Name">
                                 </a>
@@ -234,8 +226,7 @@
                                     <p class="card-text flex-grow-1 text-muted">
                                         @(product.Description.Length > 100 ? $"{product.Description.Substring(0, 100)}..." : product.Description)
                                     </p>
-                                    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
-                                        @if (product.DiscountPercentage > 0)
+                                    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">                                        @if (product.DiscountPercentage > 0)
                                         {
                                             decimal discountedPrice = product.Price * (1 - (product.DiscountPercentage / 100));
                                             <div>

@@ -19,6 +19,7 @@ public class ApplicationUser : IdentityUser
     public string PostalCode { get; set; } = string.Empty;
     public DateTime Created { get; set; } = DateTime.Now;
     public bool IsActive { get; set; } = false;
+    public string? PhotoUrl { get; set; } = "/images/profiles/default-profile.png";
     
     // Navigation properties
     public virtual ICollection<Order> Orders { get; set; }
