@@ -13,9 +13,20 @@
         if (string.IsNullOrEmpty(firstImage.Path))
             return "/images/products/apple-macbook-pro-16-main.png";
 
-        return firstImage.Path.StartsWith("http")
-        ? firstImage.Path
-        : "/images/" + firstImage.Path;
+        // If the path is an external URL, use it directly
+        if (firstImage.Path.StartsWith("http"))
+            return firstImage.Path;
+
+        // If the path already includes /images/, don't add it again
+        if (firstImage.Path.StartsWith("/images/"))
+            return firstImage.Path;
+
+        // If the path already starts with a slash, don't add another one
+        if (firstImage.Path.StartsWith("/"))
+            return firstImage.Path;
+
+        // Otherwise, prepend /images/ to the path
+        return "/images/" + firstImage.Path;
     }
 }
 <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -41,26 +52,6 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-3">
-            <h1 class="h2 pb-4">Categories</h1>
-            <ul class="list-unstyled templatemo-accordion">
-                @if (ViewBag.Categories != null)
-                {
-                    @foreach (var category in ViewBag.Categories)
-                    {
-                        <li class="pb-3">
-                            <a class="collapsed d-flex justify-content-between h3 text-decoration-none"
-                                href="/Home/shop?category=@category.Name.ToLower()">
-                                @category.Name
-                            </a>
-                        </li>
-                    }
-                }
-                else
-                {
-                    <li>No categories found</li>
-                }
-            </ul>
-
             <div class="mt-5">
                 <h3 class="pb-3">Filter Products</h3>
                 <form action="/Home/shop" method="get" class="pb-3">
@@ -73,11 +64,10 @@
                         <label class="form-label">Category</label>
                         <select class="form-select" name="category">
                             <option value="">All Categories</option>
-                            <option value="laptops">Laptops</option>
-                            <option value="smartphones">Smartphones</option>
-                            <option value="accessories">Accessories</option>
-                            <option value="audio">Audio</option>
-                            <option value="gaming">Gaming</option>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.Name.ToLower()">@category.Name</option>
+                            }
                         </select>
                     </div>
 
@@ -111,7 +101,7 @@
 
         <div class="col-lg-9">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <ul class="list-inline shop-top-menu pb-3 pt-1">
                         <li class="list-inline-item">
                             <a class="h6 text-dark text-decoration-none mr-3" href="/Home/shop">All Products</a>
@@ -127,15 +117,6 @@
                             }
                         }
                     </ul>
-                </div>
-                <div class="col-md-6 pb-4">
-                    <div class="d-flex">
-                        <select class="form-control">
-                            <option>Featured</option>
-                            <option>A to Z</option>
-                            <option>Item</option>
-                        </select>
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -374,4 +355,31 @@
             });
         });
     </script>
+    <style>
+        /* Hide product overlay by default */
+        .product-overlay {
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Show overlay on hover */
+        .card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        /* Add background to overlay for better button visibility */
+        .product-overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Make buttons more visible on hover */
+        .product-overlay .btn {
+            transform: translateY(20px);
+            transition: all 0.4s ease-in-out;
+        }
+
+        .card:hover .product-overlay .btn {
+            transform: translateY(0);
+        }
+    </style>
 }
