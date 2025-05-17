@@ -26,7 +26,7 @@ public class Program
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Add services
-        //builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
 
         // Add RoleInitializer as a hosted service
         builder.Services.AddHostedService<RoleInitializer>();

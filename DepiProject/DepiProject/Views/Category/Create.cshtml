@@ -1,26 +1,60 @@
-﻿@model BusinessLayer.ViewModel.Category.CreateCategoryVm
+﻿@model CreateCategoryVm
 
 @{
     ViewData["Title"] = "Create Category";
 }
 
-<h2>Create Category</h2>
-                        
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container auth-form-container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card auth-form">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas  me-2"></i>Create a New Category</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="form-label">Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"></span>
+                                        <input asp-for="Name" required class="form-control" placeholder="Enter the Product name" />
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                        
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        <div class="col-md-12 mb-3" >
+                            <div class="form-group">
+                                <label asp-for="Description" class="form-label">Description</label>
+                                <div class="input-group">
+
+                                    <textarea asp-for="Description" required class="form-control" placeholder="Enter your the Description" ></textarea>
+                                </div>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
                         </div>
-                        
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ImageUrl" class="form-label">Enter Product Image</label>
+                                    <div class="input-group">
+                                        <input type="file" asp-for="ImageUrl" />
+                                    </div>
+                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between" >
+                            <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-secondary">Back to List</a>
+                            <button asp-action="Create" asp-controller="Category" type="submit" class="btn btn-primary">Create</button>
+                        </div>
                     </form>
                 </div>
             </div>

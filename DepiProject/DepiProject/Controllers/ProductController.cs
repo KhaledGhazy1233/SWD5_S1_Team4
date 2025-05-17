@@ -185,6 +185,9 @@ public class ProductController : Controller
     public async Task<IActionResult> Edit(int id)
     {
         var vm = await _productService.GetUpdateProductVmById(id);
+        var result = _categoryService.GetDropDown();
+
+        ViewData["categories"] = result is not null ? new SelectList(result, "Id", "Name") : null;
         if (vm == null)
             return RedirectToAction("Categories", "Admin");
 
@@ -192,18 +195,19 @@ public class ProductController : Controller
         return View(vm);
     }
     [HttpPost]
-    public async Task<IActionResult> Edit(GetProductEditVm Vm)
+    public async Task<IActionResult> Edit(UpdateProductVm Vm)
     {
         if (!ModelState.IsValid)
             return View(Vm);
 
-        //var result = await _productService.UpdateAsync(Vm);
+        var result = await _productService.UpdateAsync(Vm);
 
-        //if (result == "Success")
-        //    return RedirectToAction("Categories", "Admin");
+        if (result == "Success")
+            return RedirectToAction("Categories", "Admin");
 
-
-        //TempData["ErrorMessage"] = result;
+        var categoryDropDowns = _categoryService.GetDropDown();
+        ViewData["categories"] = categoryDropDowns is not null ? new SelectList(categoryDropDowns, "Id", "Name") : null;
+        TempData["ErrorMessage"] = result;
         return View(Vm);
     }
 

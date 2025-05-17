@@ -1,7 +1,6 @@
 ﻿using BusinessLayer.Services.Interface;
 using BusinessLayer.ViewModel.Category;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 
 namespace DepiProject.Controllers
@@ -35,28 +34,12 @@ namespace DepiProject.Controllers
             var result = await _categoryService.Create(vm);
 
             if (result == "Success")
-                return RedirectToAction("Index");
+                return RedirectToAction("Categories", "Admin");
 
             TempData["ErrorMessage"] = result;
             return View(vm);
         }
-        // Service  take id  return update cat vm
-        /* public async Task<IActionResult> Edit(int id)
-         {
-             var category = await _categoryService.GetCategoryById(id);
-             if (category == null)
-                 return RedirectToAction("Index");
 
-             var vm = new UpdateCategoryVm
-             {
-                 Id = category.CategoryId,
-                 Name = category.Name,
-                 Description = category.Description
-             };
-
-             return View(vm);
-         }*/
-        // Last-----------------------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
             var vm = await _categoryService.GetUpdateCategoryVmById(id);
@@ -65,8 +48,6 @@ namespace DepiProject.Controllers
 
             return View(vm);
         }
-        //----------------------------------------------------------------------------
-
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCategoryVm vm)
         {
@@ -76,7 +57,7 @@ namespace DepiProject.Controllers
             var result = await _categoryService.Update(vm);
 
             if (result == "Success")
-                return RedirectToAction("Index");
+                return RedirectToAction("Categories", "Admin");
 
             TempData["ErrorMessage"] = result;
             return View(vm);
@@ -86,7 +67,7 @@ namespace DepiProject.Controllers
         {
             var result = await _categoryService.Delete(id);
             TempData["Message"] = result;
-            return RedirectToAction("Index");
+            return RedirectToAction("Categories", "Admin");
         }
     }
 }

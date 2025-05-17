@@ -126,38 +126,24 @@ public class ProductService : IProductService
     }
     public Task<UpdateProductVm> GetUpdateProductVmById(int productID)
     {
-        //var produnt = _productRepository.Get(p => !p.IsDeleted, "Category");
-        //var categories = _dbContext.Categories.Where(c => !c.IsDeleted);
-        //var editVm = new UpdateProductVm()
-        //{
-        //    StockQuantity = produnt.StockQuantity,
-        //    Brand = produnt.Brand,
-        //    //CategoryName = produnt.Category.Name,
-        //    Name = produnt.Name,
-        //    Description = produnt.Description,
-        //    Price = produnt.Price,
-        //    ProductId = productID,
-        //    DiscountPercentage = produnt.DiscountPercentage,
-        //    Id = productID,
-        //    IsFeatured = produnt.IsFeatured,
-        //    TechnicalSpecifications = produnt.TechnicalSpecifications,
-        //    WarrantyInfo = produnt.WarrantyInfo,
-        //    Model = produnt.Model,
-        //};
+        var produnt = _productRepository.Get(p => !p.IsDeleted && p.ProductId == productID, "Category");
+        var categories = _dbContext.Categories.Where(c => !c.IsDeleted);
+        var editVm = new UpdateProductVm()
+        {
+            StockQuantity = produnt.StockQuantity,
+            Brand = produnt.Brand,
+            Name = produnt.Name,
+            Description = produnt.Description,
+            Price = produnt.Price,
+            ProductId = productID,
+            DiscountPercentage = produnt.DiscountPercentage,
+            IsFeatured = produnt.IsFeatured,
+            TechnicalSpecifications = produnt.TechnicalSpecifications,
+            WarrantyInfo = produnt.WarrantyInfo,
+            Model = produnt.Model,
+        };
 
-        //foreach (var category in categories)
-        //{
-        //    var categoryVm = new CategoryDropDown()
-        //    {
-        //        Id = category.CategoryId,
-        //        Name = category.Name,
-        //    };
-
-        //    editVm.categoryDropDowns.Add(categoryVm);
-        //}
-
-        //return Task.FromResult(editVm);
-        return Task.FromResult(new UpdateProductVm());
+        return Task.FromResult(editVm);
     }
     public async Task<string> CreateAsync(CreateProductVm vm)
     {
@@ -208,11 +194,6 @@ public class ProductService : IProductService
     }
     public async Task<string> UpdateAsync(UpdateProductVm vm)
     {
-
-        // is new name exits exclude itself
-        if (await _productRepository.IsProductNameExistExcludeItself(vm.Name, vm.ProductId))
-            return "this new name is already exist";
-
         // get product
         var product = _productRepository.Get(p => p.ProductId == vm.ProductId);
 
@@ -230,6 +211,7 @@ public class ProductService : IProductService
         product.Model = vm.Model;
         product.IsFeatured = vm.IsFeatured;
         product.TechnicalSpecifications = vm.TechnicalSpecifications;
+
 
         List<IFormFile> oldPaths = new List<IFormFile>();
 

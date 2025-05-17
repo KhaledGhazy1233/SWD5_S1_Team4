@@ -1,5 +1,177 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model UpdateProductVm
+
+
+
 @{
+    ViewData["Title"] = "Update Product";
+}
+
+<link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+
+<div class="container auth-form-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card auth-form">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i>Update Product</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <input asp-for="Name" hidden />
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="form-label">Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input asp-for="Name" required class="form-control" placeholder="Enter the Product name" />
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Description" class="form-label">Description</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input asp-for="Description" required class="form-control" placeholder="Enter your the Description" />
+                                    </div>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Brand" class="form-label">Brand</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input asp-for="Brand" required class="form-control" placeholder="Enter the Brand" />
+                                    </div>
+                                    <span asp-validation-for="Brand" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="StockQuantity" class="form-label">StockQuantity</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input asp-for="StockQuantity" class="form-control" min="5" placeholder="Enter StockQuantity" />
+                                    </div>
+                                    <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DiscountPercentage" class="form-label">DiscountPercentage</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input asp-for="DiscountPercentage" class="form-control" placeholder="Enter the DiscountPercentage" />
+                                    </div>
+                                    <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="TechnicalSpecifications" class="form-label">TechnicalSpecifications</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input asp-for="TechnicalSpecifications" required class="form-control" placeholder="Enter TechnicalSpecifications" />
+                                    </div>
+                                    <span asp-validation-for="TechnicalSpecifications" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Price" class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input asp-for="Price" class="form-control" placeholder="Enter the Price" />
+                                    </div>
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="WarrantyInfo" class="form-label">WarrantyInfo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input asp-for="WarrantyInfo" class="form-control" placeholder="Enter WarrantyInfo" />
+                                    </div>
+                                    <span asp-validation-for="WarrantyInfo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Model" class="form-label">Model</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input asp-for="Model" required class="form-control" placeholder="Enter the Model" />
+                                    </div>
+                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IsFeatured" class="form-label">Is Featured</label>
+                                    <div class="input-group">
+                                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.categories">
+                                            Category
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="IsFeatured" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ImageUrl" class="form-label">Enter Product Image</label>
+                                    <div class="input-group">
+                                        <input type="file" asp-for="ImageUrl"  />
+                                    </div>
+                                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="IsFeatured" class="form-label">Is Featured</label>
+                                    <div class="input-group">
+                                        <input type="checkbox" asp-for="IsFeatured" style="width:80px ; height:50px" />
+                                    </div>
+                                    <span asp-validation-for="IsFeatured" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" asp-controller="Admin" class="btn btn-outline-secondary">Back to List</a>
+                            <button asp-action="Edit" asp-controller="Product" type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

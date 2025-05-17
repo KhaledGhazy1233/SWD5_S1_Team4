@@ -49,12 +49,17 @@ namespace BusinessLayer.Services.Implementation
                 return "this new name is already exsit";
 
 
-            await _fileService.DeleteImageByUrlAsync(category.ImageUrl);
-            var path = await _fileService.UploadFileAsync(vm.ImageUrl);
+            if (vm.ImageUrl != null)
+            {
+                await _fileService.DeleteImageByUrlAsync(category.ImageUrl);
+                var path = await _fileService.UploadFileAsync(vm.ImageUrl);
+
+                category.ImageUrl = path;
+            }
+
 
             category.Name = vm.Name;
             category.Description = vm.Description;
-            category.ImageUrl = path;
 
             await _categoryRepository.SaveChangesAsync();
 
@@ -138,7 +143,7 @@ namespace BusinessLayer.Services.Implementation
 
         public List<CategoryDropDown> GetDropDown()
         {
-            var result = _categoryRepository.GetAll();
+            var result = _categoryRepository.GetAll(p => p.IsDeleted == false);
 
             var response = new List<CategoryDropDown>();
 
