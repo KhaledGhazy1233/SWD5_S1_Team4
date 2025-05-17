@@ -293,12 +293,18 @@
                         "X-Requested-With": "XMLHttpRequest"
                     },
                     success: function (data) {
-                        console.log("AJAX success response:", data);
-                        if (data && data.success) {
+                        console.log("AJAX success response:", data);                        if (data && data.success) {
                             // Update the cart count in the navbar
                             $("#cartCount").html(data.count);
                             // Show success message
                             alert("Product added to cart successfully!");
+                        } else if (data && data.requiresLogin) {
+                            console.log("Login required:", data);
+                            alert("Please log in to add items to your cart");
+                            // Redirect to login page after a short delay
+                            setTimeout(function() {
+                                window.location.href = '/Account/Login';
+                            }, 1000);
                         } else {
                             console.error("Server returned success=false:", data);
                             alert("Failed to add product to cart. Please try again.");

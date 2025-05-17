@@ -369,8 +369,7 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then(response => response.json())                .then(data => {
                     if (data.success) {
                         // Show success notification
                         showNotification('success', 'Product added to cart successfully!');
@@ -379,6 +378,14 @@
                         if (document.getElementById('cartCount')) {
                             document.getElementById('cartCount').textContent = data.count;
                         }
+                    } else if (data.requiresLogin) {
+                        // Show login required notification
+                        showNotification('warning', 'Please log in to add items to your cart');
+                        
+                        // Redirect to login page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '/Account/Login';
+                        }, 1500);
                     } else {
                         showNotification('error', 'Failed to add product to cart.');
                     }
