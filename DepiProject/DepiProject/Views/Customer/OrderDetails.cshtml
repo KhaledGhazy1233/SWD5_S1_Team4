@@ -1,0 +1,77 @@
+@model DataLayer.Entities.Order
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "_CustomerLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4 text-gray-800">Order Details</h1>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Order Information</h6>
+                    <a href="@Url.Action("Orders", "Customer")" class="btn btn-sm btn-secondary">Back to Orders</a>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-primary font-weight-bold">Order Summary</h5>
+                            <p><strong>Order ID:</strong> ORD-@Model.OrderId</p>
+                            <p><strong>Order Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</p>
+                            <p><strong>Status:</strong>
+                                @if (Model.IsDeleted)
+                                {
+                                    <span class="badge badge-danger">Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Delivered</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-primary font-weight-bold">Shipping Information</h5>
+                            <p><strong>Recipient:</strong> @Model.Name</p>
+                            <p><strong>Address:</strong> @Model.StreetAddress, @Model.City, @Model.State
+                                @Model.PostalCode</p>
+                            <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-end mt-4">
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title font-weight-bold mb-3">Order Summary</h5>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Subtotal:</span>
+                                        <span>$@Model.TotalPrice.ToString("F2")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Discount:</span>
+                                        <span>-$@Model.Discount.ToString("F2")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Tax:</span>
+                                        <span>$@Model.Fax.ToString("F2")</span>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between font-weight-bold">
+                                        <span>Total:</span>
+                                        <span>$@Model.FinalPrice.ToString("F2")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

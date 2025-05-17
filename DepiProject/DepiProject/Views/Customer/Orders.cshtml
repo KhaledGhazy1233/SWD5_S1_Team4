@@ -1,4 +1,4 @@
-@model List<object>
+@model List<DepiProject.ViewModels.OrderViewModel>
 @{
     ViewData["Title"] = "My Orders";
     Layout = "_CustomerLayout";
@@ -14,7 +14,8 @@
     </div>
 
     <!-- Orders List -->
-    <div class="card shadow mb-4">        <div class="card-header py-3">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Order History</h6>
         </div>
         <div class="card-body">
@@ -25,40 +26,44 @@
                             <th>Order ID</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Tracking #</th>
                             <th>Items</th>
                             <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var order in Model)
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>@order.Id</td>
+                                    <td>@order.Date.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        @{
+                                            var badgeClass = order.Status switch
+                                            {
+                                                "Delivered" => "badge badge-success",
+                                                "Shipped" => "badge badge-primary",
+                                                "Processing" => "badge badge-warning",
+                                                "Cancelled" => "badge badge-danger",
+                                                _ => "badge badge-secondary"
+                                            };
+                                        }
+                                        <span class="@badgeClass">@order.Status</span>
+                                    </td>
+                                    <td>@order.Items</td>
+                                    <td>$@order.Total.ToString("F2")</td>
+                                    <td>
+                                        <a href="@Url.Action("OrderDetails", "Customer", new { id = order.RawId })" class="btn btn-sm btn-primary">View Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@order.GetType().GetProperty("Id").GetValue(order, null)</td>
-                                <td>@(((DateTime)order.GetType().GetProperty("Date").GetValue(order, null)).ToString("MMM dd, yyyy"))</td>
-                                <td>
-                                    @{
-                                        var status = order.GetType().GetProperty("Status").GetValue(order, null).ToString();
-                                        var badgeClass = status switch
-                                        {
-                                            "Delivered" => "badge bg-success",
-                                            "Shipped" => "badge bg-primary",
-                                            "Processing" => "badge bg-warning",
-                                            "Cancelled" => "badge bg-danger",
-                                            _ => "badge bg-secondary"
-                                        };
-                                    }
-                                    <span class="@badgeClass">@status</span>
-                                </td>
-                                <td>@order.GetType().GetProperty("TrackingNumber").GetValue(order, null)</td>
-                                <td>@order.GetType().GetProperty("Items").GetValue(order, null)</td>
-                                <td>$@(((decimal)order.GetType().GetProperty("Total").GetValue(order, null)).ToString("0.00"))</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary view-order-btn" data-id="@order.GetType().GetProperty("Id").GetValue(order, null)">
-                                        <i class="fas fa-eye"></i> View
-                                    </button>
-                                </td>
+                                <td colspan="6" class="text-center">No orders found</td>
                             </tr>
                         }
                     </tbody>
@@ -70,13 +75,9 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $('#ordersTable').DataTable();
-            
-            // View order button click handler
-            $('.view-order-btn').on('click', function() {
-                var orderId = $(this).data('id');                // Navigate to order details page
-                alert('Loading details for order: ' + orderId);
+        $(document).ready(function() {
+            $('#ordersTable').DataTable({
+                "order": [[1, "desc"]]
             });
         });
     </script>

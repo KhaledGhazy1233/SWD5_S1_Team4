@@ -9,7 +9,7 @@
         <div class="col-12">
             <h1 class="h3 mb-4 text-gray-800">Welcome to Your Dashboard, @ViewBag.FullName</h1>
         </div>
-    </div>    
+    </div>
     <!-- User Information Panel -->
     <div class="row mb-4">
         <div class="col-12">
@@ -28,16 +28,19 @@
                             <p><strong>Member Since:</strong> @ViewBag.JoinDate.ToString("MMM dd, yyyy")</p>
                         </div>
                         <div class="col-md-4 text-center">
-                            <img src="https://via.placeholder.com/120" class="img-fluid rounded-circle mb-3" alt="Profile Photo">
+                            <img src="https://via.placeholder.com/120" class="img-fluid rounded-circle mb-3"
+                                alt="Profile Photo">
                             <div>
-                                <a href="#" class="btn btn-sm btn-primary">Edit Profile</a>
+                                <a href="@Url.Action("Profile", "Customer")" class="btn btn-sm btn-primary">Edit
+                                    Profile</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    <div class="row">
+    </div>
+    <div class="row">
         <!-- Order Statistics -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -64,7 +67,8 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 Total Spent</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$0</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">$@ViewBag.TotalSpent.ToString("F2")
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -82,7 +86,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Reward Points</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.RewardPoints</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-star fa-2x text-gray-300"></i>
@@ -100,7 +104,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
-                    <a href="/Customer/Orders" class="btn btn-sm btn-primary">View All</a>
+                    <a href="@Url.Action("Orders", "Customer")" class="btn btn-sm btn-primary">View All</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -115,33 +119,93 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="5" class="text-center">No orders found</td>
-                                </tr>
+                                @if (ViewBag.RecentOrders != null && ViewBag.RecentOrders.Count > 0)
+                                {
+                                    foreach (var order in ViewBag.RecentOrders)
+                                    {
+                                        <tr>
+                                            <td>@order.OrderId</td>
+                                            <td>@order.Date.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @if (order.Status == "Delivered")
+                                                {
+                                                    <span class="badge badge-success">@order.Status</span>
+                                                }
+                                                else if (order.Status == "Shipped")
+                                                {
+                                                    <span class="badge badge-info">@order.Status</span>
+                                                }
+                                                else if (order.Status == "Processing")
+                                                {
+                                                    <span class="badge badge-warning">@order.Status</span>
+                                                }
+                                                else if (order.Status == "Cancelled")
+                                                {
+                                                    <span class="badge badge-danger">@order.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-secondary">@order.Status</span>
+                                                }
+                                            </td>
+                                            <td>$@order.Total.ToString("F2")</td>
+                                            <td>
+                                                <a href="@Url.Action("OrderDetails", "Customer", new { id = order.OrderId.Replace("ORD-", "") })"
+                                                    class="btn btn-sm btn-primary">View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center">No orders found</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>        <!-- Store Quick Links -->
+        </div> <!-- Store Quick Links -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Quick Links</h6>
-                    <a href="/Home/shop" class="btn btn-sm btn-primary">Shop Now</a>
+                    <a href="@Url.Action("shop", "Home")" class="btn btn-sm btn-primary">Shop Now</a>
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a href="/Home/shop?category=laptops" class="list-group-item list-group-item-action">
-                            <i class="fas fa-laptop me-2"></i> Laptops
-                        </a>
-                        <a href="/Home/shop?category=mobiles" class="list-group-item list-group-item-action">
-                            <i class="fas fa-mobile-alt me-2"></i> Mobile Devices
-                        </a>
-                        <a href="/Home/shop?category=cameras" class="list-group-item list-group-item-action">
-                            <i class="fas fa-camera me-2"></i> Cameras
-                        </a>
-                        <a href="/Home/contact" class="list-group-item list-group-item-action">
+                        @if (ViewBag.Categories != null && ViewBag.Categories.Count > 0)
+                        {
+                            foreach (var category in ViewBag.Categories)
+                            {
+                                <a href="@Url.Action("shop", "Home", new { category = category.Name.ToLower() })"
+                                    class="list-group-item list-group-item-action">
+                                    @{
+                                        var iconClass = category.Name.ToLower() switch
+                                        {
+                                            var name when name.Contains("laptop") => "fas fa-laptop",
+                                            var name when name.Contains("phone") || name.Contains("mobile") => "fas fa-mobile-alt",
+                                            var name when name.Contains("camera") => "fas fa-camera",
+                                            var name when name.Contains("tv") || name.Contains("television") => "fas fa-tv",
+                                            var name when name.Contains("audio") || name.Contains("headphone") => "fas fa-headphones",
+                                            var name when name.Contains("gaming") || name.Contains("game") => "fas fa-gamepad",
+                                            var name when name.Contains("watch") || name.Contains("wearable") => "fas fa-watch",
+                                            var name when name.Contains("computer") || name.Contains("desktop") => "fas fa-desktop",
+                                            var name when name.Contains("accessory") || name.Contains("accessories") => "fas fa-plug",
+                                            _ => "fas fa-tag"
+                                        };
+                                    }
+                                    <i class="@iconClass me-2"></i> @category.Name
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-center text-muted">No categories available</p>
+                        }
+                        <a href="@Url.Action("contact", "Home")" class="list-group-item list-group-item-action">
                             <i class="fas fa-headset me-2"></i> Support
                         </a>
                     </div>
