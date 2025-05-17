@@ -7,85 +7,198 @@
 <link rel="stylesheet" href="~/css/ShoppingCart.css" />
 <style>
     .cart-item {
-        border-bottom: 1px solid #e0e0e0;
-        padding-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 20px;
         margin-bottom: 20px;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
     .cart-item:hover {
         background-color: #f8f9fa;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     .product-img {
-        max-width: 100px;
-        object-fit: cover;
+        max-width: 120px;
+        height: 120px;
+        object-fit: contain;
         border-radius: 8px;
+        border: 1px solid #eaeaea;
+        padding: 5px;
+        background-color: white;
     }
 
     .cart-summary {
-        border: 1px solid #e0e0e0;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        border: none;
+        padding: 25px;
+        border-radius: 12px;
+        background-color: #f8f9fa;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 20px;
+    }
+
+    .cart-summary h4 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e9ecef;
     }
 
     .cart-summary .total-price {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: bold;
+        color: #0d6efd;
     }
 
     .btn-checkout {
         background-color: #0d6efd;
         color: white;
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px;
+        transition: all 0.3s ease;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .btn-checkout:hover {
         background-color: #0b5ed7;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 2px;
+        background-color: white;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .quantity-btn:hover {
+        background-color: #e9ecef;
+    }
+
+    .quantity-input {
+        width: 40px !important;
+        border: none;
+        text-align: center;
+        font-weight: 600;
+        padding: 0;
+        background: transparent;
     }
 
     .empty-cart {
         min-height: 300px;
+        padding: 50px 20px;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .empty-cart i {
+        color: #d1d1d1;
+        margin-bottom: 1.5rem;
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+        color: #0d6efd;
+        font-weight: 700;
+    }
+
+    .remove-btn {
+        border-radius: 6px;
+        transition: all 0.3s;
+    }
+
+    .remove-btn:hover {
+        background-color: #dc3545;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .continue-shopping-btn {
+        padding: 10px 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .continue-shopping-btn:hover {
+        transform: translateX(-5px);
     }
 </style>
 <div class="container py-5">
     <div class="row">
         <!-- Shopping Cart Items -->
         <div class="col-lg-8">
-            <h3 class="mb-4">
-                <i class="fas fa-shopping-cart me-2"></i> Your Shopping Cart
-            </h3> @if (cart.ShoppingCartList != null && cart.ShoppingCartList.Any())
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-shopping-cart me-3 text-primary"></i> Your Shopping Cart
+                </h2>
+                <span class="badge bg-primary rounded-pill">
+                    @(cart.ShoppingCartList?.Count() ?? 0) Items
+                </span>
+            </div>
+            <hr class="mb-4">@if (cart.ShoppingCartList != null && cart.ShoppingCartList.Any())
             {
                 @foreach (var item in cart.ShoppingCartList)
                 {
                     <div class="cart-item d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex">
-                            <img src="@(item.Product.ProductImages?.FirstOrDefault()?.Path ?? "/images/no-image.jpg")"
-                                alt="@item.Product.Name" class="product-img me-3" />
+                            <div class="me-4">
+                                <img src="@(item.Product.ProductImages?.FirstOrDefault()?.Path ?? "/images/no-image.jpg")"
+                                    alt="@item.Product.Name" class="product-img" />
+                            </div>
                             <div>
-                                <h5>@item.Product.Name</h5>
-                                <p class="text-muted small mb-1">@item.Product.Description</p>
-                                <div class="d-flex align-items-center mt-2">
+                                <h5 class="product-name">@item.Product.Name</h5>
+                                <p class="text-muted small mb-3">@item.Product.Description</p>
+                                <div class="quantity-control mt-3">
                                     <a asp-controller="Cart" asp-action="Minus" asp-route-cartId="@item.Id"
-                                        class="btn btn-sm btn-outline-secondary me-2">
+                                        class="quantity-btn">
                                         <i class="fas fa-minus"></i>
                                     </a>
 
-                                    <input type="text" value="@item.Count" class="form-control form-control-sm text-center me-2"
-                                        style="width: 50px;" readonly />
+                                    <input type="text" value="@item.Count" class="quantity-input form-control" readonly />
 
-                                    <a asp-controller="Cart" asp-action="Plus" asp-route-cartId="@item.Id"
-                                        class="btn btn-sm btn-outline-secondary">
+                                    <a asp-controller="Cart" asp-action="Plus" asp-route-cartId="@item.Id" class="quantity-btn">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-end">
-                            <span class="fw-bold">@((item.Price * item.Count).ToString("C"))</span>
+                            <span class="product-price mb-3">@((item.Price * item.Count).ToString("C"))</span>
                             <a asp-controller="Cart" asp-action="Remove" asp-route-cartId="@item.Id"
-                                class="btn btn-sm btn-danger mt-2">
-                                <i class="fas fa-trash-alt"></i> Remove
+                                class="btn btn-outline-danger remove-btn">
+                                <i class="fas fa-trash-alt me-1"></i> Remove
                             </a>
                         </div>
                     </div>
@@ -93,40 +206,60 @@
             }
                         else
             {
-                <div class="text-center py-5">
-                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                    <h3>Your cart is empty</h3>
-                    <p class="text-muted">Add some items to your cart to continue shopping</p>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
+                <div class="empty-cart text-center">
+                    <i class="fas fa-shopping-cart fa-4x mb-3"></i>
+                    <h3 class="mb-3">Your cart is empty</h3>
+                    <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary continue-shopping-btn">
                         <i class="fas fa-arrow-left me-2"></i>Continue Shopping
                     </a>
                 </div>
             }
-        </div>
-
-        <!-- Cart Summary -->
+        </div> <!-- Cart Summary -->
         <div class="col-lg-4 mt-4 mt-lg-0">
             <div class="cart-summary">
-                <h4 class="mb-4">Cart Summary</h4>
+                <h4>Cart Summary</h4>
                 <ul class="list-unstyled mb-4">
-                    <li class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span>@cart.OrderTotal.ToString("C")</span>
+                    <li class="d-flex justify-content-between mb-3 pb-1">
+                        <span class="fw-medium">Subtotal:</span>
+                        <span class="fw-bold">@cart.OrderTotal.ToString("C")</span>
                     </li>
-                    <li class="d-flex justify-content-between mb-2">
-                        <span>Shipping:</span>
-                        <span>Free</span>
+                    <li class="d-flex justify-content-between mb-3 pb-1">
+                        <span class="fw-medium">Shipping:</span>
+                        <span class="text-success fw-medium">Free</span>
                     </li>
-                    <li class="d-flex justify-content-between border-top pt-3">
+                    @if (cart.OrderTotal > 0)
+                    {
+                        <li class="d-flex justify-content-between mb-2 text-success small">
+                            <span><i class="fas fa-check-circle me-1"></i> Eligible for free shipping</span>
+                        </li>
+                    }
+                    <li class="d-flex justify-content-between border-top mt-2 pt-3">
                         <span class="total-price">Total:</span>
-                        <span class="total-price text-primary">@cart.OrderTotal.ToString("C")</span>
+                        <span class="total-price">@cart.OrderTotal.ToString("C")</span>
                     </li>
                 </ul>
                 <form asp-controller="Cart" asp-action="Checkout" method="get">
-                    <button type="submit" class="btn btn-checkout w-100 py-2">
+                    <button type="submit" class="btn btn-checkout w-100 py-3 mt-2" @(cart.OrderTotal <= 0 ? "disabled" :
+                                                                                                           "")>
                         <i class="fas fa-credit-card me-2"></i> Proceed to Checkout
                     </button>
                 </form>
+                @if (cart.OrderTotal > 0)
+                {
+                    <div class="text-center mt-4 small">
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <i class="fas fa-lock text-success me-2"></i>
+                            <span>Secure checkout</span>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <i class="fab fa-cc-visa fa-2x mx-1 text-muted"></i>
+                            <i class="fab fa-cc-mastercard fa-2x mx-1 text-muted"></i>
+                            <i class="fab fa-cc-amex fa-2x mx-1 text-muted"></i>
+                            <i class="fab fa-cc-paypal fa-2x mx-1 text-muted"></i>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
