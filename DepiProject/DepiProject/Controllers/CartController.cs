@@ -24,12 +24,16 @@ namespace DepiProject.Controllers
             // Ensure Stripe API key is set
             StripeConfiguration.ApiKey = _configuration.GetSection("Stripe:SecretKey").Get<string>();
         }
-        [HttpPost]
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)
             {
+                // For AJAX requests, return a JSON response indicating authentication is required
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, requiresLogin = true, message = "Please log in to add items to your cart." });
+                }
                 return RedirectToAction("Login", "Account");
             }
 
