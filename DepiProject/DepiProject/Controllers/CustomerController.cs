@@ -138,39 +138,9 @@ public class CustomerController : Controller
 
         ViewBag.UserName = user.UserName;
         ViewBag.Email = user.Email;
-
-        // Static wishlist data
-        var wishlistItems = new List<object>
-        {
-            new {
-                Id = 1,
-                Name = "UltraPhone 12 Pro",
-                ImageUrl = "/images/products/ultraphone.jpg",
-                Price = 999.99m,
-                InStock = true
-            },
-            new {
-                Id = 2,
-                Name = "TechBook Air",
-                ImageUrl = "/images/products/techbook.jpg",
-                Price = 1299.99m,
-                InStock = true
-            },
-            new {
-                Id = 3,
-                Name = "SmartWatch Series 5",
-                ImageUrl = "/images/products/smartwatch.jpg",
-                Price = 299.99m,
-                InStock = false
-            },
-            new {
-                Id = 4,
-                Name = "Wireless Headphones",
-                ImageUrl = "/images/products/headphones.jpg",
-                Price = 199.99m,
-                InStock = true
-            }
-        };
+        // TODO: Replace with actual wishlist data from the database
+        // For now, using an empty list as a placeholder
+        var wishlistItems = new List<object>();
 
         return View(wishlistItems);
     }
@@ -289,8 +259,6 @@ public class CustomerController : Controller
         {
             return RedirectToAction("Login", "Account");
         }
-
-        // Corn needs to change it or just remove it
         TempData["SuccessMessage"] = "Notification settings updated successfully!";
 
         _logger.LogInformation("Customer {UserName} updated notification settings", user.UserName);
@@ -305,10 +273,7 @@ public class CustomerController : Controller
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
-        }
-
-        // Corn needs to change it or just remove it
-        TempData["SuccessMessage"] = "Preferences updated successfully!";
+        }        TempData["SuccessMessage"] = "Preferences updated successfully!";
 
         _logger.LogInformation("Customer {UserName} updated preferences", user.UserName);
 
@@ -322,10 +287,7 @@ public class CustomerController : Controller
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
-        }
-
-        // Corn needs to change it or just remove it
-        TempData["SuccessMessage"] = "Security settings updated successfully!";
+        }        TempData["SuccessMessage"] = "Security settings updated successfully!";
 
         _logger.LogInformation("Customer {UserName} updated security settings", user.UserName);
 

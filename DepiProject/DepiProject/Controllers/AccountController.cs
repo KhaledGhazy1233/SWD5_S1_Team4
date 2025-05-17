@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace DepiProject.Controllers;
@@ -19,14 +20,15 @@ public class AccountController : Controller
     private readonly IEmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
-
+    private readonly ILogger<AccountController> _logger;
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<IdentityRole> roleManager,
         IEmailService emailService,
         IConfiguration configuration,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ILogger<AccountController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -34,6 +36,7 @@ public class AccountController : Controller
         _emailService = emailService;
         _configuration = configuration;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     // GET: /Account/Login
@@ -43,8 +46,7 @@ public class AccountController : Controller
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
-    }
-
+    }    
     // POST: /Account/Login
     [HttpPost]
     [AllowAnonymous]
@@ -53,74 +55,65 @@ public class AccountController : Controller
     {
         ViewData["ReturnUrl"] = returnUrl;
 
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
-            {
-                ModelState.AddModelError(string.Empty, "You must confirm your email before logging in.");
-                ViewData["ShowResendLink"] = true;
-                ViewData["Email"] = model.Email;
-                return View(model);
-            }
-
-            if (user != null && !user.IsActive)
-            {
-                ModelState.AddModelError(string.Empty, "Your account is not active. Please confirm your email.");
-                ViewData["ShowResendLink"] = true;
-                ViewData["Email"] = model.Email;
-                return View(model);
-            }
-
-            var result = await _signInManager.PasswordSignInAsync(
-                model.Email,
-                model.Password,
-                model.RememberMe,
-                lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                TempData["success"] = "Login successful";
-
-                if (user != null)
-                {
-                    if (await _userManager.IsInRoleAsync(user, Roles.Admin))
-                    {
-                        return RedirectToAction("Dashboard", "Admin");
-                    }
-                    else if (await _userManager.IsInRoleAsync(user, Roles.Customer))
-                    {
-                        return RedirectToAction("Dashboard", "Customer");
-                    }
-                }
-
-                return RedirectToLocal(returnUrl);
-            }
-
-            if (result.IsLockedOut)
-            {
-                return View("Lockout");
-            }
-            else if (result.IsNotAllowed)
-            {
-                var userAccount = await _userManager.FindByEmailAsync(model.Email);
-                if (userAccount != null && !await _userManager.IsEmailConfirmedAsync(userAccount))
-                {
-                    ModelState.AddModelError(string.Empty, "You must confirm your email before logging in.");
-                    ViewData["ShowResendLink"] = true;
-                    return View(model);
-                }
-                ModelState.AddModelError(string.Empty, "Login not allowed.");
-                return View(model);
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
-            }
+            return View(model);
         }
 
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
+        if (!await _userManager.IsEmailConfirmedAsync(user))
+        {
+            ModelState.AddModelError(string.Empty, "You must confirm your email before logging in.");
+            ViewData["ShowResendLink"] = true;
+            ViewData["Email"] = model.Email;
+            return View(model);
+        }
+
+        if (!user.IsActive)
+        {
+            ModelState.AddModelError(string.Empty, "Your account is not active. Please contact support.");
+            return View(model);
+        }
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email,
+            model.Password,
+            model.RememberMe,
+            lockoutOnFailure: true);
+
+        if (result.Succeeded)
+        {
+            TempData["success"] = "Login successful";
+
+            if (await _userManager.IsInRoleAsync(user, Roles.Admin))
+            {
+                _logger.LogInformation("Admin user logged in: {Email}, UserId: {UserId}", 
+                    model.Email, user.Id);
+                return RedirectToAction("Dashboard", "Admin");
+            }
+            else if (await _userManager.IsInRoleAsync(user, Roles.Customer))
+            {
+                return RedirectToAction("Dashboard", "Customer");
+            }
+
+            return RedirectToLocal(returnUrl);
+        }
+        if (result.IsLockedOut)
+        {
+            return View("Lockout");
+        }
+        
+        if (result.IsNotAllowed)
+        {
+            ModelState.AddModelError(string.Empty, "Login not allowed.");
+            return View(model);
+        }
+        
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         return View(model);
     }
 
@@ -157,7 +150,6 @@ public class AccountController : Controller
                 Created = DateTime.Now,
                 IsActive = false
             };
-
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -181,7 +173,8 @@ public class AccountController : Controller
                 }
                 catch (Exception ex)
                 {
-                    // Log error but don't show to user
+                    _logger.LogError(ex, "Error sending confirmation email to user: {Email}, UserId: {UserId}", 
+                        user.Email, user.Id);
                 }
 
                 TempData["Email"] = user.Email;
@@ -196,12 +189,13 @@ public class AccountController : Controller
 
         return View(model);
     }
-
     // POST: /Account/Logout
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
+        var userId = _userManager.GetUserId(User);
+        
         await _signInManager.SignOutAsync();
 
         TempData["success"] = "You have been logged out successfully";
@@ -257,7 +251,7 @@ public class AccountController : Controller
             }
             catch (Exception ex)
             {
-                // Log exception
+                _logger.LogError(ex, "Error sending password reset email to user: {Email}", user.Email);
             }
 
             return View("ForgotPasswordConfirmation");
@@ -320,8 +314,9 @@ public class AccountController : Controller
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error resetting password for user: {Email}", model.Email);
             ModelState.AddModelError(string.Empty, "An error occurred while resetting your password.");
         }
 
@@ -375,8 +370,9 @@ public class AccountController : Controller
                 return View("Error");
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error confirming email for userId: {UserId}", userId);
             ModelState.AddModelError(string.Empty, "Invalid email confirmation link.");
             return View("Error");
         }
@@ -452,8 +448,9 @@ public class AccountController : Controller
 
             TempData["success"] = "Verification email sent. Please check your email.";
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error sending confirmation email to user: {Email}", model.Email);
             ModelState.AddModelError(string.Empty, "Error sending email. Please try again later.");
             return View(model);
         }

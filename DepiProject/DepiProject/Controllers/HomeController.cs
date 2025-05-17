@@ -1,6 +1,7 @@
 using BusinessLayer.Constants;
 using BusinessLayer.Services.Interface;
 using DataLayer.Entities;
+using DataLayer.Repository.IRepository;
 using DepiProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,13 @@ using System.Diagnostics;
 namespace DepiProject.Controllers;
 
 public class HomeController : Controller
-{
-    private readonly ILogger<HomeController> _logger;
+{    private readonly ILogger<HomeController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ISharedService _sharedService;
     private readonly IProductService _productService;
     private readonly ICategoryService _categoryService;
-
-    // Sample data removed
+    private readonly IUnitOfWork _unitOfWork;
 
     public HomeController(
         ILogger<HomeController> logger,
@@ -25,7 +24,8 @@ public class HomeController : Controller
         SignInManager<ApplicationUser> signInManager,
         ISharedService sharedService,
         IProductService productService,
-        ICategoryService categoryService)
+        ICategoryService categoryService,
+        IUnitOfWork unitOfWork)
     {
         _logger = logger;
         _userManager = userManager;
@@ -33,13 +33,8 @@ public class HomeController : Controller
         _sharedService = sharedService;
         _productService = productService;
         _categoryService = categoryService;
+        _unitOfWork = unitOfWork;
     }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
@@ -65,13 +60,21 @@ public class HomeController : Controller
                         ViewBag.RoleBadgeClass = "bg-primary";
                     }
                     else if (await _userManager.IsInRoleAsync(user, Roles.Customer))
-                    {
-                        ViewBag.UserRole = Roles.Customer;
+                    {                        ViewBag.UserRole = Roles.Customer;
                         ViewBag.RoleBadgeClass = "bg-success";
 
-                        // Add customer-specific content
-                        ViewBag.LatestOrderDate = DateTime.Now.AddDays(-3).ToString("MMM dd, yyyy");
-                        ViewBag.PendingOrdersCount = 2;
+                        // Get real order data for the customer
+                        var orders = _unitOfWork.Orders.GetAll(o => o.ApplicationUserId == user.Id, includeProperties: "ProductOrders");
+                        
+                        // Count pending orders (non-cancelled orders)
+                        var pendingOrdersCount = orders.Count(o => !o.IsDeleted);
+                        ViewBag.PendingOrdersCount = pendingOrdersCount;
+                        
+                        // Get date of latest order
+                        var latestOrder = orders.OrderByDescending(o => o.CreatedAt).FirstOrDefault();
+                        ViewBag.LatestOrderDate = latestOrder != null 
+                            ? latestOrder.CreatedAt.ToString("MMM dd, yyyy") 
+                            : "N/A";
                     }
                 }
             }
@@ -87,7 +90,7 @@ public class HomeController : Controller
             return View();
         }
     }
-    public async Task<IActionResult> shop(string category, string search, string brand, decimal? minPrice, decimal? maxPrice)
+    public async Task<IActionResult> Shop(string category, string search, string brand, decimal? minPrice, decimal? maxPrice)
     {
         try
         {
@@ -192,7 +195,7 @@ public class HomeController : Controller
             return View(new List<Product>());
         }
     }
-    public IActionResult shopsingle(int id)
+    public IActionResult ShopSingle(int id)
     {
         try
         {
@@ -261,28 +264,15 @@ public class HomeController : Controller
         {
             _logger.LogError(ex, "Error occurred when loading product details for ID {ProductId}: {Message}", id, ex.Message);
             TempData["ErrorMessage"] = "An error occurred while loading the product details. Please try again.";
-            return RedirectToAction("shop");
+            return RedirectToAction("Shop");
         }
     }
-
-    public IActionResult contact()
+    public IActionResult Contact()
     {
         return View();
     }
-
-    public IActionResult about()
+    public IActionResult About()
     {
-        return View();
-    }
-
-    public IActionResult admin()
-    {
-        ViewBag.Products = _productService.GetProductsVm();
-        return View();
-    }
-    public new IActionResult NotFound()
-    {
-        Response.StatusCode = 404;
         return View();
     }
 }

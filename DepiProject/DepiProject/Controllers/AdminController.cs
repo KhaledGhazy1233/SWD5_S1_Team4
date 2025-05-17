@@ -129,14 +129,9 @@ public class AdminController : Controller
     }
 
     public IActionResult Products()
-    {
-        try
+    {        try
         {
-            _logger.LogInformation("Admin accessed the static products page");
-
-            //var electronicsCategory = new DepiProject.Models.Category { Id = 1, Name = "Electronics" };
-            //var clothingCategory = new DepiProject.Models.Category { Id = 2, Name = "Clothing" };
-            //var booksCategory = new DepiProject.Models.Category { Id = 3, Name = "Books" };
+            _logger.LogInformation("Admin accessed the products page");
 
             var result = _productService.GetProductsVm();
             return View(result);
@@ -150,17 +145,9 @@ public class AdminController : Controller
     }
 
     public async Task<IActionResult> Categories(int pageNumber, int pageSize)
-    {
-        try
+    {        try
         {
-            _logger.LogInformation("Admin accessed the static categories page");
-            //if (pageNumber == 0 || pageSize == 0)
-            //{
-            //    pageNumber = 1;
-            //    pageSize = 5;
-            //}
-
-            //var categories = await _categoryService.GetPaginatedCategories(pageNumber, pageSize);
+            _logger.LogInformation("Admin accessed the categories page");
             var categories = await _categoryService.GetAllCategories();
             return View(categories);
         }
@@ -169,6 +156,20 @@ public class AdminController : Controller
             _logger.LogError(ex, "Error in Categories action: {ErrorMessage}", ex.Message);
             TempData["ErrorMessage"] = "There was an error loading the categories. Please try again.";
             return RedirectToAction("Dashboard");
+        }
+    }
+    public async Task<IActionResult> Customers()
+    {
+        try
+        {
+            var customerUsers = await _userManager.GetUsersInRoleAsync(Roles.Customer);
+            return View(customerUsers);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving customers: {Message}", ex.Message);
+            TempData["ErrorMessage"] = "An error occurred while retrieving customers.";
+            return View(new List<ApplicationUser>());
         }
     }
     public IActionResult Orders()
