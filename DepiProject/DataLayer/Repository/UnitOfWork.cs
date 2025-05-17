@@ -23,7 +23,7 @@ namespace DataLayer.Repository
             Product = new ProductRepository(_db);
             OrderDetails = new OrderDetailsRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
-            Orders = new IRepository.OrderRepository(_db);
+            Orders = new OrderRepository(_db);
             ShoppingCart = new ShoppingCartRepository(_db);
             Category = new CategoryRepository(_db);
         }
