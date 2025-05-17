@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Locked Out";
+}
+
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">This account has been locked out, please try again later.</p>
+</header>
+<div class="row">
+    <div class="col-md-8">
+        <div class="alert alert-warning">
+            <p>
+                <strong>Account locked</strong> - Your account has been locked due to too many failed login attempts.
+                <br />
+                Please wait for some time before trying again, or you can reset your password by clicking 
+                <a asp-action="ForgotPassword" asp-controller="Account">here</a>.
+            </p>
+        </div>
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Return to Home</a>
+    </div>
+</div>

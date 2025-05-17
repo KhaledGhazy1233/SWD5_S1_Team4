@@ -40,23 +40,6 @@ namespace DepiProject.Controllers
             TempData["ErrorMessage"] = result;
             return View(vm);
         }
-        // Service  take id  return update cat vm
-        /* public async Task<IActionResult> Edit(int id)
-         {
-             var category = await _categoryService.GetCategoryById(id);
-             if (category == null)
-                 return RedirectToAction("Index");
-
-             var vm = new UpdateCategoryVm
-             {
-                 Id = category.CategoryId,
-                 Name = category.Name,
-                 Description = category.Description
-             };
-
-             return View(vm);
-         }*/
-        // Last-----------------------------------------------------------------------
         public async Task<IActionResult> Edit(int id)
         {
             var vm = await _categoryService.GetUpdateCategoryVmById(id);
@@ -65,7 +48,6 @@ namespace DepiProject.Controllers
 
             return View(vm);
         }
-        //----------------------------------------------------------------------------
 
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateCategoryVm vm)
